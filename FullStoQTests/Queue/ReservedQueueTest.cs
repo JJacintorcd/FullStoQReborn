@@ -98,8 +98,8 @@ namespace FullStoQTests.Queue
 
 
 
-    #region Delete
-    [TestMethod]
+        #region Delete
+        [TestMethod]
         public void TestDeleteReservedQueues()
         {
             ContextSeeder.Seed();
