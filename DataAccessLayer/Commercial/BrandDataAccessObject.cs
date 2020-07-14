@@ -9,59 +9,59 @@ using System.Threading.Tasks;
 
 namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Commercial
 {
-    public class CategoryDataAccessObject
+    public class BrandDataAccessObject
     {
         private Context _context;
-        public CategoryDataAccessObject()
+        public BrandDataAccessObject()
         {
             _context = new Context();
         }
 
         #region C
-        public void Create(Category category)
+        public void Create(Brand brand)
         {
-            _context.Categories.Add(category);
+            _context.Brands.Add(brand);
             _context.SaveChanges();
         }
 
-        public async Task CreateAsync(Category category)
+        public async Task CreateAsync(Brand brand)
         {
-            await _context.Categories.AddAsync(category);
+            await _context.Brands.AddAsync(brand);
             await _context.SaveChangesAsync();
         }
         #endregion
 
         #region R
-        public Category Read(Guid id)
+        public Brand Read(Guid id)
         {
-            return _context.Categories.FirstOrDefault(x => x.Id == id);
+            return _context.Brands.FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<Category> ReadAsync(Guid id)
+        public async Task<Brand> ReadAsync(Guid id)
         {
-            return await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            return await Task.Run(() => _context.Set<Brand>().FirstOrDefault(x => x.Id == id));
         }
         #endregion
 
         #region U
-        public void Update(Category category)
+        public void Update(Brand brand)
         {
-            _context.Entry(category).State = EntityState.Modified;
+            _context.Entry(brand).State = EntityState.Modified;
             _context.SaveChanges();
         }
 
-        public async Task UpdateAsync(Category category)
+        public async Task UpdateAsync(Brand brand)
         {
-            _context.Entry(category).State = EntityState.Modified;
+            _context.Entry(brand).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
         #endregion
 
         #region D
-        public void Delete(Category category)
+        public void Delete(Brand brand)
         {
-            category.IsDeleted = true;
-            Update(category);
+            brand.IsDeleted = true;
+            Update(brand);
         }
 
         public void Delete(Guid id)
@@ -71,10 +71,10 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Commercial
             Delete(item);
         }
 
-        public async Task DeleteAsync(Category category)
+        public async Task DeleteAsync(Brand brand)
         {
-            category.IsDeleted = true;
-            await UpdateAsync(category);
+            brand.IsDeleted = true;
+            await UpdateAsync(brand);
         }
 
         public async Task DeleteAsync(Guid id)
@@ -86,13 +86,14 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Commercial
         #endregion
 
         #region L
-        public List<Category> List()
+        public List<Brand> List()
         {
-            return _context.Set<Category>().ToList();
+            return _context.Set<Brand>().ToList();
         }
-        public async Task<List<Category>> ListAsync()
+
+        public async Task<List<Brand>> ListAsync()
         {
-            return await _context.Set<Category>().ToListAsync();
+            return await _context.Set<Brand>().ToListAsync();
         }
         #endregion
     }

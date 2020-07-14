@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
+namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 {
     public class Category : NamedEntity
     {
