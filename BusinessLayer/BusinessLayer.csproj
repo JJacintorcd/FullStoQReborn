@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Recodme.RD.FullStoQReborn.BusinessLayer</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Commercial\" />
+    <Folder Include="EssentialGoods\" />
+    <Folder Include="Person\" />
+    <Folder Include="Queue\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+  </ItemGroup>
+
+</Project>

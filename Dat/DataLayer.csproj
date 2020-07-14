@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Recodme.RD.FullStoQReborn.DataLayer</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Commercial\" />
+    <Folder Include="EssentialGoods\" />
+    <Folder Include="Queue\" />
+    <Folder Include="Person\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
+  </ItemGroup>
+
+</Project>
