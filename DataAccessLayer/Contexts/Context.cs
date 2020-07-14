@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Properties;
 using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
-using Recodme.RD.FullStoQReborn.DataLayer.Person;
 using System;
 using System.Collections.Generic;
 using System.Text;
