@@ -28,7 +28,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts
             }
         }
 
-        public DbSet<Company> Companies { get; set; }
+        public DbSet<Region> Regions { get; set; }
 
     }
 }
