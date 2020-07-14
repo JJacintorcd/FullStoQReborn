@@ -23,7 +23,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
 
         }
 
-        //public virtual ICollection<Establishment> Establishments { get; set; }
+        public virtual ICollection<Establishment> Establishments { get; set; }
 
         public Company(string name, long vatNumber) : base(name)
         {

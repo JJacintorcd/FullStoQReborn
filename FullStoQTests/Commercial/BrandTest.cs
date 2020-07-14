@@ -13,7 +13,7 @@ namespace FullStoQTests.Commercial
     public class BrandTest
     {
         [TestMethod]
-        public void TestCreateAndReadCategories()
+        public void TestCreateAndReadBrand()
         {
             ContextSeeder.Seed();
             var bo = new BrandBusinessObject();
@@ -35,7 +35,7 @@ namespace FullStoQTests.Commercial
         }
 
         [TestMethod]
-        public void TestListCategories()
+        public void TestListBrand()
         {
             ContextSeeder.Seed();
             var bo = new BrandBusinessObject();
@@ -53,7 +53,7 @@ namespace FullStoQTests.Commercial
         }
 
         [TestMethod]
-        public void TestUpdateCategories()
+        public void TestUpdateBrand()
         {
             ContextSeeder.Seed();
             var bo = new BrandBusinessObject();
@@ -79,7 +79,7 @@ namespace FullStoQTests.Commercial
         }
 
         [TestMethod]
-        public void TestDeleteCategories()
+        public void TestDeleteBrand()
         {
             ContextSeeder.Seed();
             var bo = new BrandBusinessObject();

@@ -1,5 +1,6 @@
 ﻿using Recodme.RD.FullStoQReborn.Data.Base;
 using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
+using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -80,8 +81,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
 
         //public ICollection<ReservedQueue> ReservedQueues { get; set; }
         //public ICollection<StoreQueue> StoreQueues { get; set; }
-        //public virtual ICollection<EssentialGood> EssentialGoods { get; set; }
-        //public virtual ICollection<ShoppingBasket> ShoppingBaskets { get; set; }
+        public virtual ICollection<ProductModel> ProductModels { get; set; }
+        public virtual ICollection<ShoppingBasket> ShoppingBaskets { get; set; }
 
 
         public Establishment(string address, string openingHours, string closingHours, string closingDays, Guid regionId,
