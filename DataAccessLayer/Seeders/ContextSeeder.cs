@@ -15,9 +15,11 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders
             _ctx.Database.EnsureCreated();
      
             var reg1 = new Region("Covilhã");
+            var comp1 = new Company("pingo ácido", 123456789);
 
 
             _ctx.Regions.AddRange(reg1);
+            _ctx.Companies.AddRange(comp1);
 
             _ctx.SaveChanges();
         }
