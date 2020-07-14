@@ -23,7 +23,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders
             var bra1 = new Brand("Dona Edite");
             var prof1 = new Profile(123456789, "Paulo", "Macabres", 919191919, DateTime.UtcNow);
             var sb1 = new ShoppingBasket(prof1.Id);
-            var mod1 = new ProductModel("Vinho Tinto da Barraca do Tejo", false, "506-1237-424", 3.99, 0.75);
+            var mod1 = new ProductModel("Vinho Tinto da Barraca do Tejo", false, "506-1237-424", 3.99, 0.75, bra1.Id, cat1.Id );
 
             _ctx.Regions.AddRange(reg1);
             _ctx.Companies.AddRange(comp1);
