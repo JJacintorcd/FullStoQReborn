@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Commercial\" />
     <Folder Include="EssentialGoods\" />
     <Folder Include="Queue\" />
     <Folder Include="Person\" />
