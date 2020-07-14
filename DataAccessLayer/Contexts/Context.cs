@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Properties;
 using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
+using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using Recodme.RD.FullStoQReborn.DataLayer.Person;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts
         public DbSet<Establishment> Establishments { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Profile> Profiles { get; set; }
+        public DbSet<ShoppingBasket> ShoppingBaskets { get; set; }
 
     }
 }

@@ -8,7 +8,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 {
     public class ShoppingBasket : Entity
     {
-        public virtual ICollection<ProductUnit> EssentialGoods { get; set; }
+        //public virtual ICollection<ProductUnit> EssentialGoods { get; set; }
 
         [ForeignKey("Profile")]
         public Guid ProfileId { get; set; }
