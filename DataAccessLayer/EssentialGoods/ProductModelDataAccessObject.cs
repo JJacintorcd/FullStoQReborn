@@ -11,7 +11,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.EssentialGoods
 {
     public class ProductModelDataAccessObject
     {
-        private Context _context;
+        private readonly Context _context;
 
         public ProductModelDataAccessObject()
         {
@@ -21,13 +21,13 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.EssentialGoods
         #region Create
         public void Create(ProductModel productModel)
         {
-            _context.Models.Add(productModel);
+            _context.ProductModels.Add(productModel);
             _context.SaveChanges();
         }
 
         public async Task CreateAsync(ProductModel productModel)
         {
-            await _context.Models.AddAsync(productModel);
+            await _context.ProductModels.AddAsync(productModel);
             await _context.SaveChangesAsync();
         }
         #endregion
@@ -35,12 +35,12 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.EssentialGoods
         #region Read
         public ProductModel Read(Guid id)
         {
-            return _context.Models.FirstOrDefault(x => x.Id == id);
+            return _context.ProductModels.FirstOrDefault(x => x.Id == id);
         }
 
         public async Task<ProductModel> ReadAsync(Guid id)
         {
-            return await _context.Models.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.ProductModels.FirstOrDefaultAsync(x => x.Id == id);
         }
         #endregion
 
