@@ -72,7 +72,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 
         public virtual ICollection<ProductUnit> ProductUnits { get; set; }
 
-        public ProductModel(string name, bool isReserved, string barCode, double price, double weight, Guid brandId, Guid categoryId )
+        public ProductModel(string name, bool isReserved, string barCode, double price, double weight, Guid brandId, Guid categoryId)
             : base(name)
         {
             IsReserved = isReserved;

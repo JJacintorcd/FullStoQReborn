@@ -38,6 +38,9 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts
         public DbSet<ProductModel> ProductModels { get; set; }
         public DbSet<ProductUnit> ProductUnits { get; set; }
         public DbSet<Brand> Brands { get; set; }
+        public DbSet<StoreQueue> StoreQueues { get; set; }
+
+        
 
 
     }

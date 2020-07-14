@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts;
-using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
+using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Commercial
+namespace Recodme.RD.FullStoQReborn.DataAccessLayer.EssentialGoods
 {
     public class BrandDataAccessObject
     {
-        private Context _context;
+        private readonly Context _context;
         public BrandDataAccessObject()
         {
             _context = new Context();
@@ -39,7 +39,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Commercial
 
         public async Task<Brand> ReadAsync(Guid id)
         {
-            return await Task.Run(() => _context.Set<Brand>().FirstOrDefault(x => x.Id == id));
+            return await _context.Brands.FirstOrDefaultAsync(x => x.Id == id);
         }
         #endregion
 
@@ -90,7 +90,6 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Commercial
         {
             return _context.Set<Brand>().ToList();
         }
-
         public async Task<List<Brand>> ListAsync()
         {
             return await _context.Set<Brand>().ToListAsync();
