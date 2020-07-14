@@ -22,7 +22,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders
             var cat1 = new Category("Non-Alcoholic Beverages");
             var bra1 = new Brand("Dona Edite");
             var prof1 = new Profile(123456789, "Paulo", "Macabres", 919191919, DateTime.UtcNow);
-
+            var sb1 = new ShoppingBasket(prof1.Id);
             var mod1 = new ProductModel("Vinho Tinto da Barraca do Tejo", false, "506-1237-424", 3.99, 0.75);
 
             _ctx.Regions.AddRange(reg1);
@@ -31,6 +31,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders
             _ctx.Categories.AddRange(cat1);
             _ctx.Brands.AddRange(bra1);
             _ctx.Profiles.AddRange(prof1);
+            _ctx.ShoppingBaskets.AddRange(sb1);
             _ctx.ProductModels.AddRange(mod1);
 
 
