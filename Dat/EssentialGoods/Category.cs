@@ -7,7 +7,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 {
     public class Category : NamedEntity
     {
-        //public virtual ICollection<EssentialGood> EssentialGoods { get; set; }
+        public virtual ICollection<ProductModel> ProductModels { get; set; }
 
         public Category(string name) : base(name)
         {
