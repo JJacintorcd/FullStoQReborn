@@ -10,7 +10,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
 {
     public class Establishment : Entity
     {
-        private string _address;
+        private string _address; 
 
         [Required]
         public string Address

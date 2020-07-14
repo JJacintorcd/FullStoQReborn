@@ -1,6 +1,6 @@
 ﻿using Recodme.RD.FullStoQReborn.BusinessLayer.OperationResults;
-using Recodme.RD.FullStoQReborn.DataAccessLayer.Commercial;
-using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
+using Recodme.RD.FullStoQReborn.DataAccessLayer.EssentialGoods;
+using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,46 +8,56 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
+namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
 {
-    public class CategoryBusinessObject
+    public class ProductModelBusinessObject
     {
-        private readonly CategoryDataAccessObject _dao;
+        private readonly ProductModelDataAccessObject _dao;
 
-        public CategoryBusinessObject()
+        public ProductModelBusinessObject()
         {
-            _dao = new CategoryDataAccessObject();
+            _dao = new ProductModelDataAccessObject();
+
         }
 
-        #region C
-        public OperationResult Create(Category item)
+        #region Create
+
+        public OperationResult Create(ProductModel item)
         {
             try
             {
                 _dao.Create(item);
                 return new OperationResult() { Success = true };
+
             }
             catch (Exception e)
             {
                 return new OperationResult() { Success = false, Exception = e };
+
             }
+
         }
-        public async Task<OperationResult> CreateAsync(Category item)
+        public async Task<OperationResult> CreateAsync(ProductModel item)
         {
             try
             {
                 await _dao.CreateAsync(item);
                 return new OperationResult() { Success = true };
+
             }
             catch (Exception e)
             {
                 return new OperationResult() { Success = false, Exception = e };
+
             }
+
         }
+
         #endregion
 
-        #region R
-        public OperationResult<Category> Read(Guid id)
+        #region Read
+
+        public OperationResult<ProductModel> Read(Guid id)
         {
             try
             {
@@ -55,19 +65,24 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
                 {
                     IsolationLevel = IsolationLevel.ReadCommitted,
                     Timeout = TimeSpan.FromSeconds(30)
+
                 };
                 using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
                 var result = _dao.Read(id);
                 transactionScope.Complete();
-                return new OperationResult<Category>() { Success = true, Result = result };
+                return new OperationResult<ProductModel>() { Success = true, Result = result };
+
             }
             catch (Exception e)
             {
-                return new OperationResult<Category>() { Success = false, Exception = e };
+                return new OperationResult<ProductModel>() { Success = false, Exception = e };
+
             }
+
+
         }
 
-        public async Task<OperationResult<Category>> ReadAsync(Guid id)
+        public async Task<OperationResult<ProductModel>> ReadAsync(Guid id)
         {
             try
             {
@@ -80,54 +95,70 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
                 using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
                 var res = await _dao.ReadAsync(id);
                 transactionScope.Complete();
-                return new OperationResult<Category>() { Success = true, Result = res };
+                return new OperationResult<ProductModel>() { Success = true, Result = res };
+
             }
             catch (Exception e)
             {
-                return new OperationResult<Category>() { Success = false, Exception = e };
+                return new OperationResult<ProductModel>() { Success = false, Exception = e };
+
             }
+
         }
+
         #endregion
 
-        #region U
-        public OperationResult Update(Category item)
+        #region Update
+
+        public OperationResult Update(ProductModel item)
         {
             try
             {
                 _dao.Update(item);
                 return new OperationResult() { Success = true };
+
             }
             catch (Exception e)
             {
                 return new OperationResult() { Success = false, Exception = e };
+
             }
+
         }
-        public async Task<OperationResult> UpdateAsync(Category item)
+        public async Task<OperationResult> UpdateAsync(ProductModel item)
         {
             try
             {
                 await _dao.UpdateAsync(item);
                 return new OperationResult() { Success = true };
+
             }
             catch (Exception e)
             {
                 return new OperationResult() { Success = false, Exception = e };
+
             }
+
         }
+
         #endregion
 
-        #region D
-        public OperationResult Delete(Category item)
+        #region Delete
+
+        public OperationResult Delete(ProductModel item)
         {
             try
             {
                 _dao.Delete(item);
                 return new OperationResult() { Success = true };
+
             }
             catch (Exception e)
             {
                 return new OperationResult() { Success = false, Exception = e };
+
             }
+
         }
 
         public async Task<OperationResult> DeleteAsync(Guid id)
@@ -136,11 +167,14 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
             {
                 await _dao.DeleteAsync(id);
                 return new OperationResult() { Success = true };
+
             }
             catch (Exception e)
             {
                 return new OperationResult() { Success = false, Exception = e };
+
             }
+
         }
         public OperationResult Delete(Guid id)
         {
@@ -148,28 +182,36 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
             {
                 _dao.Delete(id);
                 return new OperationResult() { Success = true };
+
             }
             catch (Exception e)
             {
                 return new OperationResult() { Success = false, Exception = e };
+
             }
+
         }
-        public async Task<OperationResult> DeleteAsync(Category item)
+        public async Task<OperationResult> DeleteAsync(ProductModel item)
         {
             try
             {
                 await _dao.DeleteAsync(item);
                 return new OperationResult() { Success = true };
+
             }
             catch (Exception e)
             {
                 return new OperationResult() { Success = false, Exception = e };
+
             }
+
         }
+
         #endregion
 
-        #region L
-        public OperationResult<List<Category>> List()
+        #region List
+
+        public OperationResult<List<ProductModel>> List()
         {
             try
             {
@@ -184,14 +226,17 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
 
                 transactionScope.Complete();
 
-                return new OperationResult<List<Category>>() { Success = true, Result = result };
+                return new OperationResult<List<ProductModel>>() { Success = true, Result = result };
+
             }
             catch (Exception e)
             {
-                return new OperationResult<List<Category>>() { Success = false, Exception = e };
+                return new OperationResult<List<ProductModel>>() { Success = false, Exception = e };
+
             }
+
         }
-        public async Task<OperationResult<List<Category>>> ListAsync()
+        public async Task<OperationResult<List<ProductModel>>> ListAsync()
         {
             try
             {
@@ -204,17 +249,20 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
                 using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
                 var res = await _dao.ListAsync();
                 transactionScope.Complete();
-                return new OperationResult<List<Category>>() { Success = true, Result = res };
+                return new OperationResult<List<ProductModel>>() { Success = true, Result = res };
+
             }
             catch (Exception e)
             {
-                return new OperationResult<List<Category>>() { Success = false, Exception = e };
+                return new OperationResult<List<ProductModel>>() { Success = false, Exception = e };
+
             }
         }
+
         #endregion
 
-        #region LND
-        public OperationResult<List<Category>> ListNotDeleted()
+        #region List Not Deleted
+        public OperationResult<List<ProductModel>> ListNotDeleted()
         {
             try
             {
@@ -229,14 +277,17 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
 
                 transactionScope.Complete();
 
-                return new OperationResult<List<Category>>() { Success = true, Result = result };
+                return new OperationResult<List<ProductModel>>() { Success = true, Result = result };
+
             }
             catch (Exception e)
             {
-                return new OperationResult<List<Category>>() { Success = false, Exception = e };
+                return new OperationResult<List<ProductModel>>() { Success = false, Exception = e };
+
             }
+
         }
-        public async Task<OperationResult<List<Category>>> ListNotDeletedAsync()
+        public async Task<OperationResult<List<ProductModel>>> ListNotDeletedAsync()
         {
             try
             {
@@ -250,11 +301,13 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
                 var res = await _dao.ListAsync();
                 var result = res.Where(x => !x.IsDeleted).ToList();
                 transactionScope.Complete();
-                return new OperationResult<List<Category>>() { Success = true, Result = result };
+                return new OperationResult<List<ProductModel>>() { Success = true, Result = result };
+
             }
             catch (Exception e)
             {
-                return new OperationResult<List<Category>>() { Success = false, Exception = e };
+                return new OperationResult<List<ProductModel>>() { Success = false, Exception = e };
+
             }
         }
         #endregion
