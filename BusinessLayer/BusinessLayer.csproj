@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Folder Include="EssentialGoods\" />
+    <Folder Include="Person\" />
     <Folder Include="Queue\" />
   </ItemGroup>
 
@@ -16,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
-    <ProjectReference Include="..\Dat\DataLayer.csproj" />
   </ItemGroup>
 
 </Project>
