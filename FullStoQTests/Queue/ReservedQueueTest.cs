@@ -3,6 +3,7 @@ using Recodme.RD.FullStoQReborn.BusinessLayer.Commercial;
 using Recodme.RD.FullStoQReborn.BusinessLayer.Person;
 using Recodme.RD.FullStoQReborn.BusinessLayer.Queue;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders;
+using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
 using Recodme.RD.FullStoQReborn.DataLayer.Queue;
 using System.Linq;
 
@@ -72,46 +73,47 @@ namespace FullStoQTests.Queue
 
         #region Update
         [TestMethod]
-        public void TestUpdateReservedQueues()
+        public void TestUpdateReservedQueue()
         {
             ContextSeeder.Seed();
-            var boProf = new ProfileBusinessObject();
-            var profList = boProf.List().Result.First();
-
-            var boEst = new EstablishmentBusinessObject();
-            var estList = boEst.List().Result.First();
-
+            var regBo = new RegionBusinessObject();
+            var reg = new Region("Algordos");
+            regBo.Create(reg);
+            var compBo = new CompanyBusinessObject();
+            var comp = new Company("", 1234567890);
+            compBo.Create(comp);
+            var estBo = new EstablishmentBusinessObject();
+            var est = new Establishment("anywhere", "sempre", "nunca", "8º dia da semana", reg.Id, comp.Id);
+            estBo.Create(est); 
             var bo = new ReservedQueueBusinessObject();
-            var resList = bo.List();
-
-            var item = resList.Result.FirstOrDefault();
-            item.ProfileId = item.Id;
-
-            var resUpdate = bo.Update(item);
-            var resNotList = bo.List().Result.Where(x => !x.IsDeleted);
-
-            Assert.IsTrue(resUpdate.Success && resNotList.First().ProfileId == item.Id);
+            var stoQList = bo.List();
+            var item = stoQList.Result.FirstOrDefault();
+            item.EstablishmentId = est.Id;
+            var stoQUpdate = bo.Update(item);
+            var stoQNotList = bo.ListNotDeleted().Result;
+            Assert.IsTrue(stoQUpdate.Success && stoQNotList.First().EstablishmentId == est.Id);
         }
 
         [TestMethod]
         public void TestUpdateReservedQueueAsync()
         {
-            ContextSeeder.Seed();                     
-
+            ContextSeeder.Seed();
+            var regBo = new RegionBusinessObject();
+            var reg = new Region("Algordos");
+            regBo.Create(reg);
+            var compBo = new CompanyBusinessObject();
+            var comp = new Company("", 1234567890);
+            compBo.Create(comp);
+            var estBo = new EstablishmentBusinessObject();
+            var est = new Establishment("anywhere", "sempre", "nunca", "8º dia da semana", reg.Id, comp.Id);
+            estBo.Create(est); 
             var bo = new ReservedQueueBusinessObject();
-            var resList = bo.List(); 
-
-            var itemPro = resList.Result.FirstOrDefault();
-            itemPro.ProfileId = itemPro.Id;
-
-            var itemEst = resList.Result.FirstOrDefault();
-            itemEst.EstablishmentId = itemEst.Id;           
-            
-            var reg = new ReservedQueue(itemEst.EstablishmentId, itemPro.ProfileId);
-            var resCreate = bo.CreateAsync(reg).Result;
-            var resGet = bo.ReadAsync(reg.Id).Result;
-
-            Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
+            var stoQList = bo.ListAsync().Result;
+            var item = stoQList.Result.FirstOrDefault();
+            item.EstablishmentId = est.Id;
+            var stoQUpdate = bo.UpdateAsync(item).Result;
+            stoQList = bo.ListNotDeletedAsync().Result;
+            Assert.IsTrue(stoQList.Success && stoQUpdate.Success && stoQList.Result.First().EstablishmentId == est.Id);
         }
         #endregion
 
