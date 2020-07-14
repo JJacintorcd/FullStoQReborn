@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commercial\" />
     <Folder Include="EssentialGoods\" />
     <Folder Include="Seeders\" />
     <Folder Include="Person\" />
@@ -32,6 +31,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dat\DataLayer.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Properties;
+using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,6 +28,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts
             }
         }
 
+        public DbSet<Company> Companies { get; set; }
 
     }
 }
