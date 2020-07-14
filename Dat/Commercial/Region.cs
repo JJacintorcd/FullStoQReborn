@@ -7,7 +7,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
 {
     public class Region : NamedEntity
     {
-        public virtual ICollection<Establishment> Establishments { get; set; }
+        //public virtual ICollection<Establishment> Establishments { get; set; }
 
         public Region(string name) : base(name)
         {
