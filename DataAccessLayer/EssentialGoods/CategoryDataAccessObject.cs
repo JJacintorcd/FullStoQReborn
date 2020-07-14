@@ -11,7 +11,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.EssentialGoods
 {
     public class CategoryDataAccessObject
     {
-        private Context _context;
+        private readonly Context _context;
         public CategoryDataAccessObject()
         {
             _context = new Context();

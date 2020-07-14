@@ -16,10 +16,16 @@ namespace FullStoQTests.EssentialGoods
         public void TestCreateAndReadCategories()
         {
             ContextSeeder.Seed();
+            var braBo = new BrandBusinessObject();
+            var bra = new Brand("Barraca do Tejo");
+            braBo.Create(bra);
+            var catBo = new CategoryBusinessObject();
+            var cat = new Category("Non-Alcoholic Beverages");
+            catBo.Create(cat);
             var bo = new ProductModelBusinessObject();
-            var reg = new ProductModel("Vinho Branco da Barraca do Tejo", false, "506-1237-422", 4.24, 0.80);
-            var resCreate = bo.Create(reg);
-            var resGet = bo.Read(reg.Id);
+            var prodMod = new ProductModel("Vinho Branco", false, "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            var resCreate = bo.Create(prodMod);
+            var resGet = bo.Read(prodMod.Id);
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
         }
 
@@ -27,10 +33,16 @@ namespace FullStoQTests.EssentialGoods
         public void TestCreateAndReadProductModelAsync()
         {
             ContextSeeder.Seed();
+            var braBo = new BrandBusinessObject();
+            var bra = new Brand("Barraca do Tejo");
+            braBo.Create(bra);
+            var catBo = new CategoryBusinessObject();
+            var cat = new Category("Non-Alcoholic Beverages");
+            catBo.Create(cat);
             var bo = new ProductModelBusinessObject();
-            var reg = new ProductModel("Vinho Branco da Barraca do Tejo", false, "506-1237-422", 4.24, 0.80);
-            var resCreate = bo.CreateAsync(reg).Result;
-            var resGet = bo.ReadAsync(reg.Id).Result;
+            var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", false, "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            var resCreate = bo.CreateAsync(prodMod).Result;
+            var resGet = bo.ReadAsync(prodMod.Id).Result;
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
         }
 

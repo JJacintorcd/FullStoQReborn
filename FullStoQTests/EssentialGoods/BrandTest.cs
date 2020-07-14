@@ -1,13 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Recodme.RD.FullStoQReborn.BusinessLayer.Commercial;
+using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders;
-using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
+using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FullStoQTests.Commercial
+namespace FullStoQTests.EssentialGoods
 {
     [TestClass]
     public class BrandTest
