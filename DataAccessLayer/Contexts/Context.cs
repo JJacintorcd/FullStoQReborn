@@ -32,17 +32,10 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts
 
         public DbSet<Region> Regions { get; set; }
         public DbSet<Company> Companies { get; set; }
-
+        public DbSet<Establishment> Establishments { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Profile> Profiles { get; set; }
-        public DbSet<ProductModel> Models { get; set; }
-        public DbSet<ProductUnit> ProductUnits { get; set; }
-        public DbSet<Brand> Brands { get; set; }
-        
-
-
-
-
+        public DbSet<ShoppingBasket> ShoppingBaskets { get; set; }
 
     }
 }

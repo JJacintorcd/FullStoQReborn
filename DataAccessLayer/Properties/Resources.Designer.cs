@@ -61,7 +61,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server=RECODME-VASCOV\SQLEXPRESS;Database=FullStoQ;Trusted_Connection=true;.
+        ///   Looks up a localized string similar to Server=RECODME-JOAOJ\SQLEXPRESS;Database=FullStoQ;Trusted_Connection=true;.
         /// </summary>
         public static string ConnectionString {
             get {
@@ -79,11 +79,11 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server=RECODME-VASCOV\SQLEXPRESS;Database=FullStoQ;Trusted_Connection=true;.
+        ///   Looks up a localized string similar to Server=RECODME-JOAOJ\SQLEXPRESS;Database=FullStoQ;Trusted_Connection=true;.
         /// </summary>
-        public static string ConnectionStringVasco {
+        public static string ConnectionStringJoão {
             get {
-                return ResourceManager.GetString("ConnectionStringVasco", resourceCulture);
+                return ResourceManager.GetString("ConnectionStringJoão", resourceCulture);
             }
         }
     }
