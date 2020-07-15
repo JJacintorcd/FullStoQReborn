@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models.PersonViewModel
 {
-    public class ProfileViewModel
+    public class ProfileViewModel : BaseViewModel
     {
     }
 }

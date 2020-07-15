@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.Models.BaseViewModel
+namespace WebAPI.Models.Base
 {
     public class BaseViewModel
     {
