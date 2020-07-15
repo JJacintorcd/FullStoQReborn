@@ -27,6 +27,8 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders
             var mod1 = new ProductModel("Vinho Tinto da Barraca do Tejo", false, "506-1237-424", 3.99, 0.75, bra1.Id, cat1.Id);
             var stoQ1 = new StoreQueue(42, est1.Id);
             var resQ1 = new ReservedQueue(est1.Id, prof1.Id);
+            var unit1 = new ProductUnit("O Deslumbrante", "lolada69420", mod1.Id);
+
 
             _ctx.Regions.AddRange(reg1);
             _ctx.Companies.AddRange(comp1);
@@ -38,6 +40,8 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders
             _ctx.ProductModels.AddRange(mod1);
             _ctx.StoreQueues.AddRange(stoQ1);
             _ctx.ReservedQueues.AddRange(resQ1);
+            _ctx.ProductUnits.AddRange(unit1);
+
 
             _ctx.SaveChanges();
         }
