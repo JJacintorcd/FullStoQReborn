@@ -99,5 +99,27 @@ namespace FullStoQTests.EssentialGoods
             resList = bo.ListNotDeletedAsync().Result;
             Assert.IsTrue(resDelete.Success && resList.Success && resList.Result.Count == 0);
         }
+
+        [TestMethod]
+        public void TestCreateSameNameBrand()
+        {
+            ContextSeeder.Seed();
+            var bo = new BrandBusinessObject();
+            var item = bo.List().Result.FirstOrDefault();
+            var reg = new Brand(item.Name);
+            var resCreate = bo.Create(reg);
+            Assert.IsTrue(!resCreate.Success);
+        }
+
+        [TestMethod]
+        public void TestCreateSameNameBrandAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new BrandBusinessObject();
+            var item = bo.ListAsync().Result.Result.FirstOrDefault();
+            var reg = new Brand(item.Name);
+            var resCreate = bo.CreateAsync(reg).Result;
+            Assert.IsTrue(!resCreate.Success);
+        }
     }
 }
