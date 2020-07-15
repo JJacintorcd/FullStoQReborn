@@ -10,7 +10,7 @@ namespace FullStoQTests.Commercial
     public class RegionTest
     {
         [TestMethod]
-        public void TestCreateAndReadRegions()
+        public void TestCreateAndReadRegion()
         {
             ContextSeeder.Seed();
             var bo = new RegionBusinessObject();
@@ -32,7 +32,7 @@ namespace FullStoQTests.Commercial
         }
 
         [TestMethod]
-        public void TestListRegions()
+        public void TestListRegion()
         {
             ContextSeeder.Seed();
             var bo = new RegionBusinessObject();
@@ -50,7 +50,7 @@ namespace FullStoQTests.Commercial
         }
 
         [TestMethod]
-        public void TestUpdateRegions()
+        public void TestUpdateRegion()
         {
             ContextSeeder.Seed();
             var bo = new RegionBusinessObject();
@@ -63,7 +63,7 @@ namespace FullStoQTests.Commercial
         }
 
         [TestMethod]
-        public void TestUpdateRegionnAsync()
+        public void TestUpdateRegionAsync()
         {
             ContextSeeder.Seed();
             var bo = new RegionBusinessObject();
@@ -76,7 +76,7 @@ namespace FullStoQTests.Commercial
         }
 
         [TestMethod]
-        public void TestDeleteRegions()
+        public void TestDeleteRegion()
         {
             ContextSeeder.Seed();
             var bo = new RegionBusinessObject();

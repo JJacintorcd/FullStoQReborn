@@ -81,7 +81,7 @@ namespace FullStoQTests.Commercial
 
         #region Assync Delete
         [TestMethod]
-        public void TestDeleteEstablishmentAsync()
+        public void TestDeleteCompanyAsync()
         {
             ContextSeeder.Seed();
             var bo = new CompanyBusinessObject();
