@@ -15,6 +15,10 @@
     <Folder Include="Views\Queue\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Dat\DataLayer.csproj" />
+  </ItemGroup>
+
 
 
 </Project>
