@@ -15,7 +15,7 @@ namespace FullStoQTests.Person
     public class ProfileTest
     {
         [TestMethod]
-        public void TestCreateAndReadProfiles()
+        public void TestCreateAndReadProfile()
         {
             ContextSeeder.Seed();
             var bo = new ProfileBusinessObject();
@@ -37,7 +37,7 @@ namespace FullStoQTests.Person
         }
 
         [TestMethod]
-        public void TestListProfiles()
+        public void TestListProfile()
         {
             ContextSeeder.Seed();
             var bo = new ProfileBusinessObject();
@@ -55,7 +55,7 @@ namespace FullStoQTests.Person
         }
 
         [TestMethod]
-        public void TestUpdateProfiles()
+        public void TestUpdateProfile()
         {
             ContextSeeder.Seed();
             var bo = new ProfileBusinessObject();
@@ -68,7 +68,7 @@ namespace FullStoQTests.Person
         }
 
         [TestMethod]
-        public void TestUpdateProfilenAsync()
+        public void TestUpdateProfileAsync()
         {
             ContextSeeder.Seed();
             var bo = new ProfileBusinessObject();
@@ -81,7 +81,7 @@ namespace FullStoQTests.Person
         }
 
         [TestMethod]
-        public void TestDeleteProfiles()
+        public void TestDeleteProfile()
         {
             ContextSeeder.Seed();
             var bo = new ProfileBusinessObject();

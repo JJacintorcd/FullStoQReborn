@@ -13,7 +13,7 @@ namespace FullStoQTests.EssentialGoods
     public class ProductModelTest
     {
         [TestMethod]
-        public void TestCreateAndReadCategories()
+        public void TestCreateAndReadProductModel()
         {
             ContextSeeder.Seed();
             var braBo = new BrandBusinessObject();
@@ -47,7 +47,7 @@ namespace FullStoQTests.EssentialGoods
         }
 
         [TestMethod]
-        public void TestListCategories()
+        public void TestListProductModel()
         {
             ContextSeeder.Seed();
             var bo = new ProductModelBusinessObject();
@@ -65,7 +65,7 @@ namespace FullStoQTests.EssentialGoods
         }
 
         [TestMethod]
-        public void TestUpdateCategories()
+        public void TestUpdateProductModel()
         {
             ContextSeeder.Seed();
             var bo = new ProductModelBusinessObject();
@@ -91,7 +91,7 @@ namespace FullStoQTests.EssentialGoods
         }
 
         [TestMethod]
-        public void TestDeleteCategories()
+        public void TestDeleteProductModel()
         {
             ContextSeeder.Seed();
             var bo = new ProductModelBusinessObject();

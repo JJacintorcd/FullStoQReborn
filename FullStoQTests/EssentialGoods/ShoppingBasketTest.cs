@@ -89,7 +89,7 @@ namespace FullStoQTests.EssentialGoods
 
         #region Assync Delete
         [TestMethod]
-        public void TestDeleteEstablishmentAsync()
+        public void TestDeleteShoppingBasketAsync()
         {
             ContextSeeder.Seed();
             var bo = new ShoppingBasketBusinessObject();

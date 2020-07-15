@@ -13,7 +13,7 @@ namespace FullStoQTests.EssentialGoods
     public class CategoryTest
     {
         [TestMethod]
-        public void TestCreateAndReadCategories()
+        public void TestCreateAndReadCategory()
         {
             ContextSeeder.Seed();
             var bo = new CategoryBusinessObject();
@@ -35,7 +35,7 @@ namespace FullStoQTests.EssentialGoods
         }
 
         [TestMethod]
-        public void TestListCategories()
+        public void TestListCategory()
         {
             ContextSeeder.Seed();
             var bo = new CategoryBusinessObject();
@@ -53,7 +53,7 @@ namespace FullStoQTests.EssentialGoods
         }
 
         [TestMethod]
-        public void TestUpdateCategories()
+        public void TestUpdateCategory()
         {
             ContextSeeder.Seed();
             var bo = new CategoryBusinessObject();
@@ -79,7 +79,7 @@ namespace FullStoQTests.EssentialGoods
         }
 
         [TestMethod]
-        public void TestDeleteCategories()
+        public void TestDeleteCategory()
         {
             ContextSeeder.Seed();
             var bo = new CategoryBusinessObject();
