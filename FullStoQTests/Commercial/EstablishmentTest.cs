@@ -143,5 +143,39 @@ namespace FullStoQTests.Commercial
         }
         #endregion
 
+        #region Same Address
+        [TestMethod]
+        public void TestCreateSameAddressRegion()
+        {
+            ContextSeeder.Seed();
+            var bo = new EstablishmentBusinessObject();
+            var boReg = new RegionBusinessObject();
+            var boComp = new CompanyBusinessObject();
+            var reg1 = boReg.List().Result.First();
+            var com1 = boComp.List().Result.First();
+            var item = bo.List().Result.FirstOrDefault();
+            var est = new Establishment(item.Address, "9h00", "21h00", "monday", reg1.Id, com1.Id);
+            var resCreate = bo.Create(est);
+            Assert.IsTrue(!resCreate.Success);
+        }
+        #endregion
+
+        #region Same Address Async
+        [TestMethod]
+        public void TestCreateSameAddressRegionAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new EstablishmentBusinessObject();
+            var boReg = new RegionBusinessObject();
+            var boComp = new CompanyBusinessObject();
+            var reg1 = boReg.ListAsync().Result.Result.First();
+            var com1 = boComp.ListAsync().Result.Result.First();
+            var item = bo.ListAsync().Result.Result.FirstOrDefault();
+            var est = new Establishment(item.Address, "9h00", "21h00", "monday", reg1.Id, com1.Id);
+            var resCreate = bo.CreateAsync(est).Result;
+            Assert.IsTrue(!resCreate.Success);
+        }
+        #endregion
+
     }
 }
