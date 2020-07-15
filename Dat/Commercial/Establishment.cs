@@ -1,18 +1,16 @@
 ﻿using Recodme.RD.FullStoQReborn.Data.Base;
-using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
 using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using Recodme.RD.FullStoQReborn.DataLayer.Queue;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
 {
     public class Establishment : Entity
     {
-        private string _address; 
+        private string _address;
 
         [Required]
         public string Address

@@ -101,5 +101,49 @@ namespace FullStoQTests.Person
             resList = bo.ListNotDeletedAsync().Result;
             Assert.IsTrue(resDelete.Success && resList.Success && resList.Result.Count == 0);
         }
+
+        [TestMethod]
+        public void TestCreateSameVatNumberProfile()
+        {
+            ContextSeeder.Seed();
+            var bo = new ProfileBusinessObject();
+            var item = bo.List().Result.First();
+            var reg = new Profile(item.VatNumber, "Manuel", "Macabres", 919191918, DateTime.UtcNow);
+            var resCreate = bo.Create(reg);
+            Assert.IsTrue(!resCreate.Success);
+        }
+
+        [TestMethod]
+        public void TestCreateSameVatNumberProfileAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new ProfileBusinessObject();
+            var item = bo.ListAsync().Result.Result.First();
+            var reg = new Profile(item.VatNumber, "Manuel", "Macabres", 919191918, DateTime.UtcNow);
+            var resCreate = bo.CreateAsync(reg).Result;
+            Assert.IsTrue(!resCreate.Success);
+        }
+
+        [TestMethod]
+        public void TestCreateSamePhoneNumberProfile()
+        {
+            ContextSeeder.Seed();
+            var bo = new ProfileBusinessObject();
+            var item = bo.List().Result.First();
+            var reg = new Profile(123456789, "Manuel", "Macabres", item.PhoneNumber, DateTime.UtcNow);
+            var resCreate = bo.Create(reg);
+            Assert.IsTrue(!resCreate.Success);
+        }
+
+        [TestMethod]
+        public void TestCreateSamePhoneNumberProfileAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new ProfileBusinessObject();
+            var item = bo.ListAsync().Result.Result.First();
+            var reg = new Profile(123456789, "Manuel", "Macabres", item.PhoneNumber, DateTime.UtcNow);
+            var resCreate = bo.CreateAsync(reg).Result;
+            Assert.IsTrue(!resCreate.Success);
+        }
     }
 }
