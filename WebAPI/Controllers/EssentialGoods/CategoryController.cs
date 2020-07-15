@@ -31,10 +31,10 @@ namespace WebAPI.Controllers.EssentialGoods
             if (res.Success)
             {
                 if (res.Result == null) return NotFound();
-                var pvm = new CategoryViewModel();
-                pvm.Id = res.Result.Id;
-                pvm.Name = res.Result.Name;
-                return pvm;
+                var rvm = new CategoryViewModel();
+                rvm.Id = res.Result.Id;
+                rvm.Name = res.Result.Name;
+                return rvm;
             }
 
             else return StatusCode((int)HttpStatusCode.InternalServerError);

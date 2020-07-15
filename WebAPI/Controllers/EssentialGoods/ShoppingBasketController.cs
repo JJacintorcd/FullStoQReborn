@@ -31,10 +31,10 @@ namespace WebAPI.Controllers.EssentialGoods
             if (res.Success)
             {
                 if (res.Result == null) return NotFound();
-                var pvm = new ShoppingBasketViewModel();
-                pvm.Id = res.Result.Id;
-                pvm.ProfileId = res.Result.ProfileId;
-                return pvm;
+                var sbvm = new ShoppingBasketViewModel();
+                sbvm.Id = res.Result.Id;
+                sbvm.ProfileId = res.Result.ProfileId;
+                return sbvm;
             }
 
             else return StatusCode((int)HttpStatusCode.InternalServerError);

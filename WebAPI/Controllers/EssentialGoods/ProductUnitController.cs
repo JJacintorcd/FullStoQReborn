@@ -31,12 +31,12 @@ namespace WebAPI.Controllers.EssentialGoods
             if (res.Success)
             {
                 if (res.Result == null) return NotFound();
-                var pvm = new ProductUnitViewModel();
-                pvm.Id = res.Result.Id;
-                pvm.ProductModelId = res.Result.ProductModelId;
-                pvm.SerialNumber = res.Result.SerialNumber;
+                var puvm = new ProductUnitViewModel();
+                puvm.Id = res.Result.Id;
+                puvm.ProductModelId = res.Result.ProductModelId;
+                puvm.SerialNumber = res.Result.SerialNumber;
 
-                return pvm;
+                return puvm;
             }
 
             else return StatusCode((int)HttpStatusCode.InternalServerError);
