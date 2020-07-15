@@ -20,6 +20,7 @@ namespace WebAPI.Models.EssentialGoodsViewModel
             return new ProductModelViewModel()
             {
                 Name = productModel.Name,
+                IsReserved = productModel.IsReserved,
                 BarCode = productModel.BarCode,
                 Price = productModel.Price,
                 Weight = productModel.Weight,

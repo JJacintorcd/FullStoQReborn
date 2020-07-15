@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 {
-    public class ProductUnit : NamedEntity
+    public class ProductUnit : Entity
     {
         private string _serialNumber;
         public string SerialNumber
@@ -24,13 +24,13 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
         public virtual ProductModel ProductModel { get; set; }
 
 
-        public ProductUnit(string name, string serialNumber, Guid productModelId) : base(name)
+        public ProductUnit(string serialNumber, Guid productModelId) : base()
         {
             _serialNumber = serialNumber;
             ProductModelId = productModelId;
         }
 
-        public ProductUnit(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string name, string serialNumber, Guid productModelId) : base(id, createdAt, updatedAt, isDeleted, name)
+        public ProductUnit(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string serialNumber, Guid productModelId) : base(id, createdAt, updatedAt, isDeleted)
         {
             _serialNumber = serialNumber;
             ProductModelId = productModelId;

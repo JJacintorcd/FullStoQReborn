@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Models.Base;
 
 namespace WebAPI.Models.EssentialGoodsViewModel
 {
-    public class ShoppingBasketViewModel
+    public class ShoppingBasketViewModel : BaseViewModel
     {
         public Guid ProfileId { get; set; }
         public static ShoppingBasketViewModel Parse(ShoppingBasket shoppingBasket)
