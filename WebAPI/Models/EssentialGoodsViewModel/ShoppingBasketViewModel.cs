@@ -1,23 +1,26 @@
 ﻿using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using WebAPI.Models.Base;
 
 namespace WebAPI.Models.EssentialGoodsViewModel
 {
-    public class ShoppingBasketViewModel
+    public class ShoppingBasketViewModel : BaseViewModel
     {
-        public ShoppingBasket ToShoppingBasket()
-        {
-            return new ShoppingBasket();
-        }
-
+        public Guid ProfileId { get; set; }
         public static ShoppingBasketViewModel Parse(ShoppingBasket shoppingBasket)
         {
             return new ShoppingBasketViewModel()
             {
-                Name = productUnit.Name,
-                ProductModelId = productUnit.ProductModelId,
-                SerialNumber = productUnit.SerialNumber
+                ProfileId = shoppingBasket.ProfileId
             };
+        }
+
+        public ShoppingBasket ToShoppingBasket()
+        {
+            return new ShoppingBasket(ProfileId);
         }
     }
 }

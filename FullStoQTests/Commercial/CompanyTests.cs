@@ -113,5 +113,27 @@ namespace FullStoQTests.Commercial
             Assert.IsTrue(resList.Success && resList.Result.Count == 1);
         }
         #endregion
+
+        [TestMethod]
+        public void TestCreateSameVatNumberCompany()
+        {
+            ContextSeeder.Seed();
+            var bo = new CompanyBusinessObject();
+            var item = bo.List().Result.First();
+            var est = new Company("Ilhas", item.VatNumber);
+            var resCreate = bo.Create(est);
+            Assert.IsTrue(!resCreate.Success);
+        }
+
+        [TestMethod]
+        public void TestCreateSameVatNumberCompanyAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new CompanyBusinessObject();
+            var item = bo.ListAsync().Result.Result.First();
+            var est = new Company("Ilhas", item.VatNumber);
+            var resCreate = bo.CreateAsync(est).Result;
+            Assert.IsTrue(!resCreate.Success);
+        }
     }
 }

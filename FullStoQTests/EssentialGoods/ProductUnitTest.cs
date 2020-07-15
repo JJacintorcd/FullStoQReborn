@@ -119,5 +119,47 @@ namespace FullStoQTests.EssentialGoods
             resList = bo.ListNotDeletedAsync().Result;
             Assert.IsTrue(resDelete.Success && resList.Success && resList.Result.Count == 0);
         }
+
+        [TestMethod]
+        public void TestCreateSameSerialNumberProductUnit()
+        {
+            ContextSeeder.Seed();
+            var braBo = new BrandBusinessObject();
+            var bra = new Brand("Barraca do Tejo");
+            braBo.Create(bra);
+            var catBo = new CategoryBusinessObject();
+            var cat = new Category("Non-Alcoholic Beverages");
+            catBo.Create(cat);
+            var pmbo = new ProductModelBusinessObject();
+            var prodMod = new ProductModel("Vinho Branco", false, "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            pmbo.Create(prodMod);
+
+            var bo = new ProductUnitBusinessObject();
+            var item = bo.List().Result.FirstOrDefault();
+            var prodUnit = new ProductUnit("O Soberbo", item.SerialNumber, prodMod.Id);
+            var resCreate = bo.Create(prodUnit);
+            Assert.IsTrue(!resCreate.Success);
+        }
+
+        [TestMethod]
+        public void TestCreateSameSerialNumberProductUnitAsync()
+        {
+            ContextSeeder.Seed();
+            var braBo = new BrandBusinessObject();
+            var bra = new Brand("Barraca do Tejo");
+            braBo.Create(bra);
+            var catBo = new CategoryBusinessObject();
+            var cat = new Category("Non-Alcoholic Beverages");
+            catBo.Create(cat);
+            var pmbo = new ProductModelBusinessObject();
+            var prodMod = new ProductModel("Vinho Branco", false, "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            pmbo.Create(prodMod);
+
+            var bo = new ProductUnitBusinessObject();
+            var item = bo.ListAsync().Result.Result.FirstOrDefault();
+            var prodUnit = new ProductUnit("O Soberbo", item.SerialNumber, prodMod.Id);
+            var resCreate = bo.CreateAsync(prodUnit).Result;
+            Assert.IsTrue(!resCreate.Success);
+        }
     }
 }

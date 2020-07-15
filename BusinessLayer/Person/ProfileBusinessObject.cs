@@ -24,6 +24,8 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Person
         {
             try
             {
+                if (_dao.List().Any(x => x.VatNumber == item.VatNumber)) throw new Exception("Vat number already exists");
+                if (_dao.List().Any(x => x.PhoneNumber == item.PhoneNumber)) throw new Exception("Phone number already exists");
                 _dao.Create(item);
                 return new OperationResult() { Success = true };
             }
@@ -36,6 +38,8 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Person
         {
             try
             {
+                if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber)) throw new Exception("Vat number already exists");
+                if (_dao.ListAsync().Result.Any(x => x.PhoneNumber == item.PhoneNumber)) throw new Exception("Phone number already exists");
                 await _dao.CreateAsync(item);
                 return new OperationResult() { Success = true };
             }

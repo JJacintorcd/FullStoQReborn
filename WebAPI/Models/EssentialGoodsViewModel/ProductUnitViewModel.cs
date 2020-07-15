@@ -7,24 +7,22 @@ using WebAPI.Models.Base;
 
 namespace WebAPI.Models.EssentialGoodsViewModel
 {
-    public class ProductUnitViewModel:NamedViewModel
+    public class ProductUnitViewModel : BaseViewModel
     {
-        public string  SerialNumber { get; set; }
+        public string SerialNumber { get; set; }
         public Guid ProductModelId { get; set; }
-
-        public ProductUnit ToProductUnit()
-        {
-            return new ProductUnit(Name, SerialNumber, ProductModelId);
-        }
-
         public static ProductUnitViewModel Parse(ProductUnit productUnit)
         {
             return new ProductUnitViewModel()
             {
-                Name = productUnit.Name,
-                ProductModelId = productUnit.ProductModelId,
-                SerialNumber = productUnit.SerialNumber
+                SerialNumber = productUnit.SerialNumber,
+                ProductModelId = productUnit.ProductModelId
             };
+        }
+
+        public ProductUnit ToProductUnit()
+        {
+            return new ProductUnit(SerialNumber, ProductModelId);
         }
     }
 }
