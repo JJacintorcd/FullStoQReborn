@@ -1,10 +1,8 @@
 ﻿using Recodme.RD.FullStoQReborn.Data.Base;
 using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Recodme.RD.FullStoQReborn.DataLayer.Queue
 {
