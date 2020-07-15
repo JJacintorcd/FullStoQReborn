@@ -5,8 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Queue\" />
-    <Folder Include="Controllers\Commercial\" />
     <Folder Include="Views\Commercial\" />
     <Folder Include="Views\EssentialGoods\" />
     <Folder Include="Views\Person\" />

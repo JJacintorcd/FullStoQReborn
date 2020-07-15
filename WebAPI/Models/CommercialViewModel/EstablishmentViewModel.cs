@@ -13,7 +13,7 @@ namespace WebAPI.Models.CommercialViewModel
         public Guid RegionId { get; set; }
         public Guid CompanyId { get; set; }
 
-        public Establishment ToCompany()
+        public Establishment ToEstablishment()
         {
             return new Establishment(Address, OpeningHours, ClosingHours, ClosingDays, RegionId, CompanyId);
         }
