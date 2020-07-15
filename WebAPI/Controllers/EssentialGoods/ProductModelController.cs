@@ -31,16 +31,16 @@ namespace WebAPI.Controllers.EssentialGoods
             if (res.Success)
             {
                 if (res.Result == null) return NotFound();
-                var pvm = new ProductModelViewModel();
-                pvm.Id = res.Result.Id;
-                pvm.Name = res.Result.Name;
-                pvm.IsReserved = res.Result.IsReserved;
-                pvm.BarCode = res.Result.BarCode;
-                pvm.Price = res.Result.Price;
-                pvm.Weight = res.Result.Weight;
-                pvm.BrandId = res.Result.BrandId;
-                pvm.CategoryId = res.Result.CategoryId;
-                return pvm;
+                var pmvm = new ProductModelViewModel();
+                pmvm.Id = res.Result.Id;
+                pmvm.Name = res.Result.Name;
+                pmvm.IsReserved = res.Result.IsReserved;
+                pmvm.BarCode = res.Result.BarCode;
+                pmvm.Price = res.Result.Price;
+                pmvm.Weight = res.Result.Weight;
+                pmvm.BrandId = res.Result.BrandId;
+                pmvm.CategoryId = res.Result.CategoryId;
+                return pmvm;
             }
 
             else return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -54,7 +54,7 @@ namespace WebAPI.Controllers.EssentialGoods
             var list = new List<ProductModelViewModel>();
             foreach (var item in res.Result)
             {
-                list.Add(new ProductModelViewModel { Id = item.Id, Name = item.Name });
+                list.Add(new ProductModelViewModel { Id = item.Id, Name = item.Name, BarCode = item.BarCode, Price = item.Price, Weight = item.Weight, IsReserved = item.IsReserved, BrandId = item.BrandId, CategoryId = item.CategoryId});
             }
             return list;
         }

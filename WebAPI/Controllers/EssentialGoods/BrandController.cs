@@ -28,10 +28,10 @@ namespace WebAPI.Controllers.EssentialGoods
             if (res.Success)
             {
                 if (res.Result == null) return NotFound();
-                var pvm = new BrandViewModel();
-                pvm.Id = res.Result.Id;
-                pvm.Name = res.Result.Name;
-                return pvm;
+                var bvm = new BrandViewModel();
+                bvm.Id = res.Result.Id;
+                bvm.Name = res.Result.Name;
+                return bvm;
             }
 
             else return StatusCode((int)HttpStatusCode.InternalServerError);
