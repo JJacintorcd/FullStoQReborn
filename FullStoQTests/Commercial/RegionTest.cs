@@ -96,5 +96,27 @@ namespace FullStoQTests.Commercial
             resList = bo.ListNotDeletedAsync().Result;
             Assert.IsTrue(resDelete.Success && resList.Success && resList.Result.Count == 0);
         }
+
+        [TestMethod]
+        public void TestCreateSameNameRegion()
+        {
+            ContextSeeder.Seed();
+            var bo = new RegionBusinessObject();
+            var item = bo.List().Result.FirstOrDefault();
+            var reg = new Region(item.Name);
+            var resCreate = bo.Create(reg);
+            Assert.IsTrue(!resCreate.Success);
+        }
+
+        [TestMethod]
+        public void TestCreateSameNameRegionAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new RegionBusinessObject();
+            var item = bo.ListAsync().Result.Result.FirstOrDefault();
+            var reg = new Region(item.Name);
+            var resCreate = bo.CreateAsync(reg).Result;
+            Assert.IsTrue(!resCreate.Success);
+        }
     }
 }
