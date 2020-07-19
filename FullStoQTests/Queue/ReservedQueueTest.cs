@@ -160,7 +160,7 @@ namespace FullStoQTests.Queue
             bo.Create(res);
             var limit = bo.TwoHourLimitReserve(res);
 
-            Assert.IsTrue(res.IsDeleted && !limit.Success);
+            Assert.IsTrue(res.IsDeleted && limit.Success);
         }
     }
 }

@@ -17,14 +17,14 @@ namespace FullStoQTests.EssentialGoods
         {
             ContextSeeder.Seed();
             var braBo = new BrandBusinessObject();
-            var bra = new Brand("Barraca do Tejo");
-            braBo.Create(bra);
+            var bra = braBo.ListNotDeleted().Result.First();
             var catBo = new CategoryBusinessObject();
-            var cat = new Category("Non-Alcoholic Beverages");
-            catBo.Create(cat);
+            var cat = catBo.ListNotDeleted().Result.First();
+
             var bo = new ProductModelBusinessObject();
             var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
             var resCreate = bo.Create(prodMod);
+
             var resGet = bo.Read(prodMod.Id);
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
         }
@@ -34,14 +34,14 @@ namespace FullStoQTests.EssentialGoods
         {
             ContextSeeder.Seed();
             var braBo = new BrandBusinessObject();
-            var bra = new Brand("Barraca do Tejo");
-            braBo.Create(bra);
+            var bra = braBo.ListNotDeletedAsync().Result.Result.First();
             var catBo = new CategoryBusinessObject();
-            var cat = new Category("Non-Alcoholic Beverages");
-            catBo.Create(cat);
+            var cat = catBo.ListNotDeletedAsync().Result.Result.First();
+
             var bo = new ProductModelBusinessObject();
             var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
             var resCreate = bo.CreateAsync(prodMod).Result;
+
             var resGet = bo.ReadAsync(prodMod.Id).Result;
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
         }

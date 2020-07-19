@@ -16,19 +16,13 @@ namespace FullStoQTests.EssentialGoods
         public void TestCreateAndReadProductUnit()
         {
             ContextSeeder.Seed();
-            var braBo = new BrandBusinessObject();
-            var bra = new Brand("Barraca do Tejo");
-            braBo.Create(bra);
-            var catBo = new CategoryBusinessObject();
-            var cat = new Category("Non-Alcoholic Beverages");
-            catBo.Create(cat);
             var pmbo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
-            pmbo.Create(prodMod);
+            var prodMod = pmbo.ListNotDeleted().Result.First();
 
             var bo = new ProductUnitBusinessObject();
             var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id);
             var resCreate = bo.Create(prodUnit);
+
             var resGet = bo.Read(prodUnit.Id);
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
         }
@@ -37,19 +31,14 @@ namespace FullStoQTests.EssentialGoods
         public void TestCreateAndReadProductUnitAsync()
         {
             ContextSeeder.Seed();
-            var braBo = new BrandBusinessObject();
-            var bra = new Brand("Barraca do Tejo");
-            braBo.Create(bra);
-            var catBo = new CategoryBusinessObject();
-            var cat = new Category("Non-Alcoholic Beverages");
-            catBo.Create(cat);
+       
             var pmbo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
-            pmbo.Create(prodMod);
+            var prodMod = pmbo.ListNotDeletedAsync().Result.Result.First();
 
             var bo = new ProductUnitBusinessObject();
             var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id);
             var resCreate = bo.CreateAsync(prodUnit).Result;
+
             var resGet = bo.ReadAsync(prodUnit.Id).Result;
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
         }
