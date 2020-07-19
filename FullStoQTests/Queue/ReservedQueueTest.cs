@@ -5,6 +5,7 @@ using Recodme.RD.FullStoQReborn.BusinessLayer.Queue;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders;
 using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
 using Recodme.RD.FullStoQReborn.DataLayer.Queue;
+using System;
 using System.Linq;
 
 namespace FullStoQTests.Queue
@@ -143,6 +144,24 @@ namespace FullStoQTests.Queue
                 resList.Result.Count == 0);
         }
         #endregion
+
+        [TestMethod]
+        public void TestHourLimit()
+        {
+            ContextSeeder.Seed();
+
+            var boProf = new ProfileBusinessObject();
+            var profList = boProf.List().Result.First();
+            var boEst = new EstablishmentBusinessObject();
+            var estList = boEst.List().Result.First();
+
+            var bo = new ReservedQueueBusinessObject();
+            var res = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow.AddHours(-3), DateTime.UtcNow, false, profList.Id, estList.Id);
+            bo.Create(res);
+            var limit = bo.TwoHourLimitReserve(res);
+
+            Assert.IsTrue(res.IsDeleted && !limit.Success);
+        }
     }
 }
 

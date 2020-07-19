@@ -1,4 +1,5 @@
-﻿using Recodme.RD.FullStoQReborn.BusinessLayer.OperationResults;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Recodme.RD.FullStoQReborn.BusinessLayer.OperationResults;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Queue;
 using Recodme.RD.FullStoQReborn.DataLayer.Queue;
 using System;
@@ -26,7 +27,6 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
             {
                 _dao.Create(item);
                 return new OperationResult() { Success = true };
-
             }
             catch (Exception e)
             {
@@ -273,5 +273,21 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
             }
         }
         #endregion
+
+        public OperationResult TwoHourLimitReserve(ReservedQueue item)
+        {
+            try
+            {
+                var reserveHour = item.CreatedAt;
+                var hourLimit = reserveHour.AddHours(2);
+                if (DateTime.UtcNow > hourLimit)_dao.Delete(item);
+                return new OperationResult<ReservedQueue>() { Success = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<ReservedQueue>() { Success = false, Exception = e };
+            }
+
+        }
     }
 }
