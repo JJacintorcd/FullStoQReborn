@@ -31,15 +31,17 @@ namespace WebAPI.Controllers.EssentialGoods
             if (res.Success)
             {
                 if (res.Result == null) return NotFound();
-                var pmvm = new ProductModelViewModel();
-                pmvm.Id = res.Result.Id;
-                pmvm.Name = res.Result.Name;
-                pmvm.IsReserved = res.Result.IsReserved;
-                pmvm.BarCode = res.Result.BarCode;
-                pmvm.Price = res.Result.Price;
-                pmvm.Weight = res.Result.Weight;
-                pmvm.BrandId = res.Result.BrandId;
-                pmvm.CategoryId = res.Result.CategoryId;
+                var pmvm = new ProductModelViewModel()
+                {
+                    Id = res.Result.Id,
+                    ProductName = res.Result.ProductName,
+                    BarCode = res.Result.BarCode,
+                    Price = res.Result.Price,
+                    Weight = res.Result.Weight,
+                    BrandId = res.Result.BrandId,
+                    CategoryId = res.Result.CategoryId
+                };
+                
                 return pmvm;
             }
 
@@ -54,7 +56,7 @@ namespace WebAPI.Controllers.EssentialGoods
             var list = new List<ProductModelViewModel>();
             foreach (var item in res.Result)
             {
-                list.Add(new ProductModelViewModel { Id = item.Id, Name = item.Name, BarCode = item.BarCode, Price = item.Price, Weight = item.Weight, IsReserved = item.IsReserved, BrandId = item.BrandId, CategoryId = item.CategoryId});
+                list.Add(new ProductModelViewModel { Id = item.Id, ProductName = item.ProductName, BarCode = item.BarCode, Price = item.Price, Weight = item.Weight, BrandId = item.BrandId, CategoryId = item.CategoryId});
             }
             return list;
         }
@@ -67,10 +69,9 @@ namespace WebAPI.Controllers.EssentialGoods
             var current = currentRes.Result;
             if (current == null) return NotFound();
 
-            if (current.Name == productModel.Name && current.IsReserved == productModel.IsReserved && current.BarCode == productModel.BarCode && current.Price == productModel.Price && current.Weight == productModel.Weight && current.BrandId == productModel.BrandId && current.CategoryId == productModel.CategoryId) return StatusCode((int)HttpStatusCode.NotModified);
+            if (current.ProductName == productModel.ProductName && current.BarCode == productModel.BarCode && current.Price == productModel.Price && current.Weight == productModel.Weight && current.BrandId == productModel.BrandId && current.CategoryId == productModel.CategoryId) return StatusCode((int)HttpStatusCode.NotModified);
 
-            if (current.Name != productModel.Name) current.Name = productModel.Name;
-            if (current.IsReserved != productModel.IsReserved) current.IsReserved = productModel.IsReserved;
+            if (current.ProductName != productModel.ProductName) current.ProductName = productModel.ProductName;
             if (current.BarCode != productModel.BarCode) current.BarCode = productModel.BarCode;
             if (current.Price != productModel.Price) current.Price = productModel.Price;
             if (current.Weight != productModel.Weight) current.Weight = productModel.Weight;

@@ -19,20 +19,33 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
             }
         }
 
+        private bool _isReserved;
+        public bool IsReserved
+        {
+            get => _isReserved;
+            set
+            {
+                _isReserved = value;
+                RegisterChange();
+            }
+        }
+
         [ForeignKey("ProductModel")]
         public Guid ProductModelId { get; set; }
         public virtual ProductModel ProductModel { get; set; }
 
 
-        public ProductUnit(string serialNumber, Guid productModelId) : base()
+        public ProductUnit(string serialNumber, bool isReserved, Guid productModelId) : base()
         {
             _serialNumber = serialNumber;
+            _isReserved = isReserved;
             ProductModelId = productModelId;
         }
 
-        public ProductUnit(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string serialNumber, Guid productModelId) : base(id, createdAt, updatedAt, isDeleted)
+        public ProductUnit(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string serialNumber, bool isReserved, Guid productModelId) : base(id, createdAt, updatedAt, isDeleted)
         {
             _serialNumber = serialNumber;
+            _isReserved = isReserved;
             ProductModelId = productModelId;
         }
     }

@@ -10,19 +10,21 @@ namespace WebAPI.Models.EssentialGoodsViewModel
     public class ProductUnitViewModel : BaseViewModel
     {
         public string SerialNumber { get; set; }
+        public bool IsReserved { get; set; }
         public Guid ProductModelId { get; set; }
         public static ProductUnitViewModel Parse(ProductUnit productUnit)
         {
             return new ProductUnitViewModel()
             {
                 SerialNumber = productUnit.SerialNumber,
+                IsReserved = productUnit.IsReserved,
                 ProductModelId = productUnit.ProductModelId
             };
         }
 
         public ProductUnit ToProductUnit()
         {
-            return new ProductUnit(SerialNumber, ProductModelId);
+            return new ProductUnit(SerialNumber, IsReserved, ProductModelId);
         }
     }
 }

@@ -281,13 +281,12 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
                 var reserveHour = item.CreatedAt;
                 var hourLimit = reserveHour.AddHours(2);
                 if (DateTime.UtcNow > hourLimit)_dao.Delete(item);
-                return new OperationResult<ReservedQueue>() { Success = true };
+                return new OperationResult() { Success = true };
             }
             catch (Exception e)
             {
-                return new OperationResult<ReservedQueue>() { Success = false, Exception = e };
+                return new OperationResult() { Success = false, Exception = e };
             }
-
         }
     }
 }

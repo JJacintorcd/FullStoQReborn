@@ -23,7 +23,7 @@ namespace FullStoQTests.EssentialGoods
             var cat = new Category("Non-Alcoholic Beverages");
             catBo.Create(cat);
             var bo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco", false, "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
             var resCreate = bo.Create(prodMod);
             var resGet = bo.Read(prodMod.Id);
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
@@ -40,7 +40,7 @@ namespace FullStoQTests.EssentialGoods
             var cat = new Category("Non-Alcoholic Beverages");
             catBo.Create(cat);
             var bo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", false, "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
             var resCreate = bo.CreateAsync(prodMod).Result;
             var resGet = bo.ReadAsync(prodMod.Id).Result;
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
@@ -71,10 +71,10 @@ namespace FullStoQTests.EssentialGoods
             var bo = new ProductModelBusinessObject();
             var resList = bo.List();
             var item = resList.Result.FirstOrDefault();
-            item.Name = "It's just wine";
+            item.ProductName = "It's just wine";
             var resUpdate = bo.Update(item);
             var resNotList = bo.ListNotDeleted().Result;
-            Assert.IsTrue(resUpdate.Success && resNotList.First().Name == "It's just wine");
+            Assert.IsTrue(resUpdate.Success && resNotList.First().ProductName == "It's just wine");
         }
 
         [TestMethod]
@@ -84,10 +84,10 @@ namespace FullStoQTests.EssentialGoods
             var bo = new ProductModelBusinessObject();
             var resList = bo.ListAsync().Result;
             var item = resList.Result.FirstOrDefault();
-            item.Name = "It's just wine";
+            item.ProductName = "It's just wine";
             var resUpdate = bo.UpdateAsync(item).Result;
             resList = bo.ListNotDeletedAsync().Result;
-            Assert.IsTrue(resList.Success && resUpdate.Success && resList.Result.First().Name == "It's just wine");
+            Assert.IsTrue(resList.Success && resUpdate.Success && resList.Result.First().ProductName == "It's just wine");
         }
 
         [TestMethod]
@@ -124,7 +124,7 @@ namespace FullStoQTests.EssentialGoods
             catBo.Create(cat);
             var bo = new ProductModelBusinessObject();
             var item = bo.List().Result.FirstOrDefault();
-            var prodMod = new ProductModel("Vinho Branco", false, item.BarCode, 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", item.BarCode, 4.24, 0.80, bra.Id, cat.Id);
             var resCreate = bo.Create(prodMod);
             Assert.IsTrue(!resCreate.Success);
         }
@@ -141,7 +141,7 @@ namespace FullStoQTests.EssentialGoods
             catBo.Create(cat);
             var bo = new ProductModelBusinessObject();
             var item = bo.ListAsync().Result.Result.FirstOrDefault();
-            var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", false, item.BarCode, 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", item.BarCode, 4.24, 0.80, bra.Id, cat.Id);
             var resCreate = bo.CreateAsync(prodMod).Result;
             Assert.IsTrue(!resCreate.Success);
         }

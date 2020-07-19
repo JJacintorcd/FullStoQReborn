@@ -23,11 +23,11 @@ namespace FullStoQTests.EssentialGoods
             var cat = new Category("Non-Alcoholic Beverages");
             catBo.Create(cat);
             var pmbo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco", false, "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
             pmbo.Create(prodMod);
 
             var bo = new ProductUnitBusinessObject();
-            var prodUnit = new ProductUnit("O Soberbo", "werkyt235", prodMod.Id);
+            var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id);
             var resCreate = bo.Create(prodUnit);
             var resGet = bo.Read(prodUnit.Id);
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
@@ -44,11 +44,11 @@ namespace FullStoQTests.EssentialGoods
             var cat = new Category("Non-Alcoholic Beverages");
             catBo.Create(cat);
             var pmbo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco", false, "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
             pmbo.Create(prodMod);
 
             var bo = new ProductUnitBusinessObject();
-            var prodUnit = new ProductUnit("O Soberbo", "werkyt235", prodMod.Id);
+            var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id);
             var resCreate = bo.CreateAsync(prodUnit).Result;
             var resGet = bo.ReadAsync(prodUnit.Id).Result;
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
@@ -79,23 +79,23 @@ namespace FullStoQTests.EssentialGoods
             var bo = new ProductUnitBusinessObject();
             var resList = bo.List();
             var item = resList.Result.FirstOrDefault();
-            item.Name = "It's just wine";
+            item.IsReserved = true;
             var resUpdate = bo.Update(item);
             var resNotList = bo.ListNotDeleted().Result;
-            Assert.IsTrue(resUpdate.Success && resNotList.First().Name == "It's just wine");
+            Assert.IsTrue(resUpdate.Success && resNotList.First().IsReserved == true);
         }
 
         [TestMethod]
         public void TestUpdateProductUnitAsync()
         {
             ContextSeeder.Seed();
-            var bo = new ProductModelBusinessObject();
+            var bo = new ProductUnitBusinessObject();
             var resList = bo.ListAsync().Result;
             var item = resList.Result.FirstOrDefault();
-            item.Name = "It's just wine";
+            item.IsReserved = true;
             var resUpdate = bo.UpdateAsync(item).Result;
             resList = bo.ListNotDeletedAsync().Result;
-            Assert.IsTrue(resList.Success && resUpdate.Success && resList.Result.First().Name == "It's just wine");
+            Assert.IsTrue(resList.Success && resUpdate.Success && resList.Result.First().IsReserved == true);
         }
 
         [TestMethod]
@@ -131,12 +131,12 @@ namespace FullStoQTests.EssentialGoods
             var cat = new Category("Non-Alcoholic Beverages");
             catBo.Create(cat);
             var pmbo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco", false, "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
             pmbo.Create(prodMod);
 
             var bo = new ProductUnitBusinessObject();
             var item = bo.List().Result.FirstOrDefault();
-            var prodUnit = new ProductUnit("O Soberbo", item.SerialNumber, prodMod.Id);
+            var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id);
             var resCreate = bo.Create(prodUnit);
             Assert.IsTrue(!resCreate.Success);
         }
@@ -152,12 +152,12 @@ namespace FullStoQTests.EssentialGoods
             var cat = new Category("Non-Alcoholic Beverages");
             catBo.Create(cat);
             var pmbo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco", false, "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
             pmbo.Create(prodMod);
 
             var bo = new ProductUnitBusinessObject();
             var item = bo.ListAsync().Result.Result.FirstOrDefault();
-            var prodUnit = new ProductUnit("O Soberbo", item.SerialNumber, prodMod.Id);
+            var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id);
             var resCreate = bo.CreateAsync(prodUnit).Result;
             Assert.IsTrue(!resCreate.Success);
         }
