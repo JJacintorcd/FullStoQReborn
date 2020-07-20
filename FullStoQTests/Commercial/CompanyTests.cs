@@ -135,5 +135,40 @@ namespace FullStoQTests.Commercial
             var resCreate = bo.CreateAsync(est).Result;
             Assert.IsTrue(!resCreate.Success);
         }
+
+
+        #region Update Same Name
+        [TestMethod]
+        public void TestUpdateSameNameCompany()
+        {
+            ContextSeeder.Seed();
+            var bo = new CompanyBusinessObject();
+            var com = new Company("Sonae", 12345);
+            bo.Create(com);
+            var resList = bo.List();
+            var item = resList.Result.FirstOrDefault();
+            item.Name = "Sonae";
+            var resUpdate = bo.Update(item);
+            var resNotList = bo.ListNotDeleted().Result;
+            Assert.IsTrue(!resUpdate.Success);
+        }
+        #endregion
+
+        #region Update Assync Same Name
+        [TestMethod]
+        public void TestUpdateSameNameCompanyAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new CompanyBusinessObject();
+            var reg = new Company("Sonae", 1823445);
+            bo.Create(reg);
+            var resList = bo.ListAsync().Result;
+            var item = resList.Result.FirstOrDefault();
+            item.Name = "Sonae";
+            var resUpdate = bo.UpdateAsync(item).Result;
+            resList = bo.ListNotDeletedAsync().Result;
+            Assert.IsTrue(!resUpdate.Success);
+        }
+        #endregion
     }
 }

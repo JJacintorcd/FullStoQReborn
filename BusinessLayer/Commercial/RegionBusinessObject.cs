@@ -116,6 +116,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
+                if (_dao.List().Any(x => x.Name == item.Name)) throw new Exception("Name already exists");
                 _dao.Update(item);
                 return new OperationResult() { Success = true };
 
@@ -131,6 +132,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
+                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name)) throw new Exception("Name already exists");
                 await _dao.UpdateAsync(item);
                 return new OperationResult() { Success = true };
 

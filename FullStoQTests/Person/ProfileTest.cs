@@ -19,7 +19,7 @@ namespace FullStoQTests.Person
         {
             ContextSeeder.Seed();
             var bo = new ProfileBusinessObject();
-            var reg = new Profile(123456789, "Manuel", "Macabres", 919191918, DateTime.UtcNow);
+            var reg = new Profile(123450789, "Manuel", "Macabres", 939191919, DateTime.UtcNow);
             var resCreate = bo.Create(reg);
             var resGet = bo.Read(reg.Id);
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
@@ -30,7 +30,7 @@ namespace FullStoQTests.Person
         {
             ContextSeeder.Seed();
             var bo = new ProfileBusinessObject();
-            var reg = new Profile(123456789, "Manuel", "Macabres", 919191918, DateTime.UtcNow);
+            var reg = new Profile(123459789, "Manuel", "Macabres", 939191919, DateTime.UtcNow);
             var resCreate = bo.CreateAsync(reg).Result;
             var resGet = bo.ReadAsync(reg.Id).Result;
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
