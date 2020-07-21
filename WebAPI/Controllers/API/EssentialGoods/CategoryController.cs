@@ -8,65 +8,62 @@ using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
 using WebAPI.Models.EssentialGoodsViewModel;
 
-namespace WebAPI.Controllers.EssentialGoods
+namespace WebAPI.Controllers.Api.EssentialGoods
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductUnitController : ControllerBase
+    public class CategoryController : ControllerBase
     {
-        private readonly ProductUnitBusinessObject _bo = new ProductUnitBusinessObject();
+        private readonly CategoryBusinessObject _bo = new CategoryBusinessObject();
 
         [HttpPost]
-        public ActionResult Create([FromBody]ProductUnitViewModel vm)
+        public ActionResult Create([FromBody]CategoryViewModel vm)
         {
-            var productUnit = vm.ToProductUnit();
-            var res = _bo.Create(productUnit);
+            var category = vm.ToCategory();
+            var res = _bo.Create(category);
             return StatusCode(res.Success ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ProductUnitViewModel> Get(Guid id)
+        public ActionResult<CategoryViewModel> Get(Guid id)
         {
             var res = _bo.Read(id);
             if (res.Success)
             {
                 if (res.Result == null) return NotFound();
-                var puvm = new ProductUnitViewModel();
-                puvm.Id = res.Result.Id;
-                puvm.ProductModelId = res.Result.ProductModelId;
-                puvm.SerialNumber = res.Result.SerialNumber;
-
-                return puvm;
+                var rvm = new CategoryViewModel();
+                rvm.Id = res.Result.Id;
+                rvm.Name = res.Result.Name;
+                return rvm;
             }
 
             else return StatusCode((int)HttpStatusCode.InternalServerError);
         }
 
         [HttpGet]
-        public ActionResult<List<ProductUnitViewModel>> List()
+        public ActionResult<List<CategoryViewModel>> List()
         {
             var res = _bo.List();
             if (!res.Success) return StatusCode((int)HttpStatusCode.InternalServerError);
-            var list = new List<ProductUnitViewModel>();
+            var list = new List<CategoryViewModel>();
             foreach (var item in res.Result)
             {
-                list.Add(new ProductUnitViewModel { Id = item.Id, ProductModelId = item.ProductModelId, SerialNumber = item.SerialNumber });
+                list.Add(new CategoryViewModel { Id = item.Id, Name = item.Name });
             }
             return list;
         }
 
         [HttpPut]
-        public ActionResult Update([FromBody] ProductUnitViewModel productUnit)
+        public ActionResult Update([FromBody] CategoryViewModel category)
         {
-            var currentRes = _bo.Read(productUnit.Id);
+            var currentRes = _bo.Read(category.Id);
             if (!currentRes.Success) return StatusCode((int)HttpStatusCode.InternalServerError);
             var current = currentRes.Result;
             if (current == null) return NotFound();
 
-            if (current.ProductModelId == productUnit.ProductModelId && current.SerialNumber == productUnit.SerialNumber) return StatusCode((int)HttpStatusCode.NotModified);
+            if (current.Name == category.Name) return StatusCode((int)HttpStatusCode.NotModified);
 
-            if (current.ProductModelId != productUnit.ProductModelId) current.ProductModelId = productUnit.ProductModelId;
-            if (current.SerialNumber != productUnit.SerialNumber) current.SerialNumber = productUnit.SerialNumber;
+            if (current.Name != category.Name) current.Name = category.Name;
 
 
             var updateResult = _bo.Update(current);

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.Person;
 using WebAPI.Models.PersonViewModel;
 
-namespace WebAPI.Controllers.Person
+namespace WebAPI.Controllers.Api.Person
 {
     [Route("api/[controller]")]
     [ApiController]

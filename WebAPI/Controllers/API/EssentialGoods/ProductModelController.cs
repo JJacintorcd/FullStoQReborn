@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
 using WebAPI.Models.EssentialGoodsViewModel;
 
-namespace WebAPI.Controllers.EssentialGoods
+namespace WebAPI.Controllers.Api.EssentialGoods
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -34,7 +34,7 @@ namespace WebAPI.Controllers.EssentialGoods
                 var pmvm = new ProductModelViewModel()
                 {
                     Id = res.Result.Id,
-                    ProductName = res.Result.ProductName,
+                    Name = res.Result.Name,
                     BarCode = res.Result.BarCode,
                     Price = res.Result.Price,
                     Weight = res.Result.Weight,
@@ -56,7 +56,7 @@ namespace WebAPI.Controllers.EssentialGoods
             var list = new List<ProductModelViewModel>();
             foreach (var item in res.Result)
             {
-                list.Add(new ProductModelViewModel { Id = item.Id, ProductName = item.ProductName, BarCode = item.BarCode, Price = item.Price, Weight = item.Weight, BrandId = item.BrandId, CategoryId = item.CategoryId});
+                list.Add(new ProductModelViewModel { Id = item.Id, Name = item.Name, BarCode = item.BarCode, Price = item.Price, Weight = item.Weight, BrandId = item.BrandId, CategoryId = item.CategoryId});
             }
             return list;
         }
@@ -69,9 +69,9 @@ namespace WebAPI.Controllers.EssentialGoods
             var current = currentRes.Result;
             if (current == null) return NotFound();
 
-            if (current.ProductName == productModel.ProductName && current.BarCode == productModel.BarCode && current.Price == productModel.Price && current.Weight == productModel.Weight && current.BrandId == productModel.BrandId && current.CategoryId == productModel.CategoryId) return StatusCode((int)HttpStatusCode.NotModified);
+            if (current.Name == productModel.Name && current.BarCode == productModel.BarCode && current.Price == productModel.Price && current.Weight == productModel.Weight && current.BrandId == productModel.BrandId && current.CategoryId == productModel.CategoryId) return StatusCode((int)HttpStatusCode.NotModified);
 
-            if (current.ProductName != productModel.ProductName) current.ProductName = productModel.ProductName;
+            if (current.Name != productModel.Name) current.Name = productModel.Name;
             if (current.BarCode != productModel.BarCode) current.BarCode = productModel.BarCode;
             if (current.Price != productModel.Price) current.Price = productModel.Price;
             if (current.Weight != productModel.Weight) current.Weight = productModel.Weight;

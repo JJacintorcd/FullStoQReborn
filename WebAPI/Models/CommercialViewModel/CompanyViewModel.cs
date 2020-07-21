@@ -5,7 +5,6 @@ namespace WebAPI.Models.CommercialViewModel
 {
     public class CompanyViewModel : NamedViewModel
     {
-        public bool IsDeleted { get; set; }
         public long VatNumber { get; set; }
 
         public Company ToCompany()

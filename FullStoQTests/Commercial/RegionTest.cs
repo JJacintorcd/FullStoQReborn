@@ -127,10 +127,8 @@ namespace FullStoQTests.Commercial
             var bo = new RegionBusinessObject();
             var reg = new Region("another");
             bo.Create(reg);
-            var resList = bo.List();
-            var item = resList.Result.FirstOrDefault();
-            item.Name = "another";
-            var resUpdate = bo.Update(item);
+            reg.Name = "Covilhã";
+            var resUpdate = bo.Update(reg);
             Assert.IsTrue(!resUpdate.Success);
         }
 
@@ -141,10 +139,8 @@ namespace FullStoQTests.Commercial
             var bo = new RegionBusinessObject();
             var reg = new Region("another");
             bo.Create(reg);
-            var resList = bo.ListAsync().Result;
-            var item = resList.Result.FirstOrDefault();
-            item.Name = "another";
-            var resUpdate = bo.UpdateAsync(item).Result;
+            reg.Name = "Covilhã";
+            var resUpdate = bo.UpdateAsync(reg).Result;
             Assert.IsTrue(!resUpdate.Success);
         }
     }

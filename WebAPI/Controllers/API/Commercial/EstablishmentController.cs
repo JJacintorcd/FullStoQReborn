@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using WebAPI.Models.CommercialViewModel;
 
-namespace WebAPI.Controllers.Commercial
+namespace WebAPI.Controllers.Api.Commercial
 {
     [Route("api/[controller]")]
     [ApiController]
