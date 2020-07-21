@@ -47,6 +47,7 @@ namespace FullStoQTests.Commercial
             var bo = new EstablishmentBusinessObject();
             var est = new Establishment("Avenida da liberdade, numero 1029, Lisboa", "09:00", "20:00", "Domingo", reg1.Id, com1.Id);
             var resCreate = bo.CreateAsync(est).Result;
+
             var resGet = bo.ReadAsync(est.Id).Result;
 
             Assert.IsTrue(resCreate.Success && resGet.Success && resGet.Result != null);
