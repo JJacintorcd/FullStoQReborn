@@ -95,6 +95,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
+                if (_dao.ListAsync().Result.Any(x => x.SerialNumber == item.SerialNumber && x.Id != item.Id)) throw new Exception("Serial number already exists");
                 _dao.Update(item);
                 return new OperationResult() { Success = true };
             }
@@ -107,6 +108,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
+                if (_dao.ListAsync().Result.Any(x => x.SerialNumber == item.SerialNumber && x.Id != item.Id)) throw new Exception("Serial number already exists");
                 await _dao.UpdateAsync(item);
                 return new OperationResult() { Success = true };
             }
