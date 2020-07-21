@@ -156,13 +156,73 @@ namespace FullStoQTests.Queue
             var estList = boEst.List().Result.First();
 
             var bo = new ReservedQueueBusinessObject();
-            var res = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow.AddHours(-3), DateTime.UtcNow, false, profList.Id, estList.Id);
-            bo.Create(res);
-            var limit = bo.TwoHourLimitReserve(res);
+            var res = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow.AddHours(-3), DateTime.UtcNow, false, estList.Id, profList.Id);
+           bo.Create(res);
+            var limit = bo.TwoHourLimitReserve(res.Id);
 
-            Assert.IsTrue(res.IsDeleted && !limit.Success);
+            Assert.IsTrue(res.IsDeleted && limit.Success && !limit.Result);
+        }
+
+        [TestMethod]
+        public void TestHourLimitAsync()
+        {
+            ContextSeeder.Seed();
+
+            var boProf = new ProfileBusinessObject();
+            var profList = boProf.List().Result.First();
+            var boEst = new EstablishmentBusinessObject();
+            var estList = boEst.List().Result.First();
+
+            var bo = new ReservedQueueBusinessObject();
+            var res = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow.AddHours(-3), DateTime.UtcNow, false, estList.Id, profList.Id);
+
+            var resCreate = bo.CreateAsync(res);
+            var limit = bo.TwoHourLimitReserveAsync(res.Id);
+
+            Assert.IsTrue(resCreate.Result.Success && res.IsDeleted && limit.Result.Success && !limit.Result.Result);
+        }
+
+        [TestMethod]
+        public void TestDailyLimit()
+        {
+            ContextSeeder.Seed();
+
+            var boProf = new ProfileBusinessObject();
+            var profList = boProf.List().Result.First();
+            var boEst = new EstablishmentBusinessObject();
+            var estList = boEst.List().Result.First();
+
+            var bo = new ReservedQueueBusinessObject();
+            var res1 = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, false, estList.Id, profList.Id);
+            var res2 = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, false, estList.Id, profList.Id);
+            bo.Create(res1);
+            bo.Create(res2);
+
+            var reserves = bo.DayLimitReserve(res2.Id);
+
+            Assert.IsTrue(!reserves.Success);
+        }
+
+        [TestMethod]
+        public void TestDailyLimitAsync()
+        {
+            ContextSeeder.Seed();
+
+            var boProf = new ProfileBusinessObject();
+            var profList = boProf.List().Result.First();
+            var boEst = new EstablishmentBusinessObject();
+            var estList = boEst.List().Result.First();
+
+            var bo = new ReservedQueueBusinessObject();
+            var res1 = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, false, estList.Id, profList.Id);
+            var res2 = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, false, estList.Id, profList.Id);
+            var c1 = bo.CreateAsync(res1);
+            var c2 = bo.CreateAsync(res2);
+
+            var reserves = bo.DayLimitReserveAsync(res2.Id);
+
+            Assert.IsTrue(reserves.Result.Result == false);
         }
     }
 }
-
 
