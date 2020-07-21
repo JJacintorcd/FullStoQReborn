@@ -5,62 +5,62 @@ using System.Collections.Generic;
 using System.Net;
 using WebAPI.Models.CommercialViewModel;
 
-namespace WebAPI.Controllers.Commercial
+namespace WebAPI.Controllers.Api.Commercial
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompanyController : ControllerBase
+    public class RegionController : ControllerBase
     {
-        private readonly CompanyBusinessObject _bo = new CompanyBusinessObject();
+        private readonly RegionBusinessObject _bo = new RegionBusinessObject();
 
         [HttpPost]
-        public ActionResult Create([FromBody]CompanyViewModel vm)
+        public ActionResult Create([FromBody]RegionViewModel vm)
         {
-            var company = vm.ToCompany();
-            var res = _bo.Create(company);
+            var region = vm.ToRegion();
+            var res = _bo.Create(region);
             return StatusCode(res.Success ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<CompanyViewModel> Get(Guid id)
+        public ActionResult<RegionViewModel> Get(Guid id)
         {
             var res = _bo.Read(id);
             if (res.Success)
             {
                 if (res.Result == null) return NotFound();
-                var cvm = new CompanyViewModel();
-                cvm.Id = res.Result.Id;
-                cvm.Name = res.Result.Name;
-                return cvm;
+                var pvm = new RegionViewModel();
+                pvm.Id = res.Result.Id;
+                pvm.Name = res.Result.Name;
+                return pvm;
             }
 
             else return StatusCode((int)HttpStatusCode.InternalServerError);
         }
 
         [HttpGet]
-        public ActionResult<List<CompanyViewModel>> List()
+        public ActionResult<List<RegionViewModel>> List()
         {
             var res = _bo.List();
             if (!res.Success) return StatusCode((int)HttpStatusCode.InternalServerError);
-            var list = new List<CompanyViewModel>();
+            var list = new List<RegionViewModel>();
             foreach (var item in res.Result)
             {
-                list.Add(new CompanyViewModel { Id = item.Id, Name = item.Name });
+                list.Add(new RegionViewModel { Id = item.Id, Name = item.Name });
             }
             return list;
         }
 
         [HttpPut]
-        public ActionResult Update([FromBody] CompanyViewModel company)
+        public ActionResult Update([FromBody] RegionViewModel region)
         {
-            var currentRes = _bo.Read(company.Id);
+            var currentRes = _bo.Read(region.Id);
             if (!currentRes.Success) return StatusCode((int)HttpStatusCode.InternalServerError);
             var current = currentRes.Result;
             if (current == null) return NotFound();
 
-            if (current.Name == company.Name) return StatusCode((int)HttpStatusCode.NotModified);
+            if (current.Name == region.Name) return StatusCode((int)HttpStatusCode.NotModified);
 
-            if (current.Name != company.Name) current.Name = company.Name;
+            if (current.Name != region.Name) current.Name = region.Name;
 
 
             var updateResult = _bo.Update(current);

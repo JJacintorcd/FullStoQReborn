@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using WebAPI.Models.QueueViewModel;
 
-namespace WebAPI.Controllers.Queue
+namespace WebAPI.Controllers.Api.Queue
 {
     [Route("api/[controller]")]
     [ApiController]

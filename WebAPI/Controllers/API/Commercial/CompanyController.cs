@@ -1,66 +1,66 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
+using Recodme.RD.FullStoQReborn.BusinessLayer.Commercial;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using WebAPI.Models.EssentialGoodsViewModel;
+using WebAPI.Models.CommercialViewModel;
 
-namespace WebAPI.Controllers.EssentialGoods
+namespace WebAPI.Controllers.Api.Commercial
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BrandController : ControllerBase
+    public class CompanyController : ControllerBase
     {
-        private readonly BrandBusinessObject _bo = new BrandBusinessObject();
+        private readonly CompanyBusinessObject _bo = new CompanyBusinessObject();
 
         [HttpPost]
-        public ActionResult Create([FromBody]BrandViewModel vm)
+        public ActionResult Create([FromBody]CompanyViewModel vm)
         {
-            var brand = vm.ToBrand();
-            var res = _bo.Create(brand);
+            var company = vm.ToCompany();
+            var res = _bo.Create(company);
             return StatusCode(res.Success ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<BrandViewModel> Get(Guid id)
+        public ActionResult<CompanyViewModel> Get(Guid id)
         {
             var res = _bo.Read(id);
             if (res.Success)
             {
                 if (res.Result == null) return NotFound();
-                var bvm = new BrandViewModel();
-                bvm.Id = res.Result.Id;
-                bvm.Name = res.Result.Name;
-                return bvm;
+                var cvm = new CompanyViewModel();
+                cvm.Id = res.Result.Id;
+                cvm.Name = res.Result.Name;
+                return cvm;
             }
 
             else return StatusCode((int)HttpStatusCode.InternalServerError);
         }
 
         [HttpGet]
-        public ActionResult<List<BrandViewModel>> List()
+        public ActionResult<List<CompanyViewModel>> List()
         {
             var res = _bo.List();
             if (!res.Success) return StatusCode((int)HttpStatusCode.InternalServerError);
-            var list = new List<BrandViewModel>();
+            var list = new List<CompanyViewModel>();
             foreach (var item in res.Result)
             {
-                list.Add(new BrandViewModel { Id = item.Id, Name = item.Name });
+                list.Add(new CompanyViewModel { Id = item.Id, Name = item.Name });
             }
             return list;
         }
 
         [HttpPut]
-        public ActionResult Update([FromBody] BrandViewModel brand)
+        public ActionResult Update([FromBody] CompanyViewModel company)
         {
-            var currentRes = _bo.Read(brand.Id);
+            var currentRes = _bo.Read(company.Id);
             if (!currentRes.Success) return StatusCode((int)HttpStatusCode.InternalServerError);
             var current = currentRes.Result;
             if (current == null) return NotFound();
 
-            if (current.Name == brand.Name) return StatusCode((int)HttpStatusCode.NotModified);
+            if (current.Name == company.Name) return StatusCode((int)HttpStatusCode.NotModified);
 
-            if (current.Name != brand.Name) current.Name = brand.Name;
+            if (current.Name != company.Name) current.Name = company.Name;
 
 
             var updateResult = _bo.Update(current);

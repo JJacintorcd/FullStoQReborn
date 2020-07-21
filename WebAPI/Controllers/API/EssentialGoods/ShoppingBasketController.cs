@@ -8,65 +8,62 @@ using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
 using WebAPI.Models.EssentialGoodsViewModel;
 
-namespace WebAPI.Controllers.EssentialGoods
+namespace WebAPI.Controllers.Api.EssentialGoods
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductUnitController : ControllerBase
+    public class ShoppingBasketController : ControllerBase
     {
-        private readonly ProductUnitBusinessObject _bo = new ProductUnitBusinessObject();
+        private readonly ShoppingBasketBusinessObject _bo = new ShoppingBasketBusinessObject();
 
         [HttpPost]
-        public ActionResult Create([FromBody]ProductUnitViewModel vm)
+        public ActionResult Create([FromBody]ShoppingBasketViewModel vm)
         {
-            var productUnit = vm.ToProductUnit();
-            var res = _bo.Create(productUnit);
+            var shoppingBasket = vm.ToShoppingBasket();
+            var res = _bo.Create(shoppingBasket);
             return StatusCode(res.Success ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ProductUnitViewModel> Get(Guid id)
+        public ActionResult<ShoppingBasketViewModel> Get(Guid id)
         {
             var res = _bo.Read(id);
             if (res.Success)
             {
                 if (res.Result == null) return NotFound();
-                var puvm = new ProductUnitViewModel();
-                puvm.Id = res.Result.Id;
-                puvm.ProductModelId = res.Result.ProductModelId;
-                puvm.SerialNumber = res.Result.SerialNumber;
-
-                return puvm;
+                var sbvm = new ShoppingBasketViewModel();
+                sbvm.Id = res.Result.Id;
+                sbvm.ProfileId = res.Result.ProfileId;
+                return sbvm;
             }
 
             else return StatusCode((int)HttpStatusCode.InternalServerError);
         }
 
         [HttpGet]
-        public ActionResult<List<ProductUnitViewModel>> List()
+        public ActionResult<List<ShoppingBasketViewModel>> List()
         {
             var res = _bo.List();
             if (!res.Success) return StatusCode((int)HttpStatusCode.InternalServerError);
-            var list = new List<ProductUnitViewModel>();
+            var list = new List<ShoppingBasketViewModel>();
             foreach (var item in res.Result)
             {
-                list.Add(new ProductUnitViewModel { Id = item.Id, ProductModelId = item.ProductModelId, SerialNumber = item.SerialNumber });
+                list.Add(new ShoppingBasketViewModel { Id = item.Id, ProfileId = item.ProfileId });
             }
             return list;
         }
 
         [HttpPut]
-        public ActionResult Update([FromBody] ProductUnitViewModel productUnit)
+        public ActionResult Update([FromBody] ShoppingBasketViewModel shoppingBasket)
         {
-            var currentRes = _bo.Read(productUnit.Id);
+            var currentRes = _bo.Read(shoppingBasket.Id);
             if (!currentRes.Success) return StatusCode((int)HttpStatusCode.InternalServerError);
             var current = currentRes.Result;
             if (current == null) return NotFound();
 
-            if (current.ProductModelId == productUnit.ProductModelId && current.SerialNumber == productUnit.SerialNumber) return StatusCode((int)HttpStatusCode.NotModified);
+            if (current.ProfileId == shoppingBasket.ProfileId) return StatusCode((int)HttpStatusCode.NotModified);
 
-            if (current.ProductModelId != productUnit.ProductModelId) current.ProductModelId = productUnit.ProductModelId;
-            if (current.SerialNumber != productUnit.SerialNumber) current.SerialNumber = productUnit.SerialNumber;
+            if (current.ProfileId != shoppingBasket.ProfileId) current.ProfileId = shoppingBasket.ProfileId;
 
 
             var updateResult = _bo.Update(current);

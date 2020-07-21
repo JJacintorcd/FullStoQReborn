@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
 using WebAPI.Models.EssentialGoodsViewModel;
 
-namespace WebAPI.Controllers.EssentialGoods
+namespace WebAPI.Controllers.Api.EssentialGoods
 {
     [Route("api/[controller]")]
     [ApiController]

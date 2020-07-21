@@ -5,10 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Commercial\" />
-    <Folder Include="Views\EssentialGoods\" />
-    <Folder Include="Views\Person\" />
-    <Folder Include="Views\Queue\" />
+    <Folder Include="Controllers\Web\Person\" />
+    <Folder Include="Controllers\Web\Queue\" />
+    <Folder Include="Controllers\Web\EssentialGoods\" />
+    <Folder Include="Controllers\Web\Commercial\" />
+    <Folder Include="Views\Commercial\Region\" />
+    <Folder Include="Views\Commercial\Establishment\" />
+    <Folder Include="Views\Commercial\Company\" />
+    <Folder Include="Views\EssentialGoods\Brand\" />
+    <Folder Include="Views\EssentialGoods\Category\" />
+    <Folder Include="Views\EssentialGoods\ShoppingBasket\" />
+    <Folder Include="Views\EssentialGoods\ProductUnit\" />
+    <Folder Include="Views\EssentialGoods\ProductModel\" />
+    <Folder Include="Views\Person\Profile\" />
+    <Folder Include="Views\Queue\StoreQueue\" />
+    <Folder Include="Views\Queue\ReservedQueue\" />
   </ItemGroup>
 
   <ItemGroup>
