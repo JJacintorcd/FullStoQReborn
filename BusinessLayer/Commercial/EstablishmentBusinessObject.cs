@@ -162,7 +162,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = true, Exception = e };
+                return new OperationResult() { Success = false, Exception = e };
             }
         }
         #endregion
