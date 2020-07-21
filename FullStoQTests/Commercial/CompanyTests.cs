@@ -137,7 +137,7 @@ namespace FullStoQTests.Commercial
         }
 
 
-        #region Update Same Name
+        #region Update Same Vat
         [TestMethod]
         public void TestUpdateSameNameCompany()
         {
@@ -149,12 +149,11 @@ namespace FullStoQTests.Commercial
             var item = resList.Result.FirstOrDefault();
             item.Name = "Sonae";
             var resUpdate = bo.Update(item);
-            var resNotList = bo.ListNotDeleted().Result;
             Assert.IsTrue(!resUpdate.Success);
         }
         #endregion
 
-        #region Update Assync Same Name
+        #region Update Assync Same Vat
         [TestMethod]
         public void TestUpdateSameNameCompanyAsync()
         {
@@ -166,7 +165,6 @@ namespace FullStoQTests.Commercial
             var item = resList.Result.FirstOrDefault();
             item.Name = "Sonae";
             var resUpdate = bo.UpdateAsync(item).Result;
-            resList = bo.ListNotDeletedAsync().Result;
             Assert.IsTrue(!resUpdate.Success);
         }
         #endregion

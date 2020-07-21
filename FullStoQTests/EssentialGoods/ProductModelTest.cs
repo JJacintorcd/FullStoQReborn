@@ -111,39 +111,5 @@ namespace FullStoQTests.EssentialGoods
             resList = bo.ListNotDeletedAsync().Result;
             Assert.IsTrue(resDelete.Success && resList.Success && resList.Result.Count == 0);
         }
-
-        [TestMethod]
-        public void TestCreateSameBarCodeProductModel()
-        {
-            ContextSeeder.Seed();
-            var braBo = new BrandBusinessObject();
-            var bra = new Brand("Barraca do Tejo");
-            braBo.Create(bra);
-            var catBo = new CategoryBusinessObject();
-            var cat = new Category("Non-Alcoholic Beverages");
-            catBo.Create(cat);
-            var bo = new ProductModelBusinessObject();
-            var item = bo.List().Result.FirstOrDefault();
-            var prodMod = new ProductModel("Vinho Branco", item.BarCode, 4.24, 0.80, bra.Id, cat.Id);
-            var resCreate = bo.Create(prodMod);
-            Assert.IsTrue(!resCreate.Success);
-        }
-
-        [TestMethod]
-        public void TestCreateSameBarCodeProductModelAsync()
-        {
-            ContextSeeder.Seed();
-            var braBo = new BrandBusinessObject();
-            var bra = new Brand("Barraca do Tejo");
-            braBo.Create(bra);
-            var catBo = new CategoryBusinessObject();
-            var cat = new Category("Non-Alcoholic Beverages");
-            catBo.Create(cat);
-            var bo = new ProductModelBusinessObject();
-            var item = bo.ListAsync().Result.Result.FirstOrDefault();
-            var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", item.BarCode, 4.24, 0.80, bra.Id, cat.Id);
-            var resCreate = bo.CreateAsync(prodMod).Result;
-            Assert.IsTrue(!resCreate.Success);
-        }
     }
 }
