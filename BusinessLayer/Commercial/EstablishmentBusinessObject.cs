@@ -143,6 +143,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
+                if (_dao.List().Any(x => x.Address == establishment.Address)) throw new Exception("Address already exists");
                 _dao.Update(establishment);
                 return new OperationResult() { Success = true };
             }
@@ -155,12 +156,13 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
+                if (_dao.ListAsync().Result.Any(x => x.Address == establishment.Address)) throw new Exception("Address already exists");
                 await _dao.UpdateAsync(establishment);
                 return new OperationResult() { Success = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = true, Exception = e };
+                return new OperationResult() { Success = false, Exception = e };
             }
         }
         #endregion

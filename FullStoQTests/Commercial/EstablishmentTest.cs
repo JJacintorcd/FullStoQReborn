@@ -18,13 +18,13 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var boReg = new RegionBusinessObject();
-            var reg1 = boReg.List().Result.First();
+            var reg1 = boReg.List().Result.FirstOrDefault();
 
             var boComp = new CompanyBusinessObject();
-            var com1 = boComp.List().Result.First();
+            var com1 = boComp.List().Result.FirstOrDefault();
 
             var bo = new EstablishmentBusinessObject();
-            var est = new Establishment("Avenida da liberdade, numero 1029, Lisboa", "09:00", "20:00", "Domingo", reg1.Id, com1.Id);
+            var est = new Establishment("Avenida da liberdade, numero 1022, Lisboa", "09:00", "20:00", "Domingo", reg1.Id, com1.Id);
             var resCreate = bo.Create(est);
             var resGet = bo.Read(est.Id);
 
@@ -45,7 +45,7 @@ namespace FullStoQTests.Commercial
             var com1 = boComp.List().Result.First();
 
             var bo = new EstablishmentBusinessObject();
-            var est = new Establishment("Avenida da liberdade, numero 1029, Lisboa", "09:00", "20:00", "Domingo", reg1.Id, com1.Id);
+            var est = new Establishment("Avenida da liberdade, numero 1022, Lisboa", "09:00", "20:00", "Domingo", reg1.Id, com1.Id);
             var resCreate = bo.CreateAsync(est).Result;
 
             var resGet = bo.ReadAsync(est.Id).Result;
@@ -178,5 +178,47 @@ namespace FullStoQTests.Commercial
         }
         #endregion
 
+
+        #region Update Same Address
+        [TestMethod]
+        public void TestUpdateSameAddressEstablishment()
+        {
+            ContextSeeder.Seed();
+
+            var boReg = new RegionBusinessObject();
+            var reg1 = boReg.List().Result.First();
+            var boComp = new CompanyBusinessObject();
+            var com1 = boComp.List().Result.First();
+            var bo = new EstablishmentBusinessObject();
+            var est = new Establishment("Avenida da liberdade, numero 1022, Lisboa", "09:00", "20:00", "Domingo", reg1.Id, com1.Id);
+            bo.Create(est);
+            var resList = bo.List();
+            var item = resList.Result.FirstOrDefault();
+            item.Address = "Avenida da liberdade, numero 1022, Lisboa";
+            var resUpdate = bo.Update(item);
+
+            Assert.IsTrue(!resUpdate.Success);
+        }
+        #endregion
+
+        #region Update Async SameAddress
+        [TestMethod]
+        public void TestUpdateSameNameEstablishmentAsync()
+        {
+            ContextSeeder.Seed();
+            var boReg = new RegionBusinessObject();
+            var reg1 = boReg.List().Result.First();
+            var boComp = new CompanyBusinessObject();
+            var com1 = boComp.List().Result.First();
+            var bo = new EstablishmentBusinessObject();
+            var est = new Establishment("Avenida da liberdade, numero 1022, Lisboa", "09:00", "20:00", "Domingo", reg1.Id, com1.Id);
+            bo.Create(est);
+            var restList = bo.ListAsync().Result;
+            var item = restList.Result.FirstOrDefault();
+            item.Address = "Avenida da liberdade, numero 1022, Lisboa";
+            var resUpdate = bo.UpdateAsync(item).Result;
+            Assert.IsTrue(!resUpdate.Success);
+        }
+        #endregion
     }
 }
