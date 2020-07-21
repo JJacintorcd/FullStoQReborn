@@ -65,32 +65,32 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         #endregion
 
         #region Create
-        public OperationResult Create(Establishment establishment)
+        public OperationResult<bool> Create(Establishment establishment)
         {
             try
             {
                 if (_dao.List().Any(x => x.Address == establishment.Address))
-                    if (_dao.ListAsync().Result.Any(x => x.Address == establishment.Address)) return new OperationResult() { Success = false, Message = "Address already exists" };
+                    if (_dao.ListAsync().Result.Any(x => x.Address == establishment.Address)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
                 _dao.Create(establishment);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
 
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
-        public async Task<OperationResult> CreateAsync(Establishment establishment)
+        public async Task<OperationResult<bool>> CreateAsync(Establishment establishment)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Address == establishment.Address)) return new OperationResult() { Success = false, Message = "Address already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.Address == establishment.Address)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
                 await _dao.CreateAsync(establishment);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
         #endregion
@@ -140,30 +140,30 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         #endregion
 
         #region Update
-        public OperationResult Update(Establishment establishment)
+        public OperationResult<bool> Update(Establishment establishment)
         {
             try
             {
-                if (_dao.List().Any(x => x.Address == establishment.Address && x.Id != establishment.Id)) return new OperationResult() { Success = false, Message = "Address already exists" };
+                if (_dao.List().Any(x => x.Address == establishment.Address && x.Id != establishment.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
                 _dao.Update(establishment);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
-        public async Task<OperationResult> UpdateAsync(Establishment establishment)
+        public async Task<OperationResult<bool>> UpdateAsync(Establishment establishment)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Address == establishment.Address && x.Id != establishment.Id)) return new OperationResult() { Success = false, Message = "Address already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.Address == establishment.Address && x.Id != establishment.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
                 await _dao.UpdateAsync(establishment);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
         #endregion

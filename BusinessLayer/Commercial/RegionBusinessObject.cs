@@ -22,34 +22,34 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
 
         #region Create
 
-        public OperationResult Create(Region item)
+        public OperationResult<bool> Create(Region item)
         {
             try
             {
-                if (_dao.List().Any(x => x.Name == item.Name)) return new OperationResult() { Success = false, Message = "Name already exists" };
+                if (_dao.List().Any(x => x.Name == item.Name)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 _dao.Create(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
 
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
 
             }
 
         }
-        public async Task<OperationResult> CreateAsync(Region item)
+        public async Task<OperationResult<bool>> CreateAsync(Region item)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name)) return new OperationResult() { Success = false, Message = "Name already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 await _dao.CreateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
 
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
 
             }
 
@@ -112,34 +112,34 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
 
         #region Update
 
-        public OperationResult Update(Region item)
+        public OperationResult<bool> Update(Region item)
         {
             try
             {
-                if (_dao.List().Any(x => x.Name == item.Name && x.Id != item.Id)) return new OperationResult() { Success = false, Message = "Name already exists" };
+                if (_dao.List().Any(x => x.Name == item.Name && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 _dao.Update(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
 
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
 
             }
 
         }
-        public async Task<OperationResult> UpdateAsync(Region item)
+        public async Task<OperationResult<bool>> UpdateAsync(Region item)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && x.Id != item.Id)) return new OperationResult() { Success = false, Message = "Name already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 await _dao.UpdateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
 
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
 
             }
 

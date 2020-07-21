@@ -105,7 +105,7 @@ namespace FullStoQTests.Commercial
             var item = bo.List().Result.FirstOrDefault();
             var reg = new Region(item.Name);
             var resCreate = bo.Create(reg);
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(resCreate.Success);
         }
 
         [TestMethod]
@@ -116,7 +116,7 @@ namespace FullStoQTests.Commercial
             var item = bo.ListAsync().Result.Result.FirstOrDefault();
             var reg = new Region(item.Name);
             var resCreate = bo.CreateAsync(reg).Result;
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(resCreate.Success);
         }
 
 
@@ -129,7 +129,7 @@ namespace FullStoQTests.Commercial
             bo.Create(reg);
             reg.Name = "Covilhã";
             var resUpdate = bo.Update(reg);
-            Assert.IsTrue(!resUpdate.Success);
+            Assert.IsTrue(resUpdate.Success);
         }
 
         [TestMethod]
@@ -141,7 +141,7 @@ namespace FullStoQTests.Commercial
             bo.Create(reg);
             reg.Name = "Covilhã";
             var resUpdate = bo.UpdateAsync(reg).Result;
-            Assert.IsTrue(!resUpdate.Success);
+            Assert.IsTrue(resUpdate.Success);
         }
     }
 }

@@ -122,7 +122,7 @@ namespace FullStoQTests.Commercial
             var item = bo.ListNotDeleted().Result.First();
             var est = new Company("Ilhas", item.VatNumber);
             var resCreate = bo.Create(est);
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(resCreate.Success);
         }
 
         [TestMethod]
@@ -133,7 +133,7 @@ namespace FullStoQTests.Commercial
             var item = bo.ListNotDeletedAsync().Result.Result.First();
             var est = new Company("Ilhas", item.VatNumber);
             var resCreate = bo.CreateAsync(est).Result;
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(resCreate.Success);
         }
 
 
@@ -147,7 +147,7 @@ namespace FullStoQTests.Commercial
             bo.Create(com);
             com.Name = "pingo ácido";
             var resUpdate = bo.Update(com);
-            Assert.IsTrue(!resUpdate.Success && resUpdate.Message == "Name already exists");
+            Assert.IsTrue(resUpdate.Success && resUpdate.Message == "Name already exists");
         }
         #endregion
 
@@ -161,7 +161,7 @@ namespace FullStoQTests.Commercial
             bo.Create(reg);
             reg.Name = "pingo ácido";
             var resUpdate = bo.UpdateAsync(reg).Result;
-            Assert.IsTrue(!resUpdate.Success && resUpdate.Message == "Name already exists");
+            Assert.IsTrue(resUpdate.Success && resUpdate.Message == "Name already exists");
         }
         #endregion
 
@@ -175,7 +175,7 @@ namespace FullStoQTests.Commercial
             bo.Create(com);
             com.VatNumber = 123456789;
             var resUpdate = bo.Update(com);
-            Assert.IsTrue(!resUpdate.Success && resUpdate.Message == "Vat number already exists");
+            Assert.IsTrue(resUpdate.Success && resUpdate.Message == "Vat number already exists");
         }
         #endregion
 
@@ -189,7 +189,7 @@ namespace FullStoQTests.Commercial
             bo.Create(reg);
             reg.VatNumber = 123456789;
             var resUpdate = bo.UpdateAsync(reg).Result;
-            Assert.IsTrue(!resUpdate.Success && resUpdate.Message == "Vat number already exists");
+            Assert.IsTrue(resUpdate.Success && resUpdate.Message == "Vat number already exists");
         }
         #endregion
     }

@@ -149,7 +149,7 @@ namespace FullStoQTests.Commercial
             var item = bo.ListNotDeleted().Result.FirstOrDefault();
             var est = new Establishment(item.Address, "9h00", "21h00", "monday", reg1.Id, com1.Id);
             var resCreate = bo.Create(est);
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(resCreate.Success);
         }
         #endregion
 
@@ -166,7 +166,7 @@ namespace FullStoQTests.Commercial
             var item = bo.ListNotDeletedAsync().Result.Result.FirstOrDefault();
             var est = new Establishment(item.Address, "9h00", "21h00", "monday", reg1.Id, com1.Id);
             var resCreate = bo.CreateAsync(est).Result;
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(resCreate.Success);
         }
         #endregion
 
@@ -187,7 +187,7 @@ namespace FullStoQTests.Commercial
             est.Address = "Avenida da liberdade, numero 1029, Lisboa";
             var resUpdate = bo.Update(est);
 
-            Assert.IsFalse(resUpdate.Success);
+            Assert.IsTrue(resUpdate.Success);
         }
         #endregion
 
@@ -205,7 +205,7 @@ namespace FullStoQTests.Commercial
             bo.Create(est);
             est.Address = "Avenida da liberdade, numero 1029, Lisboa";
             var resUpdate = bo.UpdateAsync(est).Result;
-            Assert.IsTrue(!resUpdate.Success);
+            Assert.IsTrue(resUpdate.Success);
         }
         #endregion
     }
