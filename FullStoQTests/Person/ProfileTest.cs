@@ -112,7 +112,7 @@ namespace FullStoQTests.Person
             var item = bo.List().Result.First();
             var reg = new Profile(item.VatNumber, "Manuel", "Macabres", 919191918, DateTime.UtcNow);
             var resCreate = bo.Create(reg);
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(!resCreate.Success && resCreate.Message == "Vat number already exists");
         }
 
         [TestMethod]
@@ -123,7 +123,7 @@ namespace FullStoQTests.Person
             var item = bo.ListAsync().Result.Result.First();
             var reg = new Profile(item.VatNumber, "Manuel", "Macabres", 919191918, DateTime.UtcNow);
             var resCreate = bo.CreateAsync(reg).Result;
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(!resCreate.Success && resCreate.Message == "Vat number already exists");
         }
 
         [TestMethod]
@@ -134,7 +134,7 @@ namespace FullStoQTests.Person
             var item = bo.List().Result.First();
             var reg = new Profile(123456789, "Manuel", "Macabres", item.PhoneNumber, DateTime.UtcNow);
             var resCreate = bo.Create(reg);
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(!resCreate.Success && resCreate.Message == "Phone number already exists");
         }
 
         [TestMethod]
@@ -145,7 +145,57 @@ namespace FullStoQTests.Person
             var item = bo.ListAsync().Result.Result.First();
             var reg = new Profile(123456789, "Manuel", "Macabres", item.PhoneNumber, DateTime.UtcNow);
             var resCreate = bo.CreateAsync(reg).Result;
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(!resCreate.Success && resCreate.Message == "Phone number already exists");
+        }
+
+
+        [TestMethod]
+        public void TestUpdateSameVatNumberProfile()
+        {
+            ContextSeeder.Seed();
+            var bo = new ProfileBusinessObject();
+            var item = new Profile(123450789, "Manuel", "Macabres", 939191919, DateTime.UtcNow);
+            bo.Create(item);
+            item.VatNumber = 123456789;
+            var resUpdate = bo.Update(item);
+            Assert.IsTrue(!resUpdate.Success && resUpdate.Message == "Vat number already exists");
+        }
+
+        [TestMethod]
+        public void TestUpdateSameVatNumberProfileAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new ProfileBusinessObject();
+            var item = new Profile(123450789, "Manuel", "Macabres", 939191919, DateTime.UtcNow);
+            bo.Create(item);
+            item.VatNumber = 123456789;
+            var resUpdate = bo.UpdateAsync(item).Result;
+            Assert.IsTrue(!resUpdate.Success && resUpdate.Message == "Vat number already exists");
+        }
+
+
+        [TestMethod]
+        public void TestUpdateSamePhoneNumberProfile()
+        {
+            ContextSeeder.Seed();
+            var bo = new ProfileBusinessObject();
+            var item = new Profile(123450789, "Manuel", "Macabres", 939191919, DateTime.UtcNow);
+            bo.Create(item);
+            item.PhoneNumber = 919191919;
+            var resUpdate = bo.UpdateAsync(item).Result;
+            Assert.IsTrue(!resUpdate.Success && resUpdate.Message == "Phone number already exists");
+        }
+
+        [TestMethod]
+        public void TestUpdateSamePhoneNumberProfileAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new ProfileBusinessObject();
+            var item = new Profile(123450789, "Manuel", "Macabres", 939191919, DateTime.UtcNow);
+            bo.Create(item);
+            item.PhoneNumber = 919191919;
+            var resUpdate = bo.UpdateAsync(item).Result;
+            Assert.IsTrue(!resUpdate.Success && resUpdate.Message == "Phone number already exists");
         }
     }
 }
