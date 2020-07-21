@@ -6,20 +6,8 @@ using System.Text;
 
 namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 {
-    public class ProductModel : Entity
+    public class ProductModel : NamedEntity
     {
-        //"Vinho Tinto da Barraca do Tejo", false, "506-1237-424", 3.99, 0.75, bra1.Id, cat1.Id
-
-        private string _productName;
-        public string ProductName
-        {
-            get => _productName;
-            set
-            {
-                _productName = value;
-                RegisterChange();
-            }
-        }
 
         private string _barCode;
         public string BarCode
@@ -65,9 +53,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
         public virtual ICollection<ProductUnit> ProductUnits { get; set; }
 
 
-        public ProductModel(string productName, string barCode, double price, double weight, Guid brandId, Guid categoryId) : base()
+        public ProductModel(string name, string barCode, double price, double weight, Guid brandId, Guid categoryId) : base(name)
         {
-            _productName = productName;
             _barCode = barCode;
             _price = price;
             _weight = weight;
@@ -75,9 +62,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
             CategoryId = categoryId;
         }
 
-        public ProductModel(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string productName, string barCode, double price, double weight, Guid brandId, Guid categoryId) : base(id, createdAt, updatedAt, isDeleted)
+        public ProductModel(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string name, string barCode, double price, double weight, Guid brandId, Guid categoryId) : base(id, createdAt, updatedAt, isDeleted, name)
         {
-            _productName = productName;
             _barCode = barCode;
             _price = price;
             _weight = weight;

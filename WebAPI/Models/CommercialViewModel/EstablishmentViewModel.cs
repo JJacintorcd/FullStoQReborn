@@ -24,6 +24,7 @@ namespace WebAPI.Models.CommercialViewModel
                 Address = establishment.Address,
                 OpeningHours = establishment.OpeningHours,
                 ClosingHours = establishment.ClosingHours,
+                ClosingDays = establishment.ClosingDays,
                 RegionId = establishment.RegionId,
                 CompanyId = establishment.CompanyId
             };

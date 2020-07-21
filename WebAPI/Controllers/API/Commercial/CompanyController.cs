@@ -28,9 +28,12 @@ namespace WebAPI.Controllers.Api.Commercial
             if (res.Success)
             {
                 if (res.Result == null) return NotFound();
-                var cvm = new CompanyViewModel();
-                cvm.Id = res.Result.Id;
-                cvm.Name = res.Result.Name;
+                var cvm = new CompanyViewModel()
+                {
+                    Id = res.Result.Id,
+                    Name = res.Result.Name
+                };
+
                 return cvm;
             }
 
