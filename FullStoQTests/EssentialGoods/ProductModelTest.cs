@@ -71,10 +71,10 @@ namespace FullStoQTests.EssentialGoods
             var bo = new ProductModelBusinessObject();
             var resList = bo.List();
             var item = resList.Result.FirstOrDefault();
-            item.ProductName = "It's just wine";
+            item.Name = "It's just wine";
             var resUpdate = bo.Update(item);
             var resNotList = bo.ListNotDeleted().Result;
-            Assert.IsTrue(resUpdate.Success && resNotList.First().ProductName == "It's just wine");
+            Assert.IsTrue(resUpdate.Success && resNotList.First().Name == "It's just wine");
         }
 
         [TestMethod]
@@ -84,10 +84,10 @@ namespace FullStoQTests.EssentialGoods
             var bo = new ProductModelBusinessObject();
             var resList = bo.ListAsync().Result;
             var item = resList.Result.FirstOrDefault();
-            item.ProductName = "It's just wine";
+            item.Name = "It's just wine";
             var resUpdate = bo.UpdateAsync(item).Result;
             resList = bo.ListNotDeletedAsync().Result;
-            Assert.IsTrue(resList.Success && resUpdate.Success && resList.Result.First().ProductName == "It's just wine");
+            Assert.IsTrue(resList.Success && resUpdate.Success && resList.Result.First().Name == "It's just wine");
         }
 
         [TestMethod]
