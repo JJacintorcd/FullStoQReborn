@@ -20,30 +20,30 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         }
 
         #region Create
-        public OperationResult Create(ProductUnit item)
+        public OperationResult<bool> Create(ProductUnit item)
         {
             try
             {
-                if (_dao.List().Any(x => x.SerialNumber == item.SerialNumber)) return new OperationResult() { Success = false };
+                if (_dao.List().Any(x => x.SerialNumber == item.SerialNumber)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
                 _dao.Create(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
-        public async Task<OperationResult> CreateAsync(ProductUnit item)
+        public async Task<OperationResult<bool>> CreateAsync(ProductUnit item)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.SerialNumber == item.SerialNumber)) throw new Exception("Serial number already exists");
+                if (_dao.ListAsync().Result.Any(x => x.SerialNumber == item.SerialNumber)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
                 await _dao.CreateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
         #endregion
@@ -91,30 +91,30 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         #endregion
 
         #region Update
-        public OperationResult Update(ProductUnit item)
+        public OperationResult<bool> Update(ProductUnit item)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.SerialNumber == item.SerialNumber && x.Id != item.Id)) throw new Exception("Serial number already exists");
+                if (_dao.ListAsync().Result.Any(x => x.SerialNumber == item.SerialNumber && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
                 _dao.Update(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
-        public async Task<OperationResult> UpdateAsync(ProductUnit item)
+        public async Task<OperationResult<bool>> UpdateAsync(ProductUnit item)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.SerialNumber == item.SerialNumber && x.Id != item.Id)) throw new Exception("Serial number already exists");
+                if (_dao.ListAsync().Result.Any(x => x.SerialNumber == item.SerialNumber && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
                 await _dao.UpdateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
         #endregion

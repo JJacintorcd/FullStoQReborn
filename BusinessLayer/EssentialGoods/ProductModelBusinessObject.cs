@@ -22,34 +22,34 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
 
         #region Create
 
-        public OperationResult Create(ProductModel item)
+        public OperationResult<bool> Create(ProductModel item)
         {
             try
             {
-                if (_dao.List().Any(x => x.BarCode == item.BarCode)) throw new Exception("Bar code already exists");
+                if (_dao.List().Any(x => x.BarCode == item.BarCode)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Bar Code already exists" };
                 _dao.Create(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
 
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
 
             }
 
         }
-        public async Task<OperationResult> CreateAsync(ProductModel item)
+        public async Task<OperationResult<bool>> CreateAsync(ProductModel item)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.BarCode == item.BarCode)) throw new Exception("Bar code already exists");
+                if (_dao.ListAsync().Result.Any(x => x.BarCode == item.BarCode)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Bar Code already exists" };
                 await _dao.CreateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
 
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
 
             }
 
@@ -112,32 +112,34 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
 
         #region Update
 
-        public OperationResult Update(ProductModel item)
+        public OperationResult<bool> Update(ProductModel item)
         {
             try
             {
+                if (_dao.List().Any(x => x.BarCode == item.BarCode)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Bar Code already exists" };
                 _dao.Update(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
 
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
 
             }
 
         }
-        public async Task<OperationResult> UpdateAsync(ProductModel item)
+        public async Task<OperationResult<bool>> UpdateAsync(ProductModel item)
         {
             try
             {
+                if (_dao.ListAsync().Result.Any(x => x.BarCode == item.BarCode)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Bar Code already exists" };
                 await _dao.UpdateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
 
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
 
             }
 
