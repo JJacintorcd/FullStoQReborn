@@ -2,10 +2,7 @@
 using Recodme.RD.FullStoQReborn.BusinessLayer.Commercial;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders;
 using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace FullStoQTests.Commercial
 {
@@ -18,10 +15,10 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var boReg = new RegionBusinessObject();
-            var reg1 = boReg.List().Result.FirstOrDefault();
+            var reg1 = boReg.ListNotDeleted().Result.FirstOrDefault();
 
             var boComp = new CompanyBusinessObject();
-            var com1 = boComp.List().Result.FirstOrDefault();
+            var com1 = boComp.ListNotDeleted().Result.FirstOrDefault();
 
             var bo = new EstablishmentBusinessObject();
             var est = new Establishment("Avenida da liberdade, numero 1022, Lisboa", "09:00", "20:00", "Domingo", reg1.Id, com1.Id);
@@ -39,10 +36,10 @@ namespace FullStoQTests.Commercial
             ContextSeeder.Seed();
 
             var boReg = new RegionBusinessObject();
-            var reg1 = boReg.List().Result.First();
+            var reg1 = boReg.ListNotDeleted().Result.First();
 
             var boComp = new CompanyBusinessObject();
-            var com1 = boComp.List().Result.First();
+            var com1 = boComp.ListNotDeleted().Result.First();
 
             var bo = new EstablishmentBusinessObject();
             var est = new Establishment("Avenida da liberdade, numero 1022, Lisboa", "09:00", "20:00", "Domingo", reg1.Id, com1.Id);
@@ -59,19 +56,12 @@ namespace FullStoQTests.Commercial
         public void TestUpdateEstablishment()
         {
             ContextSeeder.Seed();
-
-            var boReg = new RegionBusinessObject();
-            var reg1 = boReg.List().Result.First();
-
-            var boComp = new CompanyBusinessObject();
-            var com1 = boComp.List().Result.First();
-
             var bo = new EstablishmentBusinessObject();
-            var resList = bo.List();
+            var resList = bo.ListNotDeleted();
             var item = resList.Result.FirstOrDefault();
             item.Address = "Rua Augusta, n 1213, Lisboa";
             var resUpdate = bo.Update(item);
-            var resNotList = bo.List().Result.Where(x => !x.IsDeleted);
+            var resNotList = bo.ListNotDeleted().Result.Where(x => !x.IsDeleted);
 
             Assert.IsTrue(resUpdate.Success && resNotList.First().Address == "Rua Augusta, n 1213, Lisboa");
         }
@@ -83,7 +73,7 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var bo = new EstablishmentBusinessObject();
-            var restList = bo.ListAsync().Result;
+            var restList = bo.ListNotDeletedAsync().Result;
             var item = restList.Result.FirstOrDefault();
             item.ClosingDays = "Terça-feira";
             var resUpdate = bo.UpdateAsync(item).Result;
@@ -96,10 +86,11 @@ namespace FullStoQTests.Commercial
         [TestMethod]
         public void TestDeleteEstablishment()
         {
+            ContextSeeder.Seed();
             var boReg = new RegionBusinessObject();
             var boComp = new CompanyBusinessObject();
-            var reg1 = boReg.List().Result.First();
-            var com1 = boComp.List().Result.First();
+            var reg1 = boReg.ListNotDeleted().Result.First();
+            var com1 = boComp.ListNotDeleted().Result.First();
 
             var objEst = new EstablishmentBusinessObject();
             var est = new Establishment("Rua da pitaia, numero 1234, Açores", "07:00",
@@ -116,7 +107,7 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var bo = new EstablishmentBusinessObject();
-            var resList = bo.ListAsync().Result;
+            var resList = bo.ListNotDeletedAsync().Result;
             var resDelete = bo.DeleteAsync(resList.Result.First().Id).Result;
             resList = bo.ListNotDeletedAsync().Result;
             Assert.IsTrue(resDelete.Success && resList.Success && resList.Result.Count == 0);
@@ -127,8 +118,9 @@ namespace FullStoQTests.Commercial
         [TestMethod]
         public void TestListEstablishment()
         {
+            ContextSeeder.Seed();
             var bo = new EstablishmentBusinessObject();
-            var resList = bo.List();
+            var resList = bo.ListNotDeleted();
             Assert.IsTrue(resList.Success && resList.Result.Count == 1);
         }
         #endregion
@@ -139,7 +131,7 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var bo = new EstablishmentBusinessObject();
-            var restList = bo.ListAsync().Result;
+            var restList = bo.ListNotDeletedAsync().Result;
             Assert.IsTrue(restList.Success && restList.Result.Count == 1);
         }
         #endregion
@@ -152,9 +144,9 @@ namespace FullStoQTests.Commercial
             var bo = new EstablishmentBusinessObject();
             var boReg = new RegionBusinessObject();
             var boComp = new CompanyBusinessObject();
-            var reg1 = boReg.List().Result.First();
-            var com1 = boComp.List().Result.First();
-            var item = bo.List().Result.FirstOrDefault();
+            var reg1 = boReg.ListNotDeleted().Result.First();
+            var com1 = boComp.ListNotDeleted().Result.First();
+            var item = bo.ListNotDeleted().Result.FirstOrDefault();
             var est = new Establishment(item.Address, "9h00", "21h00", "monday", reg1.Id, com1.Id);
             var resCreate = bo.Create(est);
             Assert.IsTrue(!resCreate.Success);
@@ -169,9 +161,9 @@ namespace FullStoQTests.Commercial
             var bo = new EstablishmentBusinessObject();
             var boReg = new RegionBusinessObject();
             var boComp = new CompanyBusinessObject();
-            var reg1 = boReg.ListAsync().Result.Result.First();
-            var com1 = boComp.ListAsync().Result.Result.First();
-            var item = bo.ListAsync().Result.Result.FirstOrDefault();
+            var reg1 = boReg.ListNotDeletedAsync().Result.Result.First();
+            var com1 = boComp.ListNotDeletedAsync().Result.Result.First();
+            var item = bo.ListNotDeletedAsync().Result.Result.FirstOrDefault();
             var est = new Establishment(item.Address, "9h00", "21h00", "monday", reg1.Id, com1.Id);
             var resCreate = bo.CreateAsync(est).Result;
             Assert.IsTrue(!resCreate.Success);
@@ -186,18 +178,16 @@ namespace FullStoQTests.Commercial
             ContextSeeder.Seed();
 
             var boReg = new RegionBusinessObject();
-            var reg1 = boReg.List().Result.First();
+            var reg1 = boReg.ListNotDeleted().Result.First();
             var boComp = new CompanyBusinessObject();
-            var com1 = boComp.List().Result.First();
+            var com1 = boComp.ListNotDeleted().Result.First();
             var bo = new EstablishmentBusinessObject();
             var est = new Establishment("Avenida da liberdade, numero 1022, Lisboa", "09:00", "20:00", "Domingo", reg1.Id, com1.Id);
             bo.Create(est);
-            var resList = bo.List();
-            var item = resList.Result.FirstOrDefault();
-            item.Address = "Avenida da liberdade, numero 1022, Lisboa";
-            var resUpdate = bo.Update(item);
+            est.Address = "Avenida da liberdade, numero 1029, Lisboa";
+            var resUpdate = bo.Update(est);
 
-            Assert.IsTrue(!resUpdate.Success);
+            Assert.IsFalse(resUpdate.Success);
         }
         #endregion
 
@@ -207,16 +197,14 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var boReg = new RegionBusinessObject();
-            var reg1 = boReg.List().Result.First();
+            var reg1 = boReg.ListNotDeleted().Result.First();
             var boComp = new CompanyBusinessObject();
-            var com1 = boComp.List().Result.First();
+            var com1 = boComp.ListNotDeleted().Result.First();
             var bo = new EstablishmentBusinessObject();
             var est = new Establishment("Avenida da liberdade, numero 1022, Lisboa", "09:00", "20:00", "Domingo", reg1.Id, com1.Id);
             bo.Create(est);
-            var restList = bo.ListAsync().Result;
-            var item = restList.Result.FirstOrDefault();
-            item.Address = "Avenida da liberdade, numero 1022, Lisboa";
-            var resUpdate = bo.UpdateAsync(item).Result;
+            est.Address = "Avenida da liberdade, numero 1029, Lisboa";
+            var resUpdate = bo.UpdateAsync(est).Result;
             Assert.IsTrue(!resUpdate.Success);
         }
         #endregion

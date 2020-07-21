@@ -95,7 +95,11 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.List().Any(x => x.VatNumber == item.VatNumber)) throw new Exception("Vat number already exists");
+                if (_dao.List().Any(x => (x.VatNumber == item.VatNumber || x.Name == item.Name) && item.Id != x.Id))
+                {
+                    if (_dao.List().Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) throw new Exception("Vat number already exists");
+                    if (_dao.List().Any(x => x.Name == item.Name && item.Id != x.Id)) throw new Exception("Name already exists");
+                }
                 _dao.Update(item);
                 return new OperationResult() { Success = true };
             }
@@ -109,7 +113,11 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber)) throw new Exception("Vat number already exists");
+                if (_dao.ListAsync().Result.Any(x => (x.VatNumber == item.VatNumber || x.Name == item.Name) && item.Id != x.Id))
+                {
+                    if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) throw new Exception("Vat number already exists");
+                    if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && item.Id != x.Id)) throw new Exception("Name already exists");
+                }
                 await _dao.UpdateAsync(item);
                 return new OperationResult() { Success = true };
             }
