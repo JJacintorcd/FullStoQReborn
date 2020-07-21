@@ -20,30 +20,30 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         }
 
         #region C
-        public OperationResult Create(Category item)
+        public OperationResult<bool> Create(Category item)
         {
             try
             {
-                if (_dao.List().Any(x => x.Name == item.Name)) throw new Exception("Name already exists");
+                if (_dao.List().Any(x => x.Name == item.Name)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 _dao.Create(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
-        public async Task<OperationResult> CreateAsync(Category item)
+        public async Task<OperationResult<bool>> CreateAsync(Category item)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name)) throw new Exception("Name already exists");
+                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 await _dao.CreateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
         #endregion
@@ -92,30 +92,30 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         #endregion
 
         #region U
-        public OperationResult Update(Category item)
+        public OperationResult<bool> Update(Category item)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && x.Id != item.Id)) throw new Exception("Name already exists");
+                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 _dao.Update(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
-        public async Task<OperationResult> UpdateAsync(Category item)
+        public async Task<OperationResult<bool>> UpdateAsync(Category item)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && x.Id != item.Id)) throw new Exception("Name already exists");
+                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 await _dao.UpdateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
         #endregion
