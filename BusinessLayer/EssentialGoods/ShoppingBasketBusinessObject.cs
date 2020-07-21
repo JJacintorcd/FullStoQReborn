@@ -255,5 +255,38 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
             }
         }
         #endregion
+
+        #region Reservation Limits
+        public OperationResult<bool> DayLimitReserveItems(Guid id)
+        {
+            try
+            {
+                var item = _dao.Read(id);
+                var reserveDay = item.CreatedAt.Day;
+                if (DateTime.UtcNow.Day == reserveDay && _dao.List().Any(x => x.ProfileId == item.ProfileId) && _dao.List().Count > 3) return new OperationResult<bool>() { Success = true, Result = false, Message = "Daily limit reached" };
+                return new OperationResult<bool>() { Success = true, Result = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<bool>() { Success = false, Exception = e };
+            }
+        }
+
+        public async Task<OperationResult<bool>> DayLimitReserveItemsAsync(Guid id)
+        {
+            try
+            {
+                var item = _dao.ReadAsync(id).Result;
+                var reserveDay = item.CreatedAt.Day;
+                var list = await _dao.ListAsync();
+                if (DateTime.UtcNow.Day == reserveDay && list.Any(x => x.ProfileId == item.ProfileId) && _dao.List().Count > 3) return new OperationResult<bool>() { Success = true, Result = false, Message = "Daily limit reached" };
+                return new OperationResult<bool>() { Success = true, Result = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<bool>() { Success = false, Exception = e };
+            }
+        }
+        #endregion
     }
 }
