@@ -126,7 +126,7 @@ namespace FullStoQTests.EssentialGoods
             var prodMod = new ProductModel("Vinho Branco", "506-1237-424", 4.24, 0.80, bra.Id, cat.Id);
             var resCreate = bo.Create(prodMod);
 
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(!resCreate.Result);
         }
 
         [TestMethod]
@@ -142,7 +142,7 @@ namespace FullStoQTests.EssentialGoods
             var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", "506-1237-424", 4.24, 0.80, bra.Id, cat.Id);
             var resCreate = bo.CreateAsync(prodMod).Result;
 
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(!resCreate.Result);
         }
 
         [TestMethod]
@@ -156,7 +156,7 @@ namespace FullStoQTests.EssentialGoods
             var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", "506-1234-424", 4.24, 0.80, bra.Id, cat.Id);
             prodMod.BarCode = "506-1237-424";
             var resUpdate = bo.Update(prodMod);
-            Assert.IsTrue(!resUpdate.Success);
+            Assert.IsTrue(!resUpdate.Result);
         }
 
         [TestMethod]
@@ -170,7 +170,7 @@ namespace FullStoQTests.EssentialGoods
             var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", "506-1234-424", 4.24, 0.80, bra.Id, cat.Id);
             prodMod.BarCode = "506-1237-424";
             var resUpdate = bo.UpdateAsync(prodMod).Result;
-            Assert.IsTrue(!resUpdate.Success);
+            Assert.IsTrue(!resUpdate.Result);
         }
     }
 }

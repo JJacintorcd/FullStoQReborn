@@ -135,7 +135,7 @@ namespace FullStoQTests.EssentialGoods
             var est = ebo.ListNotDeleted().Result.First();
             var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id, est.Id);
             var resCreate = bo.Create(prodUnit);
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(!resCreate.Result);
         }
 
         [TestMethod]
@@ -158,7 +158,7 @@ namespace FullStoQTests.EssentialGoods
             var est = ebo.ListNotDeleted().Result.First();
             var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id, est.Id);
             var resCreate = bo.CreateAsync(prodUnit).Result;
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(!resCreate.Result);
         }
     }
 }

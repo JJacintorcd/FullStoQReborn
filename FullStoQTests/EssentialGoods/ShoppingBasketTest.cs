@@ -121,5 +121,56 @@ namespace FullStoQTests.EssentialGoods
             Assert.IsTrue(resList.Success && resList.Result.Count == 1);
         }
         #endregion
+
+        #region Limits
+
+        [TestMethod]
+        public void TestDailyLimit()
+        {
+            ContextSeeder.Seed();
+
+            var boProf = new ProfileBusinessObject();
+            var profList = boProf.List().Result.First();
+
+            var bo = new ShoppingBasketBusinessObject();
+            var res1 = new ShoppingBasket(profList.Id);
+            var res2 = new ShoppingBasket(profList.Id);
+            var res3 = new ShoppingBasket(profList.Id);
+            var res4 = new ShoppingBasket(profList.Id);
+
+            bo.Create(res1);
+            bo.Create(res2);
+            bo.Create(res3);
+            bo.Create(res4);
+
+            var reserves = bo.DayLimitReserveItems(res4.Id);
+
+            Assert.IsTrue(reserves.Success && !reserves.Result);
+        }
+
+        [TestMethod]
+        public void TestDailyLimitAsync()
+        {
+            ContextSeeder.Seed();
+
+            var boProf = new ProfileBusinessObject();
+            var profList = boProf.List().Result.First();
+
+            var bo = new ShoppingBasketBusinessObject();
+            var res1 = new ShoppingBasket(profList.Id);
+            var res2 = new ShoppingBasket(profList.Id);
+            var res3 = new ShoppingBasket(profList.Id);
+            var res4 = new ShoppingBasket(profList.Id);
+
+             bo.Create(res1);
+             bo.Create(res2);
+             bo.Create(res3);
+             bo.Create(res4);
+
+            var reserves = bo.DayLimitReserveItemsAsync(res4.Id);
+
+            Assert.IsTrue(reserves.Result.Success && !reserves.Result.Result);
+        }
+        #endregion
     }
 }

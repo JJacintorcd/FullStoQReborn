@@ -108,7 +108,7 @@ namespace FullStoQTests.EssentialGoods
             var item = bo.List().Result.FirstOrDefault();
             var reg = new Category(item.Name);
             var resCreate = bo.Create(reg);
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(!resCreate.Result);
         }
 
         [TestMethod]
@@ -119,7 +119,7 @@ namespace FullStoQTests.EssentialGoods
             var item = bo.ListAsync().Result.Result.FirstOrDefault();
             var reg = new Category(item.Name);
             var resCreate = bo.CreateAsync(reg).Result;
-            Assert.IsTrue(!resCreate.Success);
+            Assert.IsTrue(!resCreate.Result);
         }
 
         [TestMethod]
@@ -131,7 +131,7 @@ namespace FullStoQTests.EssentialGoods
             bo.Create(cat);
             cat.Name = "Non-Alcoholic Beverages";
             var resUpdate = bo.Update(cat);
-            Assert.IsTrue(!resUpdate.Success);
+            Assert.IsTrue(!resUpdate.Result);
         }
 
         [TestMethod]
@@ -143,7 +143,7 @@ namespace FullStoQTests.EssentialGoods
             bo.Create(cat);
             cat.Name = "Non-Alcoholic Beverages";
             var resUpdate = bo.UpdateAsync(cat).Result;
-            Assert.IsTrue(!resUpdate.Success);
+            Assert.IsTrue(!resUpdate.Result);
         }
     }
 }
