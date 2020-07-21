@@ -7,9 +7,8 @@ using WebAPI.Models.Base;
 
 namespace WebAPI.Models.EssentialGoodsViewModel
 {
-    public class ProductModelViewModel : BaseViewModel
+    public class ProductModelViewModel : NamedViewModel
     {
-        public string ProductName { get; set; }
         public string BarCode { get; set; }
         public double Price { get; set; }
         public double Weight { get; set; }
@@ -19,7 +18,7 @@ namespace WebAPI.Models.EssentialGoodsViewModel
         {
             return new ProductModelViewModel()
             {
-                ProductName = productModel.ProductName,
+                Name = productModel.Name,
                 BarCode = productModel.BarCode,
                 Price = productModel.Price,
                 Weight = productModel.Weight,
@@ -30,7 +29,7 @@ namespace WebAPI.Models.EssentialGoodsViewModel
 
         public ProductModel ToProductModel()
         {
-            return new ProductModel(ProductName, BarCode, Price, Weight, BrandId, CategoryId);
+            return new ProductModel(Name, BarCode, Price, Weight, BrandId, CategoryId);
         }
     }
 }

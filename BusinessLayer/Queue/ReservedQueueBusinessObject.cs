@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Recodme.RD.FullStoQReborn.BusinessLayer.OperationResults;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Queue;
+using Recodme.RD.FullStoQReborn.DataLayer.Person;
 using Recodme.RD.FullStoQReborn.DataLayer.Queue;
 using System;
 using System.Collections.Generic;
@@ -274,19 +275,77 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
         }
         #endregion
 
-        public OperationResult TwoHourLimitReserve(ReservedQueue item)
+        #region Reserve Limits
+        public OperationResult<bool> TwoHourLimitReserve(Guid id)
         {
             try
             {
+                var item = _dao.Read(id);
                 var reserveHour = item.CreatedAt;
                 var hourLimit = reserveHour.AddHours(2);
-                if (DateTime.UtcNow > hourLimit)_dao.Delete(item);
-                return new OperationResult() { Success = true };
+                if (DateTime.UtcNow > hourLimit)
+                {
+                    _dao.Delete(item);
+                    return new OperationResult<bool>() { Success = true, Result = false };
+                }
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
+
+        public async Task<OperationResult<bool>> TwoHourLimitReserveAsync(Guid id)
+        {
+            try
+            {
+                var item = _dao.ReadAsync(id).Result;
+                var reserveHour = item.CreatedAt;
+                var hourLimit = reserveHour.AddHours(2);
+                if (DateTime.UtcNow > hourLimit)
+                {
+                    await _dao.DeleteAsync(item);
+                    return new OperationResult<bool>() { Success = true, Result = false };
+                }
+                return new OperationResult<bool>() { Success = true, Result = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<bool>() { Success = false, Exception = e };
+            }
+        }
+
+        public OperationResult<bool> DayLimitReserve(Guid id)
+        {
+            try
+            {
+                var item = _dao.Read(id);
+                var reserveDay = item.CreatedAt.Day;
+                if (DateTime.UtcNow.Day == reserveDay && _dao.List().Any(x => x.ProfileId == item.ProfileId)) return new OperationResult<bool>() { Success = true, Result = false };
+                return new OperationResult<bool>() { Success = true, Result = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<bool>() { Success = false, Exception = e };
+            }
+        }
+
+        public async Task<OperationResult<bool>> DayLimitReserveAsync(Guid id)
+        {
+            try
+            {
+                var item = _dao.ReadAsync(id).Result;
+                var reserveDay = item.CreatedAt.Day;
+                var list = await _dao.ListAsync();
+                if (DateTime.UtcNow.Day == reserveDay && list.Any(x => x.ProfileId == item.ProfileId)) return new OperationResult<bool>() { Success = true, Result = false };
+                return new OperationResult<bool>() { Success = true, Result = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<bool>() { Success = false, Exception = e };
+            }
+        }
+        #endregion
     }
 }
