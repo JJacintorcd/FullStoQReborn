@@ -41,7 +41,7 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var bo = new CompanyBusinessObject();
-            var resList = bo.List();
+            var resList = bo.ListNotDeleted();
             var item = resList.Result.FirstOrDefault();
             item.Name = "Jerónimo Martins";
             var resUpdate = bo.Update(item);
@@ -56,7 +56,7 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var bo = new CompanyBusinessObject();
-            var resList = bo.ListAsync().Result;
+            var resList = bo.ListNotDeletedAsync().Result;
             var item = resList.Result.FirstOrDefault();
             item.Name = "Jerónimo Martins";
             var resUpdate = bo.UpdateAsync(item).Result;
@@ -85,7 +85,7 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var bo = new CompanyBusinessObject();
-            var resList = bo.ListAsync().Result;
+            var resList = bo.ListNotDeletedAsync().Result;
             var resDelete = bo.DeleteAsync(resList.Result.First().Id).Result;
             resList = bo.ListNotDeletedAsync().Result;
             Assert.IsTrue(resDelete.Success && resList.Success && resList.Result.Count == 0);
@@ -119,7 +119,7 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var bo = new CompanyBusinessObject();
-            var item = bo.List().Result.First();
+            var item = bo.ListNotDeleted().Result.First();
             var est = new Company("Ilhas", item.VatNumber);
             var resCreate = bo.Create(est);
             Assert.IsTrue(!resCreate.Success);
@@ -130,7 +130,7 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var bo = new CompanyBusinessObject();
-            var item = bo.ListAsync().Result.Result.First();
+            var item = bo.ListNotDeletedAsync().Result.Result.First();
             var est = new Company("Ilhas", item.VatNumber);
             var resCreate = bo.CreateAsync(est).Result;
             Assert.IsTrue(!resCreate.Success);
@@ -145,12 +145,9 @@ namespace FullStoQTests.Commercial
             var bo = new CompanyBusinessObject();
             var com = new Company("Sonae", 12345);
             bo.Create(com);
-            var resList = bo.List();
-            var item = resList.Result.FirstOrDefault();
-            item.Name = "Sonae";
-            var resUpdate = bo.Update(item);
-            var resNotList = bo.ListNotDeleted().Result;
-            Assert.IsTrue(!resUpdate.Success);
+            com.Name = "pingo ácido";
+            var resUpdate = bo.Update(com);
+            Assert.IsTrue(!resUpdate.Success && resUpdate.Exception.Message == "Name already exists");
         }
         #endregion
 
@@ -160,14 +157,39 @@ namespace FullStoQTests.Commercial
         {
             ContextSeeder.Seed();
             var bo = new CompanyBusinessObject();
-            var reg = new Company("Sonae", 1823445);
+            var reg = new Company("Sonae", 12345);
             bo.Create(reg);
-            var resList = bo.ListAsync().Result;
-            var item = resList.Result.FirstOrDefault();
-            item.Name = "Sonae";
-            var resUpdate = bo.UpdateAsync(item).Result;
-            resList = bo.ListNotDeletedAsync().Result;
-            Assert.IsTrue(!resUpdate.Success);
+            reg.Name = "pingo ácido";
+            var resUpdate = bo.UpdateAsync(reg).Result;
+            Assert.IsTrue(!resUpdate.Success && resUpdate.Exception.Message == "Name already exists");
+        }
+        #endregion
+
+        #region Update Same VAT
+        [TestMethod]
+        public void TestUpdateSameVATNumberCompany()
+        {
+            ContextSeeder.Seed();
+            var bo = new CompanyBusinessObject();
+            var com = new Company("Sonae", 12345);
+            bo.Create(com);
+            com.VatNumber = 123456789;
+            var resUpdate = bo.Update(com);
+            Assert.IsTrue(!resUpdate.Success && resUpdate.Exception.Message == "Vat number already exists");
+        }
+        #endregion
+
+        #region Update Assync Same VAT
+        [TestMethod]
+        public void TestUpdateSameVATNumberCompanyAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new CompanyBusinessObject();
+            var reg = new Company("Sonae", 12345);
+            bo.Create(reg);
+            reg.VatNumber = 123456789;
+            var resUpdate = bo.UpdateAsync(reg).Result;
+            Assert.IsTrue(!resUpdate.Success && resUpdate.Exception.Message == "Vat number already exists");
         }
         #endregion
     }
