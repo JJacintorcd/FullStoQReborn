@@ -121,5 +121,29 @@ namespace FullStoQTests.EssentialGoods
             var resCreate = bo.CreateAsync(reg).Result;
             Assert.IsTrue(!resCreate.Success);
         }
+
+        [TestMethod]
+        public void TestUpdateSameNameCategory()
+        {
+            ContextSeeder.Seed();
+            var bo = new CategoryBusinessObject();
+            var cat = new Category("Alcoholic Beverages");
+            bo.Create(cat);
+            cat.Name = "Non-Alcoholic Beverages";
+            var resUpdate = bo.Update(cat);
+            Assert.IsTrue(!resUpdate.Success);
+        }
+
+        [TestMethod]
+        public void TestUpdateSameNameCategoryAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new CategoryBusinessObject();
+            var cat = new Category("Alcoholic Beverages");
+            bo.Create(cat);
+            cat.Name = "Non-Alcoholic Beverages";
+            var resUpdate = bo.UpdateAsync(cat).Result;
+            Assert.IsTrue(!resUpdate.Success);
+        }
     }
 }

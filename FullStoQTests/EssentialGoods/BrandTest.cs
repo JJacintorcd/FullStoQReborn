@@ -121,5 +121,29 @@ namespace FullStoQTests.EssentialGoods
             var resCreate = bo.CreateAsync(reg).Result;
             Assert.IsTrue(!resCreate.Success);
         }
+
+        [TestMethod]
+        public void TestUpdateSameNameBrand()
+        {
+            ContextSeeder.Seed();
+            var bo = new BrandBusinessObject();
+            var item = new Brand("Dona Ermelinda");
+            bo.Create(item);
+            item.Name = "Dona Edite";
+            var resUpdate = bo.Update(item);
+            Assert.IsTrue(!resUpdate.Success);
+        }
+
+        [TestMethod]
+        public void TestUpdateSameNameBrandAsync()
+        {
+            ContextSeeder.Seed();
+            var bo = new BrandBusinessObject();
+            var item = new Brand("Dona Ermelinda");
+            bo.Create(item);
+            item.Name = "Dona Edite";
+            var resUpdate = bo.UpdateAsync(item).Result;
+            Assert.IsTrue(!resUpdate.Success);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Recodme.RD.FullStoQReborn.Data.Base;
+using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -34,19 +35,26 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
         public Guid ProductModelId { get; set; }
         public virtual ProductModel ProductModel { get; set; }
 
+        [ForeignKey("Establishment")]
+        public Guid EstablishmentId { get; set; }
+        public virtual Establishment Establishment { get; set; }
 
-        public ProductUnit(string serialNumber, bool isReserved, Guid productModelId) : base()
+
+
+        public ProductUnit(string serialNumber, bool isReserved, Guid productModelId, Guid establishmentId) : base()
         {
             _serialNumber = serialNumber;
             _isReserved = isReserved;
             ProductModelId = productModelId;
+            EstablishmentId = establishmentId;
         }
 
-        public ProductUnit(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string serialNumber, bool isReserved, Guid productModelId) : base(id, createdAt, updatedAt, isDeleted)
+        public ProductUnit(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string serialNumber, bool isReserved, Guid productModelId, Guid establishmentId) : base(id, createdAt, updatedAt, isDeleted)
         {
             _serialNumber = serialNumber;
             _isReserved = isReserved;
             ProductModelId = productModelId;
+            EstablishmentId = establishmentId;
         }
     }
 }

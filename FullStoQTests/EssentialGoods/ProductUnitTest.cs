@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Recodme.RD.FullStoQReborn.BusinessLayer.Commercial;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders;
+using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
 using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using System;
 using System.Collections.Generic;
@@ -18,9 +20,11 @@ namespace FullStoQTests.EssentialGoods
             ContextSeeder.Seed();
             var pmbo = new ProductModelBusinessObject();
             var prodMod = pmbo.ListNotDeleted().Result.First();
+            var ebo = new EstablishmentBusinessObject();
+            var est = ebo.ListNotDeleted().Result.First();
 
             var bo = new ProductUnitBusinessObject();
-            var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id);
+            var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id, est.Id);
             var resCreate = bo.Create(prodUnit);
 
             var resGet = bo.Read(prodUnit.Id);
@@ -34,9 +38,11 @@ namespace FullStoQTests.EssentialGoods
        
             var pmbo = new ProductModelBusinessObject();
             var prodMod = pmbo.ListNotDeletedAsync().Result.Result.First();
+            var ebo = new EstablishmentBusinessObject();
+            var est = ebo.ListNotDeleted().Result.First();
 
             var bo = new ProductUnitBusinessObject();
-            var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id);
+            var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id, est.Id);
             var resCreate = bo.CreateAsync(prodUnit).Result;
 
             var resGet = bo.ReadAsync(prodUnit.Id).Result;
@@ -125,7 +131,9 @@ namespace FullStoQTests.EssentialGoods
 
             var bo = new ProductUnitBusinessObject();
             var item = bo.List().Result.FirstOrDefault();
-            var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id);
+            var ebo = new EstablishmentBusinessObject();
+            var est = ebo.ListNotDeleted().Result.First();
+            var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id, est.Id);
             var resCreate = bo.Create(prodUnit);
             Assert.IsTrue(!resCreate.Success);
         }
@@ -146,7 +154,9 @@ namespace FullStoQTests.EssentialGoods
 
             var bo = new ProductUnitBusinessObject();
             var item = bo.ListAsync().Result.Result.FirstOrDefault();
-            var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id);
+            var ebo = new EstablishmentBusinessObject();
+            var est = ebo.ListNotDeleted().Result.First();
+            var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id, est.Id);
             var resCreate = bo.CreateAsync(prodUnit).Result;
             Assert.IsTrue(!resCreate.Success);
         }

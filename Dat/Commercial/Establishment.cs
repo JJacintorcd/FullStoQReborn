@@ -78,10 +78,9 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
         public Guid CompanyId { get; set; }
         public virtual Company Company { get; set; }
 
-        public ICollection<ReservedQueue> ReservedQueues { get; set; }
-        public ICollection<StoreQueue> StoreQueues { get; set; }
-        public virtual ICollection<ProductModel> ProductModels { get; set; }
-        public virtual ICollection<ShoppingBasket> ShoppingBaskets { get; set; }
+        public virtual ICollection<ReservedQueue> ReservedQueues { get; set; }
+        public virtual ICollection<StoreQueue> StoreQueues { get; set; }
+        public virtual ICollection<ProductUnit> ProductUnits { get; set; }
 
 
         public Establishment(string address, string openingHours, string closingHours, string closingDays, Guid regionId,

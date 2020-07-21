@@ -1,5 +1,6 @@
 ﻿using Recodme.RD.FullStoQReborn.Data.Base;
 using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
+using Recodme.RD.FullStoQReborn.DataLayer.Queue;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -80,7 +81,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Person
             }
         }
 
-        //public ICollection<ReservedQueue> ReservedQueues { get; set; }
+        public virtual ICollection<ReservedQueue> ReservedQueues { get; set; }
         public virtual ICollection<ShoppingBasket> ShoppingBaskets { get; set; }
 
 
