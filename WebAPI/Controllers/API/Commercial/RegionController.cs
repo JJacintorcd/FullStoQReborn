@@ -16,7 +16,7 @@ namespace WebAPI.Controllers.Api.Commercial
         [HttpPost]
         public ActionResult Create([FromBody]RegionViewModel vm)
         {
-            var region = vm.ToRegion();
+            var region = vm.ToModel();
             var res = _bo.Create(region);
             return StatusCode(res.Success ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError);
         }
