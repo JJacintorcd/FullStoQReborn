@@ -91,7 +91,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         {
             if (ModelState.IsValid)
             {
-                var model = vm.ToBrand();
+                var model = vm.ToModel();
                 var createOperation = await _bo.CreateAsync(model);
                 if (!createOperation.Success) return View("Error", new ErrorViewModel() { RequestId = createOperation.Exception.Message });
                 return RedirectToAction(nameof(Index));
@@ -125,7 +125,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                 var result = getOperation.Result;
                 if (vm.Name != result.Name)
                 {
-                    result = vm.ToBrand();
+                    result = vm.ToModel();
                     var updateOperation = await _bo.UpdateAsync(result);
                     if (!updateOperation.Success) return View("Error", new ErrorViewModel() { RequestId = updateOperation.Exception.Message });
                 }

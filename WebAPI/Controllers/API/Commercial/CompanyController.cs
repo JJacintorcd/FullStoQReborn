@@ -16,7 +16,7 @@ namespace WebAPI.Controllers.Api.Commercial
         [HttpPost]
         public ActionResult Create([FromBody]CompanyViewModel vm)
         {
-            var company = vm.ToCompany();
+            var company = vm.ToModel();
             var res = _bo.Create(company);
             return StatusCode(res.Success ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError);
         }
