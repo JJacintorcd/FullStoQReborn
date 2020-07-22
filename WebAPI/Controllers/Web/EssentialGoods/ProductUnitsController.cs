@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Recodme.RD.FullStoQReborn.BusinessLayer.Commercial;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
 using WebAPI.Models;
+using WebAPI.Models.CommercialViewModel;
 using WebAPI.Models.EssentialGoodsViewModel;
+using WebAPI.Models.HtmlComponents;
+using WebAPI.Support;
 
 namespace WebAPI.Controllers.Web.EssentialGoods
 {
@@ -13,6 +17,94 @@ namespace WebAPI.Controllers.Web.EssentialGoods
     public class ProductUnitsController : Controller
     {
         private readonly ProductUnitBusinessObject _bo = new ProductUnitBusinessObject();
+        private readonly EstablishmentBusinessObject _ebo = new EstablishmentBusinessObject();
+        private readonly ProductModelBusinessObject _pmbo = new ProductModelBusinessObject();
+        private readonly ShoppingBasketBusinessObject _sbbo = new ShoppingBasketBusinessObject();
+
+
+        private string GetDeleteRef()
+        {
+            return this.ControllerContext.RouteData.Values["controller"] + "/" + nameof(Delete);
+        }
+
+        private List<BreadCrumb> GetCrumbs()
+        {
+            return new List<BreadCrumb>()
+                { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
+                  new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
+                  new BreadCrumb(){Icon = "fa-shish-kebab", Action="Index", Controller="Dishes", Text = "Dishes"}
+                };
+        }
+
+        private IActionResult RecordNotFound()
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Information, "The record was not found");
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IActionResult OperationErrorBackToIndex(Exception exception)
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, exception);
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IActionResult OperationSuccess(string message)
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Success, message);
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        private async Task<List<EstablishmentViewModel>> GetEstablishmentViewModels(List<Guid> ids)
+        {
+            var filterOperation = await _ebo.FilterAsync(x => ids.Contains(x.Id));
+            var eList = new List<EstablishmentViewModel>();
+            foreach (var item in filterOperation.Result)
+            {
+                eList.Add(EstablishmentViewModel.Parse(item));
+            }
+            return eList;
+        }
+
+        private async Task<EstablishmentViewModel> GetEstablishmentViewModel(Guid id)
+        {
+            var getOperation = await _ebo.ReadAsync(id);
+            return EstablishmentViewModel.Parse(getOperation.Result);
+        }
+
+        private async Task<List<ProductModelViewModel>> GetProductViewModels(List<Guid> ids)
+        {
+            var filterOperation = await _pmbo.FilterAsync(x => ids.Contains(x.Id));
+            var eList = new List<ProductModelViewModel>();
+            foreach (var item in filterOperation.Result)
+            {
+                eList.Add(ProductModelViewModel.Parse(item));
+            }
+            return eList;
+        }
+
+        private async Task<ProductModelViewModel> GetProductModelViewModel(Guid id)
+        {
+            var getOperation = await _pmbo.ReadAsync(id);
+            return ProductModelViewModel.Parse(getOperation.Result);
+        }
+
+        private async Task<List<ShoppingBasketViewModel>> GetShoppingBasketViewModels(List<Guid> ids)
+        {
+            var filterOperation = await _sbbo.FilterAsync(x => ids.Contains(x.Id));
+            var drList = new List<ShoppingBasketViewModel>();
+            foreach (var item in filterOperation.Result)
+            {
+                drList.Add(ShoppingBasketViewModel.Parse(item));
+            }
+            return drList;
+        }
+
+        private async Task<ShoppingBasketViewModel> GetShoppingBasketViewModel(Guid id)
+        {
+            var getOperation = await _sbbo.ReadAsync(id);
+            return ShoppingBasketViewModel.Parse(getOperation.Result);
+        }
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -38,15 +130,15 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getOperation.Result == null) return NotFound();
             var vm = ProductUnitViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "ProductUnit";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "ProductUnits", "Detail" };
+            ViewData["BreadCrumbs"] = new List<string>() { "Home", "ProductUnits", "Details" };
             return View(vm);
         }
 
-        [HttpGet("/new")]
-        public IActionResult New()
+        [HttpGet("/create")]
+        public IActionResult Create()
         {
             ViewData["Title"] = "Edit ProductUnit";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "ProductUnits", "New" };
+            ViewData["BreadCrumbs"] = new List<string>() { "Home", "ProductUnits", "Create" };
             return View();
         }
 

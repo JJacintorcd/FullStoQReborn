@@ -19,62 +19,6 @@ namespace WebAPI.Controllers.Api.EssentialGoods
     public class ProductUnitController : ControllerBase
     {
         private readonly ProductUnitBusinessObject _bo = new ProductUnitBusinessObject();
-        private readonly ProductModelBusinessObject _pmbo = new ProductModelBusinessObject();
-        private readonly EstablishmentBusinessObject _ebo = new EstablishmentBusinessObject();
-        private readonly ShoppingBasketBusinessObject _spbo = new ShoppingBasketBusinessObject();
-
-        private string GetDeleteRef()
-        {
-            return this.ControllerContext.RouteData.Values["controller"] + "/" + nameof(Delete);
-        }
-
-        private List<BreadCrumb> GetCrumbs()
-        {
-            return new List<BreadCrumb>()
-                { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
-                  new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                  new BreadCrumb(){Icon = "fa-shish-kebab", Action="Index", Controller="Dishes", Text = "Dishes"}
-                };
-        }
-
-        private IActionResult RecordNotFound()
-        {
-            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Information, "The record was not found");
-            return RedirectToAction(nameof(Index));
-        }
-
-        private IActionResult OperationErrorBackToIndex(Exception exception)
-        {
-            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, exception);
-            return RedirectToAction(nameof(Index));
-        }
-
-        private IActionResult OperationSuccess(string message)
-        {
-            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Success, message);
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var listOperation = await _bo.ListNotDeletedAsync();
-            if (!listOperation.Success) return OperationErrorBackToIndex(listOperation.Exception);
-
-            var lst = new List<ProdctUnitViewModel>();
-            foreach (var item in listOperation.Result)
-            {
-                lst.Add(ProdctUnitViewModel.Parse(item));
-            }
-
-            var drList = await GetDietaryRestrictionViewModels(listOperation.Result.Select(x => x.DietaryRestrictionId).Distinct().ToList());
-            ViewData["DietaryRestrictions"] = drList;
-            ViewData["Title"] = "Dishes";
-            ViewData["BreadCrumbs"] = GetCrumbs();
-            ViewData["DeleteHref"] = GetDeleteRef();
-
-            return View(lst);
-        }
 
         [HttpPost]
         public ActionResult Create([FromBody]ProductUnitViewModel vm)
