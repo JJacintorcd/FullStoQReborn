@@ -8,11 +8,15 @@ using Recodme.RD.FullStoQReborn.DataLayer.Queue;
 
 namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts
 {
-    public class Context : IdentityDbContext
+    public class Context : IdentityDbContext<FullStoqUser, FullStoqRole, int>
     {
-        public Context() : base()
-        {
+        private readonly string _connectionString = string.Empty; 
+        
+        public Context() : base() { }
 
+        public Context(string cString)
+        {
+            _connectionString = cString;
         }
 
         public Context(DbContextOptions<Context> options) : base(options)
@@ -24,8 +28,19 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(Resources.ConnectionString);
+                if(_connectionString == string.Empty)
+                {
+                    optionsBuilder.UseSqlServer(Resources.ConnectionString);
+                }
+                else
+                {
+                    optionsBuilder.UseSqlServer(_connectionString);
+                }
             }
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Region> Regions { get; set; }

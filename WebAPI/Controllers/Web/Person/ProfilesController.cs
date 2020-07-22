@@ -14,6 +14,37 @@ namespace WebAPI.Controllers.Web.Person
     {
         private readonly ProfileBusinessObject _bo = new ProfileBusinessObject();
 
+        private string GetDeleteRef()
+        {
+            return this.ControllerContext.RouteData.Values["controller"] + "/" + nameof(Delete);
+        }
+
+        private List<BreadCrumb> GetCrumbs()
+        {
+            return new List<BreadCrumb>()
+                { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
+                  new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
+                  new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Courses", Text = "Courses"}
+                };
+        }
+
+        private IActionResult RecordNotFound()
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Information, "The record was not found");
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IActionResult OperationErrorBackToIndex(Exception exception)
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, exception);
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IActionResult OperationSuccess(string message)
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Success, message);
+            return RedirectToAction(nameof(Index));
+        }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -74,7 +105,9 @@ namespace WebAPI.Controllers.Web.Person
             if (getOperation.Result == null) return NotFound();
             var vm = ProfileViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "Edit Profile";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Profiles", "Edit" };
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Courses", Icon = "fa-edit", Text = "Edit" });
+            ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 

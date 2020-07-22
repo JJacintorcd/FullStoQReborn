@@ -15,6 +15,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Configuration;
 using WebAPI.Options;
+using Microsoft.EntityFrameworkCore;
+using Recodme.RD.FullStoQReborn.DataLayer.Person;
+using Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts;
+using Microsoft.AspNetCore.Http;
 
 namespace WebAPI
 {
@@ -31,14 +35,37 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            services.AddCors(
-                (serviceObject) =>
+
+            //Políticas de Cookies
+            services.Configure<CookiePolicyOptions>(
+                options =>
                 {
-                    serviceObject.AddPolicy("GeneralPolicy", (builder) =>
-                    {
-                        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-                    });
+                    options.CheckConsentNeeded = context => true;
+                    options.MinimumSameSitePolicy = SameSiteMode.None;
                 });
+
+            //Definição da identidade
+            services.AddIdentity<FullStoqUser, FullStoqRole>(
+                options =>
+                {
+                    options.User.RequireUniqueEmail = true;
+                }).AddEntityFrameworkStores<Context>();
+
+            //Definição da base de dados para autenticação e autorização
+            services.AddDbContext<Context>(
+                options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("Default"));
+                });
+            //Swagger Generator
+            services.AddSwaggerGen(x =>
+            {
+                x.SwaggerDoc("v1", new OpenApiInfo() { Title = "My API", Version = "v1" });
+            });
+
+            //CORS irresponsável
+            services.AddCors(x => x.AddPolicy("Default", (builder) => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer((options) =>
                 {
@@ -56,19 +83,16 @@ namespace WebAPI
                     };
 
                 });
-            services.AddSwaggerGen(
-                (x) =>
-                {
-                    x.SwaggerDoc("v1", new OpenApiInfo() { Title = "LennyHouse", Version = "v1" });
-                });
+            
             services.Configure<RazorViewEngineOptions>(o =>
             {
                 o.ViewLocationFormats.Clear();
                 o.ViewLocationFormats.Add("/Views/{1}/{0}" + RazorViewEngine.ViewExtension);
                 o.ViewLocationFormats.Add("/Views/Shared/{0}" + RazorViewEngine.ViewExtension);
-                o.ViewLocationFormats.Add("/Views/MenuViews/{1}/{0}" + RazorViewEngine.ViewExtension);
-                o.ViewLocationFormats.Add("/Views/RestaurantViews/{1}/{0}" + RazorViewEngine.ViewExtension);
-                o.ViewLocationFormats.Add("/Views/UserViews/{1}/{0}" + RazorViewEngine.ViewExtension);
+                o.ViewLocationFormats.Add("/Views/Commercial/{1}/{0}" + RazorViewEngine.ViewExtension);
+                o.ViewLocationFormats.Add("/Views/EssentialGoods/{1}/{0}" + RazorViewEngine.ViewExtension);
+                o.ViewLocationFormats.Add("/Views/Person/{1}/{0}" + RazorViewEngine.ViewExtension);
+                o.ViewLocationFormats.Add("/Views/Queue/{1}/{0}" + RazorViewEngine.ViewExtension);
             });
         }
 
@@ -92,7 +116,6 @@ namespace WebAPI
             app.UseSwaggerUI(options => options.SwaggerEndpoint(swaggerOptions.UiEndpoint,
                 swaggerOptions.ApiDescription));
 
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -109,6 +132,9 @@ namespace WebAPI
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                   name: "api",
+                   pattern: "api/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

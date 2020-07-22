@@ -1,0 +1,18 @@
+﻿@using WebAPI.Models.CommercialViewModel;
+@model CompanyViewModel
+
+<h2>Company - Details</h2>
+<hr />
+
+<div>
+    <dl class="row">
+        <dt class="col-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd class="col-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+</div>
+

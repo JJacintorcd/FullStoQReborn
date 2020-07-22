@@ -42,7 +42,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return View(vm);
         }
 
-        [HttpGet("/new")]
+        [HttpGet("new")]
         public IActionResult New()
         {
             ViewData["Title"] = "Edit Brand";
@@ -64,7 +64,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return View(vm);
         }
 
-        [HttpGet("/edit/{id}")]
+        [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null) return NotFound();
@@ -78,7 +78,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return View(vm);
         }
 
-        [HttpPost]
+        [HttpPost("edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, BrandViewModel vm)
         {
@@ -98,7 +98,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("Delete/{id}")]
+        [HttpGet("delete/{id}")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null) return NotFound();
