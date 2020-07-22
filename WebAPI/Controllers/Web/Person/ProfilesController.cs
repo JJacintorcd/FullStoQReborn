@@ -27,7 +27,7 @@ namespace WebAPI.Controllers.Web.Person
             { 
                 new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
                 new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Courses", Text = "Profiles"}
+                new BreadCrumb(){Icon = "fa-user", Action="Index", Controller="Profiles", Text = "Profiles"}
             };
         }
 
@@ -87,7 +87,7 @@ namespace WebAPI.Controllers.Web.Person
             return View(vm);
         }
 
-        [HttpGet("/new")]
+        [HttpGet("new")]
         public IActionResult New()
         {
             ViewData["Title"] = "New Profile";
@@ -111,7 +111,7 @@ namespace WebAPI.Controllers.Web.Person
             return View(vm);
         }
 
-        [HttpGet("/edit/{id}")]
+        [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null) return RecordNotFound();
@@ -128,7 +128,7 @@ namespace WebAPI.Controllers.Web.Person
             return View(vm);
         }
 
-        [HttpPost]
+        [HttpPost("edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, ProfileViewModel vm)
         {

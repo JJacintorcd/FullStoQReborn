@@ -16,8 +16,8 @@ namespace WebAPI.Controllers.Web.EssentialGoods
     public class ProductModelsController : Controller
     {
         private readonly ProductModelBusinessObject _bo = new ProductModelBusinessObject();
-        private readonly BrandBusinessObject _bro = new BrandBusinessObject();
-        private readonly CategoryBusinessObject _cro = new CategoryBusinessObject();
+        private readonly BrandBusinessObject _bbo = new BrandBusinessObject();
+        private readonly CategoryBusinessObject _cbo = new CategoryBusinessObject();
 
         private string GetDeleteRef()
         {
@@ -29,7 +29,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return new List<BreadCrumb>()
                 { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
                   new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                  new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Courses", Text = "Courses"}
+                  new BreadCrumb(){Icon = "fa-box-alt", Action="Index", Controller="ProductModels", Text = "Product Models"}
                 };
         }
 
@@ -53,7 +53,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
 
         private async Task<List<BrandViewModel>> GetBrandViewModels(List<Guid> ids)
         {
-            var filterOperation = await _bro.FilterAsync(x => ids.Contains(x.Id));
+            var filterOperation = await _bbo.FilterAsync(x => ids.Contains(x.Id));
             var drList = new List<BrandViewModel>();
             foreach (var item in filterOperation.Result)
             {
@@ -64,13 +64,13 @@ namespace WebAPI.Controllers.Web.EssentialGoods
 
         private async Task<BrandViewModel> GetBrandViewModel(Guid id)
         {
-            var getOperation = await _bro.ReadAsync(id);
+            var getOperation = await _bbo.ReadAsync(id);
             return BrandViewModel.Parse(getOperation.Result);
         }
 
         private async Task<List<CategoryViewModel>> GetCategoryViewModels(List<Guid> ids)
         {
-            var filterOperation = await _cro.FilterAsync(x => ids.Contains(x.Id));
+            var filterOperation = await _cbo.FilterAsync(x => ids.Contains(x.Id));
             var drList = new List<CategoryViewModel>();
             foreach (var item in filterOperation.Result)
             {
@@ -81,7 +81,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
 
         private async Task<CategoryViewModel> GetCategoryViewModel(Guid id)
         {
-            var getOperation = await _cro.ReadAsync(id);
+            var getOperation = await _cbo.ReadAsync(id);
             return CategoryViewModel.Parse(getOperation.Result);
         }
 
@@ -98,9 +98,9 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             }
 
             var bList = await GetBrandViewModels(listOperation.Result.Select(x => x.BrandId).Distinct().ToList());
-            ViewData["DietaryRestrictions"] = bList;
+            ViewData["Brands"] = bList;
             var cList = await GetCategoryViewModels(listOperation.Result.Select(x => x.CategoryId).Distinct().ToList());
-            ViewData["DietaryRestrictions"] = cList;
+            ViewData["Categories"] = cList;
             ViewData["Title"] = "ProductModels";
             ViewData["BreadCrumbs"] = GetCrumbs();
             ViewData["DeleteHref"] = GetDeleteRef();
@@ -117,11 +117,11 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
             if (getOperation.Result == null) return RecordNotFound();
 
-            var getCOperation = await _cro.ReadAsync(getOperation.Result.BrandId);
+            var getCOperation = await _cbo.ReadAsync(getOperation.Result.BrandId);
             if (!getCOperation.Success) return OperationErrorBackToIndex(getCOperation.Exception);
             if (getCOperation.Result == null) return RecordNotFound();
 
-            var getBOperation = await _bro.ReadAsync(getOperation.Result.BrandId);
+            var getBOperation = await _bbo.ReadAsync(getOperation.Result.BrandId);
             if (!getBOperation.Success) return OperationErrorBackToIndex(getBOperation.Exception);
             if (getBOperation.Result == null) return RecordNotFound();
 
@@ -140,10 +140,10 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         [HttpGet("new")]
         public async Task<IActionResult> New()
         {
-            var listBOperation = await _bro.ListNotDeletedAsync();
+            var listBOperation = await _bbo.ListNotDeletedAsync();
             if (!listBOperation.Success) return OperationErrorBackToIndex(listBOperation.Exception);
 
-            var listCOperation = await _cro.ListNotDeletedAsync();
+            var listCOperation = await _cbo.ListNotDeletedAsync();
             if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
 
 
@@ -195,9 +195,9 @@ namespace WebAPI.Controllers.Web.EssentialGoods
 
             var vm = ProductModelViewModel.Parse(getOperation.Result);
 
-            var listBOperation = await _bro.ListNotDeletedAsync();
+            var listBOperation = await _bbo.ListNotDeletedAsync();
             if (!listBOperation.Success) return OperationErrorBackToIndex(listBOperation.Exception);
-            var listCOperation = await _cro.ListNotDeletedAsync();
+            var listCOperation = await _cbo.ListNotDeletedAsync();
             if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
 
             var bList = new List<SelectListItem>();
@@ -239,11 +239,12 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                 if (!vm.CompareToModel(result))
                 {
                     result = vm.ToModel();
-                    var updateOperation = await _bo.UpdateAsync(result); if (!updateOperation.Success)
+                    var updateOperation = await _bo.UpdateAsync(result); 
+                    if (!updateOperation.Success)
                     {
 
                         TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
-                    return View(vm);
+                        return View(vm);
                     }
                     else return OperationSuccess("The record was successfuly updated");
                 }

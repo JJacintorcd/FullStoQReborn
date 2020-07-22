@@ -1,18 +1,24 @@
 ﻿@using WebAPI.Models.EssentialGoodsViewModel;
 @model BrandViewModel
 
-<h2>Brand - Details</h2>
-<hr />
-
-<div>
-    <dl class="row">
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
+<div class="card">
+    <div class="card-header bg-greenish-green">
+        <h2 class="float-left">
+            @ViewData["Title"]
+        </h2>
+    </div>
+    <div class="card-body">
+        <div class="ml-5 mr-5">
+            <dl class="row">
+                <dt class="col-2">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-10">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+            </dl>
+        </div>
+    </div>
 </div>
+
 

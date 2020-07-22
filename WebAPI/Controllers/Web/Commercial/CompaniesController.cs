@@ -10,7 +10,7 @@ using WebAPI.Support;
 namespace WebAPI.Controllers.Web.Commercial
 {
     [Route("[controller]")]
-    public class CoursesController : Controller
+    public class CompaniesController : Controller
     {
         private readonly CompanyBusinessObject _bo = new CompanyBusinessObject();
 

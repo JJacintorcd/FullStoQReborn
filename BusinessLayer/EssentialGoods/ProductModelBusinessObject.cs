@@ -116,7 +116,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
-                if (_dao.List().Any(x => x.BarCode == item.BarCode)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Bar Code already exists" };
+                if (_dao.List().Any(x => x.BarCode == item.BarCode && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Bar Code already exists" };
                 _dao.Update(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
 
@@ -132,7 +132,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.BarCode == item.BarCode)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Bar Code already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.BarCode == item.BarCode && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Bar Code already exists" };
                 await _dao.UpdateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
 

@@ -2,20 +2,21 @@
 @model IEnumerable<BrandViewModel>
 
 <div class="card">
-    <div class="card-header">
+    <div class="card-header bg-greenish-green">
         <h2 class="float-left">
             @ViewData["Title"]
         </h2>
         <p class="float-right mt-2 mb-0">
-            <a asp-action="New" asp-controller="Brands" class="text-white btn btn-success" style="font-size:0.8em"><i class="fas fa-plus mr-1"></i>New</a>
+
+            <a asp-controller="Brands" asp-action="New" class="text-white btn btn-success"><i class="fas fa-plus mr-1"></i>New</a>
         </p>
     </div>
     <div class="card-body table-responsive">
-        <table class="table" id="listTable">
+        <table class="table table-hover" id="listTable">
             <thead>
                 <tr>
-                    <th class="no-sort w-1"></th>
-                    <th class="w-1">@Html.DisplayNameFor(model => model.Name)</th>
+                    <th class="no-sort"></th>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
                     <th class="no-sort"></th>
                 </tr>
             </thead>
@@ -23,9 +24,11 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td class="flex-nowrap w-1">
-                            <a class="link-details" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search mr-2"></i></a>
-                            <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
+                        <td class="w-1">
+                            <a class="link-details" asp-action="Details" asp-route-id="@item.Id">
+                            <i class="fas fa-search mr-2"></i></a>
+                            <a class="link-edit" asp-controller="Brands" asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="fas fa-edit mr-2"></i></a>
                             <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
                         </td>
                         <td class="w-1">@Html.DisplayFor(x => item.Name)</td>
@@ -37,7 +40,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal" tabindex="-1" role="none" aria-hidden="true" style="display: none;">
+<div class="modal fade" id="modal" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -56,8 +59,9 @@
 </div>
 <input type="hidden" id="idToDelete" />
 <script>
-var ConfirmDelete = function (id) {
-        $("#deleteBtn").attr("href", $("#deleteBtn").attr("href") + "/" + id);
+
+    var ConfirmDelete = function (id) {
+        $("#deleteBtn").attr("href", "@ViewData["DeleteHref"]" + "/" + id);
         $("#modal").modal('show');
     }
 

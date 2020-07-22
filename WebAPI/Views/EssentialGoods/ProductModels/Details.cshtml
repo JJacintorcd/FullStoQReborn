@@ -1,7 +1,68 @@
-﻿
-@{
-    ViewData["Title"] = "Details";
-}
+﻿@using WebAPI.Models.EssentialGoodsViewModel;
+@model ProductModelViewModel
 
-<h1>Details</h1>
-
+<div class="card">
+    <div class="card-header bg-greenish-green">
+        <h2 class="float-left">
+            @ViewData["Title"]
+        </h2>
+    </div>
+    <div class="card-body">
+        <div class="ml-5 mr-5">
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.BarCode)
+                </dt>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.BarCode)
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.Price)
+                </dt>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.Price)
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.Weight)
+                </dt>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.Weight)
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.BrandId)
+                </dt>
+                <dd class="col-9">
+                    @{
+                        var b = ViewData["Brand"] as BrandViewModel;
+                    }
+                    <a asp-controller="Brands" asp-action="Details" asp-route-id="@b.Id">@b.Name</a>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.CategoryId)
+                </dt>
+                <dd class="col-9">
+                    @{
+                        var c = ViewData["Category"] as BrandViewModel;
+                    }
+                    <a asp-controller="Categories" asp-action="Details" asp-route-id="@c.Id">@c.Name</a>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
