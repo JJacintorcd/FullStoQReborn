@@ -1,6 +1,7 @@
 ﻿using Recodme.RD.FullStoQReborn.Data.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -8,7 +9,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 {
     public class ProductModel : NamedEntity
     {
-
+        [Required]
+        [Display (Name="Bar Code")]
         private string _barCode;
         public string BarCode
         {
@@ -20,6 +22,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
             }
         }
 
+        [Required]
+        [Display(Name = "Price")]
         private double _price;
         public double Price
         {
@@ -31,6 +35,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
             }
         }
 
+        [Required]
+        [Display(Name = "Weight")]
         private double _weight;
         public double Weight
         {
