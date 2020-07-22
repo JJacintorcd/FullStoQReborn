@@ -1,18 +1,31 @@
 ﻿@using WebAPI.Models.CommercialViewModel;
 @model CompanyViewModel
 
-<h2>Company - Details</h2>
-<hr />
-
-<div>
-    <dl class="row">
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
+<div class="card">
+    <div class="card-header bg-greenish-green">
+        <h2 class="float-left">
+            @ViewData["Title"]
+        </h2>
+    </div>
+    <div class="card-body">
+        <div class="ml-5 mr-5">
+            <dl class="row">
+                <dt class="col-2">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-10">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-2">
+                    @Html.DisplayNameFor(model => model.VatNumber)
+                </dt>
+                <dd class="col-10">
+                    @Html.DisplayFor(model => model.VatNumber)
+                </dd>
+            </dl>
+        </div>
+    </div>
 </div>
 
