@@ -26,7 +26,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             {
                 new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
                 new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                new BreadCrumb(){Icon = "fa-tag", Action="Index", Controller="Categories", Text = "Profiles"}
+                new BreadCrumb(){Icon = "fa-tag", Action="Index", Controller="Categories", Text = "Categories"}
             };
         }
 
