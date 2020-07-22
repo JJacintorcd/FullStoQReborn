@@ -14,7 +14,8 @@ namespace WebAPI.Models.CommercialViewModel
         {
             return new RegionViewModel()
             {                
-                Name = region.Name
+                Name = region.Name,
+                Id = region.Id
             };
         }
     }

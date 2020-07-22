@@ -13,7 +13,8 @@ namespace WebAPI.Models.EssentialGoodsViewModel
         {
             return new CategoryViewModel()
             {
-                Name = category.Name
+                Name = category.Name,
+                Id = category.Id
             };
         }
 

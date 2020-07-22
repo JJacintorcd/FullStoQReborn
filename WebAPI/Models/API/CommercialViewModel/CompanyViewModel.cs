@@ -16,8 +16,21 @@ namespace WebAPI.Models.CommercialViewModel
             return new CompanyViewModel()
             {
                 Name = company.Name,
-                VatNumber = company.VatNumber
+                VatNumber = company.VatNumber,
+                Id = company.Id
             };
+        }
+
+        public Company ToModel(Company model)
+        {
+            model.Name = Name;
+            model.VatNumber = VatNumber;
+            return model;
+        }
+
+        public bool CompareToModel(Company model)
+        {
+            return Name == model.Name && VatNumber == model.VatNumber;
         }
     }
 }

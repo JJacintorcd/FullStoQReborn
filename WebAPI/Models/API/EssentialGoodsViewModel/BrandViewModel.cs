@@ -13,7 +13,8 @@ namespace WebAPI.Models.EssentialGoodsViewModel
         {
             return new BrandViewModel()
             {
-                Name = brand.Name
+                Name = brand.Name,
+                Id = brand.Id
             };
         }
 
@@ -23,3 +24,4 @@ namespace WebAPI.Models.EssentialGoodsViewModel
         }
     }
 }
+

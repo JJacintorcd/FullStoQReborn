@@ -26,8 +26,25 @@ namespace WebAPI.Models.CommercialViewModel
                 ClosingHours = establishment.ClosingHours,
                 ClosingDays = establishment.ClosingDays,
                 RegionId = establishment.RegionId,
-                CompanyId = establishment.CompanyId
+                CompanyId = establishment.CompanyId,
+                Id = establishment.Id
             };
         }
+        public Establishment ToModel(Establishment model)
+        {
+            model.Address = Address;
+            model.OpeningHours = OpeningHours;
+            model.ClosingHours = ClosingHours;
+            model.ClosingDays = ClosingDays;
+            model.RegionId = RegionId;
+            model.CompanyId = CompanyId;
+            //model.Id = Id;
+            return model;
+        }
+
+        //public bool CompareToModel(Establishment model)
+        //{
+        //    return Name == model.Name;
+        //}
     }
 }

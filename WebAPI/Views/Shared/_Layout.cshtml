@@ -3,15 +3,24 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebAPI</title>
+    <title>@ViewData["Title"] - PresentationLayer</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/dataTables.bootstrap4.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <script src="~/lib/font-awesome/js/all.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.dataTables.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/dataTables.bootstrap4.min.js"></script>
+    @*<script src="https://kit.fontawesome.com/14d73706cb.js" crossorigin="anonymous"></script>*@
+
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-1">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebAPI</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PresentationLayer</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -24,10 +33,50 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Menu">Administration</a>
+                            </li>
+                        }
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">@User.Identity.Name, Logout</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
+        @if (ViewData["BreadCrumbs"] != null)
+        {
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    @foreach (var crumb in ViewData["BreadCrumbs"] as List<string>)
+                    {
+                        if ((ViewData["BreadCrumbs"] as List<string>).Last() == crumb)
+                        {
+                            <li class="breadcrumb-item active" style="bottom:0" aria-current="page">@crumb</li>
+                        }
+                        else
+                        {
+                            <li class="breadcrumb-item">@crumb</li>
+                        }
+                    }
+                    <li class="ml-auto font-weight-bold"><h4>@ViewData["Header"]</h4></li>
+                </ol>
+            </nav>
+        }
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -37,11 +86,9 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - WebAPI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - PresentationLayer - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
