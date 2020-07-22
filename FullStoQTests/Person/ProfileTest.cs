@@ -132,7 +132,7 @@ namespace FullStoQTests.Person
             ContextSeeder.Seed();
             var bo = new ProfileBusinessObject();
             var item = bo.List().Result.First();
-            var reg = new Profile(123456789, "Manuel", "Macabres", item.PhoneNumber, DateTime.UtcNow);
+            var reg = new Profile(123456089, "Manuel", "Macabres", item.PhoneNumber, DateTime.UtcNow);
             var resCreate = bo.Create(reg);
             Assert.IsTrue(resCreate.Success && resCreate.Message == "Phone number already exists");
         }
@@ -143,7 +143,7 @@ namespace FullStoQTests.Person
             ContextSeeder.Seed();
             var bo = new ProfileBusinessObject();
             var item = bo.ListAsync().Result.Result.First();
-            var reg = new Profile(123456789, "Manuel", "Macabres", item.PhoneNumber, DateTime.UtcNow);
+            var reg = new Profile(123456089, "Manuel", "Macabres", item.PhoneNumber, DateTime.UtcNow);
             var resCreate = bo.CreateAsync(reg).Result;
             Assert.IsTrue(resCreate.Success && resCreate.Message == "Phone number already exists");
         }

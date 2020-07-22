@@ -39,6 +39,9 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
         public Guid EstablishmentId { get; set; }
         public virtual Establishment Establishment { get; set; }
 
+        [ForeignKey("ShoppingBasket")]
+        public Guid ShoppingBasketId { get; set; }
+        public virtual ShoppingBasket ShoppingBasket { get; set; }
 
 
         public ProductUnit(string serialNumber, bool isReserved, Guid productModelId, Guid establishmentId) : base()

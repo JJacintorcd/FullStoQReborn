@@ -260,5 +260,55 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
             }
         }
         #endregion
+
+        #region Reserve
+        public OperationResult Reserve(Guid productUnitId, Guid shoppingBasketId)
+        {
+            try
+            {
+                var transactionOptions = new TransactionOptions
+                {
+                    IsolationLevel = IsolationLevel.ReadCommitted,
+                    Timeout = TimeSpan.FromSeconds(30)
+                };
+
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+                var productUnit = _dao.Read(productUnitId);
+                productUnit.ShoppingBasketId = shoppingBasketId;
+                productUnit.IsReserved = true;
+
+                transactionScope.Complete();
+
+                return new OperationResult() { Success = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult() { Success = false, Exception = e };
+            }
+        }
+        public async Task<OperationResult> ReserveAsync(Guid productUnitId, Guid shoppingBasketId)
+        {
+            try
+            {
+                var transactionOptions = new TransactionOptions
+                {
+                    IsolationLevel = IsolationLevel.ReadCommitted,
+                    Timeout = TimeSpan.FromSeconds(30)
+                };
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+                var productUnit = await _dao.ReadAsync(productUnitId);
+                productUnit.ShoppingBasketId = shoppingBasketId;
+                productUnit.IsReserved = true;
+
+                transactionScope.Complete();
+
+                return new OperationResult<List<ProductUnit>>() { Success = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<List<ProductUnit>>() { Success = false, Exception = e };
+            }
+        }
+        #endregion
     }
 }
