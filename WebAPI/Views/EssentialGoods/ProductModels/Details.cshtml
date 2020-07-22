@@ -58,7 +58,7 @@
                 </dt>
                 <dd class="col-9">
                     @{
-                        var c = ViewData["Category"] as BrandViewModel;
+                        var c = ViewData["Category"] as CategoryViewModel;
                     }
                     <a asp-controller="Categories" asp-action="Details" asp-route-id="@c.Id">@c.Name</a>
                 </dd>

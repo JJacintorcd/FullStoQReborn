@@ -288,5 +288,41 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
             }
         }
         #endregion
+
+        #region Filter
+        public OperationResult<List<ShoppingBasket>> Filter(Func<ShoppingBasket, bool> predicate)
+        {
+            try
+            {
+
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, opts, TransactionScopeAsyncFlowOption.Enabled);
+                var result = _dao.List();
+                result = result.Where(predicate).ToList();
+                transactionScope.Complete();
+                return new OperationResult<List<ShoppingBasket>> { Result = result, Success = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<List<ShoppingBasket>>() { Success = false, Exception = e };
+            }
+        }
+
+        public async Task<OperationResult<List<ShoppingBasket>>> FilterAsync(Func<ShoppingBasket, bool> predicate)
+        {
+            try
+            {
+
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, opts, TransactionScopeAsyncFlowOption.Enabled);
+                var result = await _dao.ListAsync();
+                result = result.Where(predicate).ToList();
+                transactionScope.Complete();
+                return new OperationResult<List<ShoppingBasket>> { Result = result, Success = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<List<ShoppingBasket>>() { Success = false, Exception = e };
+            }
+        }
+        #endregion
     }
 }

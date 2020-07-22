@@ -20,6 +20,12 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
 
         }
 
+        TransactionOptions transactionOptions = new TransactionOptions
+        {
+            IsolationLevel = IsolationLevel.ReadCommitted,
+            Timeout = TimeSpan.FromSeconds(30)
+        };
+
         #region Create
 
         public OperationResult<bool> Create(ProductModel item)
@@ -312,6 +318,42 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
             {
                 return new OperationResult<List<ProductModel>>() { Success = false, Exception = e };
 
+            }
+        }
+        #endregion
+
+        #region Filter
+        public OperationResult<List<ProductModel>> Filter(Func<ProductModel, bool> predicate)
+        {
+            try
+            {
+
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+                var result = _dao.List();
+                result = result.Where(predicate).ToList();
+                transactionScope.Complete();
+                return new OperationResult<List<ProductModel>> { Result = result, Success = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<List<ProductModel>>() { Success = false, Exception = e };
+            }
+        }
+
+        public async Task<OperationResult<List<ProductModel>>> FilterAsync(Func<ProductModel, bool> predicate)
+        {
+            try
+            {
+
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+                var result = await _dao.ListAsync();
+                result = result.Where(predicate).ToList();
+                transactionScope.Complete();
+                return new OperationResult<List<ProductModel>> { Result = result, Success = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<List<ProductModel>>() { Success = false, Exception = e };
             }
         }
         #endregion
