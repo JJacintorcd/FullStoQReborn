@@ -1,98 +1,149 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.Commercial;
-using WebAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebAPI.Models.CommercialViewModel;
+using WebAPI.Models.HtmlComponents;
 
 namespace WebAPI.Controllers.Web.Commercial
 {
     [Route("[controller]")]
-    public class CompaniesController : Controller
+    public class CoursesController : Controller
     {
         private readonly CompanyBusinessObject _bo = new CompanyBusinessObject();
+
+        private string GetDeleteRef()
+        {
+            return this.ControllerContext.RouteData.Values["controller"] + "/" + nameof(Delete);
+        }
+
+        private List<BreadCrumb> GetCrumbs()
+        {
+            return new List<BreadCrumb>()
+                { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
+                  new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
+                  new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Companies", Text = "Companies"}
+                };
+        }
+
+        private IActionResult RecordNotFound()
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Information, "The record was not found");
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IActionResult OperationErrorBackToIndex(Exception exception)
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, exception);
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IActionResult OperationSuccess(string message)
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Success, message);
+            return RedirectToAction(nameof(Index));
+        }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             var listOperation = await _bo.ListNotDeletedAsync();
-            if (!listOperation.Success) return View("Error", new ErrorViewModel() { RequestId = listOperation.Exception.Message });
+            if (!listOperation.Success) return OperationErrorBackToIndex(listOperation.Exception);
+
             var lst = new List<CompanyViewModel>();
             foreach (var item in listOperation.Result)
             {
                 lst.Add(CompanyViewModel.Parse(item));
             }
-            ViewData["Title"] = "Companys";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Companys" };
+
+            ViewData["Title"] = "Companies";
+            ViewData["BreadCrumbs"] = GetCrumbs();
+            ViewData["DeleteHref"] = GetDeleteRef();
+
             return View(lst);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return RecordNotFound();
             var getOperation = await _bo.ReadAsync((Guid)id);
-            if (!getOperation.Success) return View("Error", getOperation.Exception.Message);
-            if (getOperation.Result == null) return NotFound();
+
+            if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+            if (getOperation.Result == null) return RecordNotFound();
+
             var vm = CompanyViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "Company";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Companys", "Detail" };
+
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Companies", Icon = "fa-search", Text = "Detail" });
+
+            ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
-        [HttpGet("/new")]
+        [HttpGet("new")]
         public IActionResult New()
         {
-            ViewData["Title"] = "Edit Company";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Companys", "New" };
+            ViewData["Title"] = "New Company";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Companies", Icon = "fa-plus", Text = "New" });
+            ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("new")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CompanyViewModel vm)
+        public async Task<IActionResult> New(CompanyViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                var model = vm.ToCompany();
+                var model = vm.ToModel();
                 var createOperation = await _bo.CreateAsync(model);
-                if (!createOperation.Success) return View("Error", new ErrorViewModel() { RequestId = createOperation.Exception.Message });
-                return RedirectToAction(nameof(Index));
+                if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+                else return OperationSuccess("The record was successfuly created");
             }
             return View(vm);
         }
 
-        [HttpGet("/edit/{id}")]
+        [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return RecordNotFound();
 
             var getOperation = await _bo.ReadAsync((Guid)id);
-            if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
-            if (getOperation.Result == null) return NotFound();
+            if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+            if (getOperation.Result == null) return RecordNotFound();
+
             var vm = CompanyViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "Edit Company";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Companys", "Edit" };
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Companies", Icon = "fa-edit", Text = "Edit" });
+            ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
-        [HttpPost]
+        [HttpPost("edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, CompanyViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 var getOperation = await _bo.ReadAsync(id);
-                if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
-                if (getOperation.Result == null) return NotFound();
+                if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                if (getOperation.Result == null) return RecordNotFound();
                 var result = getOperation.Result;
-                if (vm.Name != result.Name && vm.VatNumber != result.VatNumber)
+                if (!vm.CompareToModel(result))
                 {
-                    result = vm.ToCompany();
+                    result = vm.ToModel(result);
                     var updateOperation = await _bo.UpdateAsync(result);
-                    if (!updateOperation.Success) return View("Error", new ErrorViewModel() { RequestId = updateOperation.Exception.Message });
+                    if (!updateOperation.Success)
+                    {
+                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
+                        return View(vm);
+                    }
+                    else return OperationSuccess("The record was successfuly updated");
                 }
             }
             return RedirectToAction(nameof(Index));
@@ -101,10 +152,10 @@ namespace WebAPI.Controllers.Web.Commercial
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return RecordNotFound();
             var deleteOperation = await _bo.DeleteAsync((Guid)id);
-            if (!deleteOperation.Success) return View("Error", new ErrorViewModel() { RequestId = deleteOperation.Exception.Message });
-            return RedirectToAction(nameof(Index));
+            if (!deleteOperation.Success) return OperationErrorBackToIndex(deleteOperation.Exception);
+            else return OperationSuccess("The record was successfuly deleted");
         }
     }
 }
