@@ -16,7 +16,7 @@ namespace WebAPI.Controllers.Api.EssentialGoods
         [HttpPost]
         public ActionResult Create([FromBody]BrandViewModel vm)
         {
-            var brand = vm.ToBrand();
+            var brand = vm.ToModel();
             var res = _bo.Create(brand);
             return StatusCode(res.Success ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError);
         }

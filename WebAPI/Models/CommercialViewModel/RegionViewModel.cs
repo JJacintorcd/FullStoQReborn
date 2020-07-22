@@ -6,17 +6,32 @@ namespace WebAPI.Models.CommercialViewModel
 {
     public class RegionViewModel:NamedViewModel
     {      
-        public Region ToRegion()
+        public RegionViewModel() { }
+
+        public Region ToModel()
         {
             return new Region(Name);
         }
+
+        public Region ToModel(Region model)
+        {
+            model.Name = Name;
+            return model;
+        }
+
         public static RegionViewModel Parse(Region region)
         {
-            return new RegionViewModel()
+            var rvm = new RegionViewModel
             {                
                 Name = region.Name,
                 Id = region.Id
             };
+            return rvm;
+        }
+
+        public bool CompareToModel(Region model)
+        {
+            return Name == model.Name;
         }
     }
 }

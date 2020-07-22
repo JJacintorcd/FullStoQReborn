@@ -24,10 +24,11 @@ namespace WebAPI.Controllers.Web.Person
         private List<BreadCrumb> GetCrumbs()
         {
             return new List<BreadCrumb>()
-                { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
-                  new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                  new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Courses", Text = "Courses"}
-                };
+            { 
+                new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
+                new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
+                new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Courses", Text = "Profiles"}
+            };
         }
 
         private IActionResult RecordNotFound()
@@ -47,52 +48,65 @@ namespace WebAPI.Controllers.Web.Person
             TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Success, message);
             return RedirectToAction(nameof(Index));
         }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             var listOperation = await _bo.ListNotDeletedAsync();
-            if (!listOperation.Success) return View("Error", new ErrorViewModel() { RequestId = listOperation.Exception.Message });
+            if (!listOperation.Success) return OperationErrorBackToIndex(listOperation.Exception);
+
             var lst = new List<ProfileViewModel>();
             foreach (var item in listOperation.Result)
             {
                 lst.Add(ProfileViewModel.Parse(item));
             }
+
             ViewData["Title"] = "Profiles";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Profiles" };
+            ViewData["BreadCrumbs"] = GetCrumbs();
+            ViewData["DeleteHref"] = GetDeleteRef();
+
             return View(lst);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return RecordNotFound();
             var getOperation = await _bo.ReadAsync((Guid)id);
-            if (!getOperation.Success) return View("Error", getOperation.Exception.Message);
-            if (getOperation.Result == null) return NotFound();
+
+            if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+            if (getOperation.Result == null) return RecordNotFound();
+
             var vm = ProfileViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "Profile";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Profiles", "Detail" };
+
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Profiles", Icon = "fa-search", Text = "Detail" });
+
+            ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
         [HttpGet("/new")]
         public IActionResult New()
         {
-            ViewData["Title"] = "Edit Profile";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Profiles", "New" };
+            ViewData["Title"] = "New Profile";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Profiles", Icon = "fa-plus", Text = "New" });
+            ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProfileViewModel vm)
+        public async Task<IActionResult> New(ProfileViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 var model = vm.ToProfile();
                 var createOperation = await _bo.CreateAsync(model);
-                if (!createOperation.Success) return View("Error", new ErrorViewModel() { RequestId = createOperation.Exception.Message });
-                return RedirectToAction(nameof(Index));
+                if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+                else return OperationSuccess("The record was successfuly created");
             }
             return View(vm);
         }
@@ -100,15 +114,16 @@ namespace WebAPI.Controllers.Web.Person
         [HttpGet("/edit/{id}")]
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return RecordNotFound();
 
             var getOperation = await _bo.ReadAsync((Guid)id);
-            if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
-            if (getOperation.Result == null) return NotFound();
+            if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+            if (getOperation.Result == null) return RecordNotFound();
+
             var vm = ProfileViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "Edit Profile";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Courses", Icon = "fa-edit", Text = "Edit" });
+            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Profiles", Icon = "fa-edit", Text = "Edit" });
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
@@ -120,14 +135,19 @@ namespace WebAPI.Controllers.Web.Person
             if (ModelState.IsValid)
             {
                 var getOperation = await _bo.ReadAsync(id);
-                if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
-                if (getOperation.Result == null) return NotFound();
+                if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                if (getOperation.Result == null) return RecordNotFound();
                 var result = getOperation.Result;
-                if (vm.BirthDate != result.BirthDate && vm.FirstName != result.FirstName && vm.LastName != result.LastName && vm.PhoneNumber != result.PhoneNumber && vm.VatNumber != result.VatNumber)
+                if (!vm.CompareToModel(result))
                 {
-                    result = vm.ToProfile();
+                    result = vm.ToModel(result);
                     var updateOperation = await _bo.UpdateAsync(result);
-                    if (!updateOperation.Success) return View("Error", new ErrorViewModel() { RequestId = updateOperation.Exception.Message });
+                    if (!updateOperation.Success)
+                    {
+                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
+                        return View(vm);
+                    }
+                    else return OperationSuccess("The record was successfuly updated");
                 }
             }
             return RedirectToAction(nameof(Index));
@@ -136,10 +156,12 @@ namespace WebAPI.Controllers.Web.Person
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return RecordNotFound();
             var deleteOperation = await _bo.DeleteAsync((Guid)id);
-            if (!deleteOperation.Success) return View("Error", new ErrorViewModel() { RequestId = deleteOperation.Exception.Message });
-            return RedirectToAction(nameof(Index));
+            if (!deleteOperation.Success) return OperationErrorBackToIndex(deleteOperation.Exception);
+            else return OperationSuccess("The record was successfuly deleted");
         }
     }
+
+
 }

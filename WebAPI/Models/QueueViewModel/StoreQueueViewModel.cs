@@ -21,6 +21,18 @@ namespace WebAPI.Models.QueueViewModel
                 EstablishmentId = storeQueue.EstablishmentId
             };
         }
+
+        public StoreQueue ToModel(StoreQueue model)
+        {
+            model.EstablishmentId = EstablishmentId;
+            model.Quantity = Quantity;
+            return model;
+        }
+
+        public bool CompareToModel(StoreQueue model)
+        {
+            return EstablishmentId == model.EstablishmentId && Quantity == model.Quantity;
+        }
     }
 }
 
