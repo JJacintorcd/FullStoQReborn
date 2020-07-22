@@ -21,5 +21,17 @@ namespace WebAPI.Models.QueueViewModel
                 EstablishmentId = reservedQueue.EstablishmentId
             };
         }
+
+        public ReservedQueue ToModel(ReservedQueue model)
+        {
+            model.EstablishmentId = EstablishmentId;
+            model.ProfileId = ProfileId;
+            return model;
+        }
+
+        public bool CompareToModel(ReservedQueue model)
+        {
+            return EstablishmentId == model.EstablishmentId && ProfileId == model.ProfileId;
+        }
     }
 }
