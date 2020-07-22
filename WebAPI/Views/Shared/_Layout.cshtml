@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using WebAPI.Models.HtmlComponents;
+@using Newtonsoft.Json
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -61,16 +64,24 @@
         @if (ViewData["BreadCrumbs"] != null)
         {
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    @foreach (var crumb in ViewData["BreadCrumbs"] as List<string>)
+                <ol class="breadcrumb bg-transparent">
+                    @foreach (var crumb in ViewData["BreadCrumbs"] as List<BreadCrumb>)
                     {
-                        if ((ViewData["BreadCrumbs"] as List<string>).Last() == crumb)
+                        if ((ViewData["BreadCrumbs"] as List<BreadCrumb>).Last() == crumb)
                         {
-                            <li class="breadcrumb-item active" style="bottom:0" aria-current="page">@crumb</li>
+                            <li class=" breadcrumb-item active" style="bottom:0" aria-current="page">
+                                <i class="fas @crumb.Icon"></i>
+                                @crumb.Text
+                            </li>
                         }
                         else
                         {
-                            <li class="breadcrumb-item">@crumb</li>
+                            <li class=" breadcrumb-item">
+                                <a class="text-dark" asp-controller="@crumb.Controller" asp-action="@crumb.Action">
+                                    <i class="fas @crumb.Icon"></i>
+                                    @crumb.Text
+                                </a>
+                            </li>
                         }
                     }
                     <li class="ml-auto font-weight-bold"><h4>@ViewData["Header"]</h4></li>

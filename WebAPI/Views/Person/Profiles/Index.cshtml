@@ -1,5 +1,5 @@
-﻿@using WebAPI.Models.CommercialViewModel
-@model IEnumerable<CompanyViewModel>
+﻿@using WebAPI.Models.PersonViewModel;
+@model IEnumerable<ProfileViewModel>
 
 <div class="card">
     <div class="card-header">
@@ -7,7 +7,7 @@
             @ViewData["Title"]
         </h2>
         <p class="float-right mt-2 mb-0">
-            <a asp-action="New" asp-controller="Companies" class="text-white btn btn-success" style="font-size:0.8em"><i class="fas fa-plus mr-1"></i>New</a>
+            <a asp-action="New" asp-controller="Profiles" class="text-white btn btn-success" style="font-size:0.8em"><i class="fas fa-plus mr-1"></i>New</a>
         </p>
     </div>
     <div class="card-body table-responsive">
@@ -15,29 +15,37 @@
             <thead>
                 <tr>
                     <th class="no-sort w-1"></th>
-                    <th class="w-1">@Html.DisplayNameFor(model => model.Name)</th>
+                    <th class="w-1">@Html.DisplayNameFor(model => model.BirthDate)</th>
+                    <th class="w-1">@Html.DisplayNameFor(model => model.FirstName)</th>
+                    <th class="w-1">@Html.DisplayNameFor(model => model.LastName)</th>
+                    <th class="w-1">@Html.DisplayNameFor(model => model.VatNumber)</th>
+                    <th class="w-1">@Html.DisplayNameFor(model => model.PhoneNumber)</th>
                     <th class="no-sort"></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td class="flex-nowrap w-1">
-                            <a class="link-details" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search mr-2"></i></a>
-                            <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
-                            <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
-                        </td>
-                        <td class="w-1">@Html.DisplayFor(x => item.Name)</td>
-                        <td></td>
-                    </tr>
+                <tr>
+                    <td class="flex-nowrap w-1">
+                        <a class="link-details" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search mr-2"></i></a>
+                        <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
+                        <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
+                    </td>
+                    <td class="w-1">@Html.DisplayFor(x => item.BirthDate)</td>
+                    <td class="w-1">@Html.DisplayFor(x => item.FirstName)</td>
+                    <td class="w-1">@Html.DisplayFor(x => item.LastName)</td>
+                    <td class="w-1">@Html.DisplayFor(x => item.VatNumber)</td>
+                    <td class="w-1">@Html.DisplayFor(x => item.PhoneNumber)</td>
+                    <td></td>
+                </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
 
-<div class="modal fade" id="modal" tabindex="-1" role="none" aria-hidden="true" style="display: none;">
+<div class="modal fade" id="modal" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

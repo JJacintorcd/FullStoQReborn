@@ -1,19 +1,31 @@
 ﻿using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
 using System;
+using System.ComponentModel.DataAnnotations;
 using WebAPI.Models.Base;
 
 namespace WebAPI.Models.CommercialViewModel
 {
     public class EstablishmentViewModel:BaseViewModel
-    {       
+    {
+        [Display(Name = "Address")]
+        [Required(ErrorMessage = "Required Field")]
         public string Address { get; set; }
+
+        [Display(Name = "Opening Hours")]
+        [Required(ErrorMessage = "Required Field")]
         public string OpeningHours { get; set; }
+
+        [Display(Name = "Closing Hours")]
+        [Required(ErrorMessage = "Required Field")]
         public string ClosingHours { get; set; }
+
+        [Display(Name = "Closing Days")]
+        [Required(ErrorMessage = "Required Field")]
         public string ClosingDays { get; set; }
         public Guid RegionId { get; set; }
         public Guid CompanyId { get; set; }
 
-        public Establishment ToEstablishment()
+        public Establishment ToModel()
         {
             return new Establishment(Address, OpeningHours, ClosingHours, ClosingDays, RegionId, CompanyId);
         }
@@ -42,9 +54,14 @@ namespace WebAPI.Models.CommercialViewModel
             return model;
         }
 
-        //public bool CompareToModel(Establishment model)
-        //{
-        //    return Name == model.Name;
-        //}
+        public bool CompareToModel(Establishment model)
+        {
+            return Address == model.Address &&
+            OpeningHours == model.OpeningHours &&
+            ClosingHours == model.ClosingHours &&
+            ClosingDays == model.ClosingDays &&
+            RegionId == model.RegionId &&
+            CompanyId == model.CompanyId;
+        }
     }
 }

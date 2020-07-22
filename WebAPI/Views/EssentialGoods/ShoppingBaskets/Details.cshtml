@@ -1,17 +1,17 @@
-﻿@using WebAPI.Models.CommercialViewModel;
-@model CompanyViewModel
+﻿@using WebAPI.Models.EssentialGoodsViewModel;
+@model ShoppingBasketViewModel
 
-<h2>Company - Details</h2>
+<h2>ShoppingBasket - Details</h2>
 <hr />
 
 <div>
     <dl class="row">
         <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.ProfileId)
         </dt>
 
         <dd class="col-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.ProfileId)
         </dd>
     </dl>
 </div>

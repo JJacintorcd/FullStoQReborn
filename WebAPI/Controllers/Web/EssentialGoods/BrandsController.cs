@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
+using WebAPI.Models;
 using WebAPI.Models.EssentialGoodsViewModel;
 using WebAPI.Models.HtmlComponents;
 using WebAPI.Support;
@@ -10,7 +12,7 @@ using WebAPI.Support;
 namespace WebAPI.Controllers.Web.EssentialGoods
 {
     [Route("[controller]")]
-    public class CoursesController : Controller
+    public class BrandsController : Controller
     {
         private readonly BrandBusinessObject _bo = new BrandBusinessObject();
 
@@ -22,10 +24,11 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         private List<BreadCrumb> GetCrumbs()
         {
             return new List<BreadCrumb>()
-                { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
-                  new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                  new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Brands", Text = "Brands"}
-                };
+            {
+                new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
+                new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
+                new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Courses", Text = "Profiles"}
+            };
         }
 
         private IActionResult RecordNotFound()
@@ -50,60 +53,48 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         public async Task<IActionResult> Index()
         {
             var listOperation = await _bo.ListNotDeletedAsync();
-            if (!listOperation.Success) return OperationErrorBackToIndex(listOperation.Exception);
-
+            if (!listOperation.Success) return View("Error", new ErrorViewModel() { RequestId = listOperation.Exception.Message });
             var lst = new List<BrandViewModel>();
             foreach (var item in listOperation.Result)
             {
                 lst.Add(BrandViewModel.Parse(item));
             }
-
             ViewData["Title"] = "Brands";
-            ViewData["BreadCrumbs"] = GetCrumbs();
-            ViewData["DeleteHref"] = GetDeleteRef();
-
+            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Brands" };
             return View(lst);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null) return RecordNotFound();
+            if (id == null) return NotFound();
             var getOperation = await _bo.ReadAsync((Guid)id);
-
-            if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
-            if (getOperation.Result == null) return RecordNotFound();
-
+            if (!getOperation.Success) return View("Error", getOperation.Exception.Message);
+            if (getOperation.Result == null) return NotFound();
             var vm = BrandViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "Brand";
-
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Brands", Icon = "fa-search", Text = "Detail" });
-
-            ViewData["BreadCrumbs"] = crumbs;
+            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Brands", "Detail" };
             return View(vm);
         }
 
         [HttpGet("new")]
         public IActionResult New()
         {
-            ViewData["Title"] = "New Brand";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Brands", Icon = "fa-plus", Text = "New" });
-            ViewData["BreadCrumbs"] = crumbs;
+            ViewData["Title"] = "Edit Brand";
+            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Brands", "New" };
             return View();
         }
 
-        [HttpPost("new")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> New(BrandViewModel vm)
+        public async Task<IActionResult> Create(BrandViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                var model = vm.ToModel();
+                var model = vm.ToBrand();
                 var createOperation = await _bo.CreateAsync(model);
-                if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
-                else return OperationSuccess("The record was successfuly created");
+                if (!createOperation.Success) return View("Error", new ErrorViewModel() { RequestId = createOperation.Exception.Message });
+                return RedirectToAction(nameof(Index));
             }
             return View(vm);
         }
@@ -111,17 +102,14 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null) return RecordNotFound();
+            if (id == null) return NotFound();
 
             var getOperation = await _bo.ReadAsync((Guid)id);
-            if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
-            if (getOperation.Result == null) return RecordNotFound();
-
+            if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
+            if (getOperation.Result == null) return NotFound();
             var vm = BrandViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "Edit Brand";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Brands", Icon = "fa-edit", Text = "Edit" });
-            ViewData["BreadCrumbs"] = crumbs;
+            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Brands", "Edit" };
             return View(vm);
         }
 
@@ -132,31 +120,26 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (ModelState.IsValid)
             {
                 var getOperation = await _bo.ReadAsync(id);
-                if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
-                if (getOperation.Result == null) return RecordNotFound();
+                if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
+                if (getOperation.Result == null) return NotFound();
                 var result = getOperation.Result;
-                if (!vm.CompareToModel(result))
+                if (vm.Name != result.Name)
                 {
-                    result = vm.ToModel(result);
+                    result = vm.ToBrand();
                     var updateOperation = await _bo.UpdateAsync(result);
-                    if (!updateOperation.Success)
-                    {
-                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
-                        return View(vm);
-                    }
-                    else return OperationSuccess("The record was successfuly updated");
+                    if (!updateOperation.Success) return View("Error", new ErrorViewModel() { RequestId = updateOperation.Exception.Message });
                 }
             }
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("Delete/{id}")]
+        [HttpGet("delete/{id}")]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null) return RecordNotFound();
+            if (id == null) return NotFound();
             var deleteOperation = await _bo.DeleteAsync((Guid)id);
-            if (!deleteOperation.Success) return OperationErrorBackToIndex(deleteOperation.Exception);
-            else return OperationSuccess("The record was successfuly deleted");
+            if (!deleteOperation.Success) return View("Error", new ErrorViewModel() { RequestId = deleteOperation.Exception.Message });
+            return RedirectToAction(nameof(Index));
         }
     }
 }

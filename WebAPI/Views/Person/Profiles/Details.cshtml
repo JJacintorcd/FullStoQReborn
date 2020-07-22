@@ -1,17 +1,53 @@
-﻿@using WebAPI.Models.CommercialViewModel;
-@model CompanyViewModel
+﻿@using WebAPI.Models.PersonViewModel;
+@model ProfileViewModel
 
-<h2>Company - Details</h2>
+<h2>Profile - Details</h2>
 <hr />
 
 <div>
     <dl class="row">
         <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.BirthDate)
         </dt>
 
         <dd class="col-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.BirthDate)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-2">
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd class="col-10">
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-2">
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd class="col-10">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-2">
+            @Html.DisplayNameFor(model => model.VatNumber)
+        </dt>
+
+        <dd class="col-10">
+            @Html.DisplayFor(model => model.VatNumber)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd class="col-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
     </dl>
 </div>

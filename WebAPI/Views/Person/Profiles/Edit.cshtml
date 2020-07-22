@@ -1,13 +1,9 @@
-﻿@using WebAPI.Models.CommercialViewModel;
-@model CompanyViewModel
-
-@{
-    ViewBag.Title = "Edit";
-}
+﻿@using WebAPI.Models.PersonViewModel;
+@model ProfileViewModel
 
 <div class="card ml-5 mr-5">
     <div class="card-header">
-        <h4 class="m-0 p-0">Edit Company</h4>
+        <h4 class="m-0 p-0">Edit Profile</h4>
     </div>
     <div class="card-body">
         <div class="row">
@@ -15,9 +11,29 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <label asp-for="BirthDate" class="control-label"></label>
+                    <input asp-for="BirthDate" class="form-control" />
+                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="VatNumber" class="control-label"></label>
+                    <input asp-for="VatNumber" class="form-control" />
+                    <span asp-validation-for="VatNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Edit" class="btn btn-primary" />
