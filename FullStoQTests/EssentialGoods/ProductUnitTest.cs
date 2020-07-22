@@ -22,9 +22,11 @@ namespace FullStoQTests.EssentialGoods
             var prodMod = pmbo.ListNotDeleted().Result.First();
             var ebo = new EstablishmentBusinessObject();
             var est = ebo.ListNotDeleted().Result.First();
+            var sbo = new ShoppingBasketBusinessObject();
+            var sbk = sbo.ListNotDeleted().Result.First();
 
             var bo = new ProductUnitBusinessObject();
-            var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id, est.Id);
+            var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id, est.Id, sbk.Id);
             var resCreate = bo.Create(prodUnit);
 
             var resGet = bo.Read(prodUnit.Id);
@@ -40,9 +42,11 @@ namespace FullStoQTests.EssentialGoods
             var prodMod = pmbo.ListNotDeletedAsync().Result.Result.First();
             var ebo = new EstablishmentBusinessObject();
             var est = ebo.ListNotDeleted().Result.First();
+            var sbo = new ShoppingBasketBusinessObject();
+            var sbk = sbo.ListNotDeleted().Result.First();
 
             var bo = new ProductUnitBusinessObject();
-            var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id, est.Id);
+            var prodUnit = new ProductUnit("werkyt235", false, prodMod.Id, est.Id, sbk.Id);
             var resCreate = bo.CreateAsync(prodUnit).Result;
 
             var resGet = bo.ReadAsync(prodUnit.Id).Result;
@@ -128,12 +132,14 @@ namespace FullStoQTests.EssentialGoods
             var pmbo = new ProductModelBusinessObject();
             var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
             pmbo.Create(prodMod);
+            var sbo = new ShoppingBasketBusinessObject();
+            var sbk = sbo.ListNotDeleted().Result.First();
 
             var bo = new ProductUnitBusinessObject();
             var item = bo.List().Result.FirstOrDefault();
             var ebo = new EstablishmentBusinessObject();
             var est = ebo.ListNotDeleted().Result.First();
-            var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id, est.Id);
+            var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id, est.Id, sbk.Id);
             var resCreate = bo.Create(prodUnit);
             Assert.IsTrue(!resCreate.Result);
         }
@@ -151,12 +157,14 @@ namespace FullStoQTests.EssentialGoods
             var pmbo = new ProductModelBusinessObject();
             var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
             pmbo.Create(prodMod);
+            var sbo = new ShoppingBasketBusinessObject();
+            var sbk = sbo.ListNotDeleted().Result.First();
 
             var bo = new ProductUnitBusinessObject();
             var item = bo.ListAsync().Result.Result.FirstOrDefault();
             var ebo = new EstablishmentBusinessObject();
             var est = ebo.ListNotDeleted().Result.First();
-            var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id, est.Id);
+            var prodUnit = new ProductUnit(item.SerialNumber, false, prodMod.Id, est.Id, sbk.Id);
             var resCreate = bo.CreateAsync(prodUnit).Result;
             Assert.IsTrue(!resCreate.Result);
         }
