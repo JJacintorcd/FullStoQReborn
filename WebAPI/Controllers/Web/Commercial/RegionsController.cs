@@ -26,7 +26,7 @@ namespace WebAPI.Controllers.Web.Commercial
             return new List<BreadCrumb>()
                 { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
                   new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                  new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Courses", Text = "Courses"}
+                  new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Regions", Text = "Regions"}
                 };
         }
 
@@ -80,18 +80,18 @@ namespace WebAPI.Controllers.Web.Commercial
             ViewData["Title"] = "Region";
 
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Regions", Icon = "fa-search", Text = "Detail" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Regions", Icon = "fa-search", Text = "Detail" });
 
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
         [HttpGet("new")]
-        public IActionResult New()
+        public IActionResult Create()
         {
-            ViewData["Title"] = "New Region";
+            ViewData["Title"] = "Create Region";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Regions", Icon = "fa-search", Text = "New" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Regions", Icon = "fa-search", Text = "Create" });
             ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
@@ -122,7 +122,7 @@ namespace WebAPI.Controllers.Web.Commercial
             var vm = RegionViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "Edit Region";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Regions", Icon = "fa-search", Text = "Edit" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Regions", Icon = "fa-search", Text = "Edit" });
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
@@ -138,7 +138,7 @@ namespace WebAPI.Controllers.Web.Commercial
                 if (getOperation.Result == null) return RecordNotFound();
                 var result = getOperation.Result;
 
-                if (vm.CompareToModel(result))
+                if (!vm.CompareToModel(result))
                 {
                     result = vm.ToModel(result);
                     var updateOperation = await _bo.UpdateAsync(result);

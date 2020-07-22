@@ -14,6 +14,12 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
     {
         private readonly CategoryDataAccessObject _dao;
 
+        TransactionOptions transactionOptions = new TransactionOptions
+        {
+            IsolationLevel = IsolationLevel.ReadCommitted,
+            Timeout = TimeSpan.FromSeconds(30)
+        };
+
         public CategoryBusinessObject()
         {
             _dao = new CategoryDataAccessObject();
@@ -255,6 +261,42 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
                 var result = res.Where(x => !x.IsDeleted).ToList();
                 transactionScope.Complete();
                 return new OperationResult<List<Category>>() { Success = true, Result = result };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<List<Category>>() { Success = false, Exception = e };
+            }
+        }
+        #endregion
+
+        #region Filter
+        public OperationResult<List<Category>> Filter(Func<Category, bool> predicate)
+        {
+            try
+            {
+
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+                var result = _dao.List();
+                result = result.Where(predicate).ToList();
+                transactionScope.Complete();
+                return new OperationResult<List<Category>> { Result = result, Success = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<List<Category>>() { Success = false, Exception = e };
+            }
+        }
+
+        public async Task<OperationResult<List<Category>>> FilterAsync(Func<Category, bool> predicate)
+        {
+            try
+            {
+
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+                var result = await _dao.ListAsync();
+                result = result.Where(predicate).ToList();
+                transactionScope.Complete();
+                return new OperationResult<List<Category>> { Result = result, Success = true };
             }
             catch (Exception e)
             {

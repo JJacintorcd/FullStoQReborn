@@ -34,7 +34,7 @@ namespace WebAPI.Controllers.Web.Queue
             return new List<BreadCrumb>()
                 { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
                   new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                  new BreadCrumb(){Icon = "fa-shish-kebab", Action="Index", Controller="ReservedQueues", Text = "ReservedQueues"}
+                  new BreadCrumb(){Icon = "fa-users-medical", Action="Index", Controller="ReservedQueues", Text = "Reserved Queues"}
                 };
         }
 
