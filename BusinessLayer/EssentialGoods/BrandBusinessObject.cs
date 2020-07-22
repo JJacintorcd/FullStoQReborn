@@ -4,7 +4,6 @@ using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -30,7 +29,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
-                if (_dao.List().Any(x => x.Name == item.Name)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.List().Any(x => x.Name.ToLower() == item.Name.ToLower())) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 _dao.Create(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -43,7 +42,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.Name.ToLower() == item.Name.ToLower())) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 await _dao.CreateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -102,9 +101,9 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
-                if (_dao.List().Any(x => x.Name == item.Name && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.List().Any(x => x.Name.ToLower() == item.Name.ToLower() && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 _dao.Update(item);
-                return new OperationResult<bool>() { Success = true, Result = true  };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
@@ -115,7 +114,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
-                if (_dao.List().Any(x => x.Name == item.Name && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.List().Any(x => x.Name.ToLower() == item.Name.ToLower() && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 await _dao.UpdateAsync(item);
                 return new OperationResult<bool>() { Success = true };
             }
