@@ -11,13 +11,14 @@ namespace WebAPI.Models.EssentialGoodsViewModel
     public class ShoppingBasketViewModel : BaseViewModel
     {
         [Display(Name = "Profile")]
-        [Required(ErrorMessage = "Select a profile")]
+        [Required(ErrorMessage = "Select a Profile")]
         public Guid ProfileId { get; set; }
         public static ShoppingBasketViewModel Parse(ShoppingBasket shoppingBasket)
         {
             return new ShoppingBasketViewModel()
             {
-                ProfileId = shoppingBasket.ProfileId
+                ProfileId = shoppingBasket.ProfileId,
+                Id = shoppingBasket.Id
             };
         }
 

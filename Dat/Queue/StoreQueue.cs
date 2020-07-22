@@ -21,8 +21,18 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Queue
             }
         }
 
+        private Guid _establishmentId;
+
         [ForeignKey("Establishment")]
-        public Guid EstablishmentId { get; set; }
+        public Guid EstablishmentId
+        {
+            get => _establishmentId;
+            set
+            {
+                _establishmentId = value;
+                RegisterChange();
+            }
+        }
         public virtual Establishment Establishment { get; set; }
 
         public StoreQueue(int quantity, Guid establishmentId) : base()

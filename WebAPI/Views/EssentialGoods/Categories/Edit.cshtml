@@ -1,28 +1,19 @@
 ﻿@using WebAPI.Models.EssentialGoodsViewModel;
-@model ShoppingBasketViewModel
-
-@{
-    ViewBag.Title = "Edit";
-}
+@model CategoryViewModel
 
 <div class="card ml-5 mr-5">
     <div class="card-header">
-        <h4 class="m-0 p-0">Edit ShoppingBasket</h4>
+        <h4 class="m-0 p-0">Edit Category</h4>
     </div>
     <div class="card-body">
         <div class="row">
             <form asp-action="Edit" class="pl-4">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                <div class="form-group col-lg-3 col-md-6 col-sm-12">
-                    <label asp-for="ProfileId" class="control-label"></label>
-                    <div class="ml-2">
-                        <select asp-items="@ViewBag.Profiles" asp-for="ProfileId" class="form-control fk-select">
-                            <option></option>
-                        </select>
-                    </div>
-
-                    <span asp-validation-for="ProfileId" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Edit" class="btn btn-primary" />
@@ -31,9 +22,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 @section Scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}

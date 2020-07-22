@@ -19,7 +19,7 @@ namespace WebAPI.Controllers.Api.EssentialGoods
         [HttpPost]
         public ActionResult Create([FromBody]CategoryViewModel vm)
         {
-            var category = vm.ToCategory();
+            var category = vm.ToModel();
             var res = _bo.Create(category);
             return StatusCode(res.Success ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError);
         }
