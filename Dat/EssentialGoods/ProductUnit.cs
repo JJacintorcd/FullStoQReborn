@@ -44,20 +44,22 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
         public virtual ShoppingBasket ShoppingBasket { get; set; }
 
 
-        public ProductUnit(string serialNumber, bool isReserved, Guid productModelId, Guid establishmentId) : base()
+        public ProductUnit(string serialNumber, bool isReserved, Guid productModelId, Guid establishmentId, Guid shoppingBasketId) : base()
         {
             _serialNumber = serialNumber;
             _isReserved = isReserved;
             ProductModelId = productModelId;
             EstablishmentId = establishmentId;
+            ShoppingBasketId = shoppingBasketId;
         }
 
-        public ProductUnit(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string serialNumber, bool isReserved, Guid productModelId, Guid establishmentId) : base(id, createdAt, updatedAt, isDeleted)
+        public ProductUnit(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string serialNumber, bool isReserved, Guid productModelId, Guid establishmentId, Guid shoppingBasketId) : base(id, createdAt, updatedAt, isDeleted)
         {
             _serialNumber = serialNumber;
             _isReserved = isReserved;
             ProductModelId = productModelId;
             EstablishmentId = establishmentId;
+            ShoppingBasketId = shoppingBasketId;
         }
     }
 }

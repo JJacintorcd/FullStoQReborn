@@ -13,7 +13,9 @@ namespace WebAPI.Models.EssentialGoodsViewModel
         public bool IsReserved { get; set; }
         public Guid ProductModelId { get; set; }
         public Guid EstablishmentId { get; set; }
-        
+        public Guid ShoppingBasketId { get; set; }
+
+
         public static ProductUnitViewModel Parse(ProductUnit productUnit)
         {
             return new ProductUnitViewModel()
@@ -21,13 +23,14 @@ namespace WebAPI.Models.EssentialGoodsViewModel
                 SerialNumber = productUnit.SerialNumber,
                 IsReserved = productUnit.IsReserved,
                 ProductModelId = productUnit.ProductModelId,
-                EstablishmentId = productUnit.EstablishmentId
+                EstablishmentId = productUnit.EstablishmentId,
+                ShoppingBasketId = productUnit.ShoppingBasketId
             };
         }
 
         public ProductUnit ToProductUnit()
         {
-            return new ProductUnit(SerialNumber, IsReserved, ProductModelId, EstablishmentId);
+            return new ProductUnit(SerialNumber, IsReserved, ProductModelId, EstablishmentId, ShoppingBasketId);
         }
     }
 }
