@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebAPI.Models;
 using WebAPI.Models.EssentialGoodsViewModel;
 using WebAPI.Models.HtmlComponents;
@@ -27,7 +26,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             {
                 new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
                 new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Courses", Text = "Profiles"}
+                new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Brands", Text = "Profiles"}
             };
         }
 
@@ -60,7 +59,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                 lst.Add(BrandViewModel.Parse(item));
             }
             ViewData["Title"] = "Brands";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Brands" };
+            ViewData["BreadCrumbs"] = new List<BreadCrumb>() { new BreadCrumb { Text = "Home" }, new BreadCrumb { Text = "Brands" } };
             return View(lst);
         }
 
@@ -73,28 +72,30 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getOperation.Result == null) return NotFound();
             var vm = BrandViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "Brand";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Brands", "Detail" };
+            ViewData["BreadCrumbs"] = new List<BreadCrumb>() { new BreadCrumb { Text = "Home" }, new BreadCrumb { Text = "Brands" }, new BreadCrumb { Text = "Details" } };
             return View(vm);
         }
 
         [HttpGet("new")]
         public IActionResult New()
         {
-            ViewData["Title"] = "Edit Brand";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Brands", "New" };
-            return View();
+            ViewData["Title"] = "New Brand";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Courses", Icon = "fa-plus", Text = "New" });
+            ViewData["BreadCrumbs"] = crumbs;
+            return View(); 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(BrandViewModel vm)
+        public async Task<IActionResult> New(BrandViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 var model = vm.ToModel();
                 var createOperation = await _bo.CreateAsync(model);
-                if (!createOperation.Success) return View("Error", new ErrorViewModel() { RequestId = createOperation.Exception.Message });
-                return RedirectToAction(nameof(Index));
+                if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+                else return OperationSuccess("The record was successfuly created");
             }
             return View(vm);
         }
@@ -105,11 +106,13 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (id == null) return NotFound();
 
             var getOperation = await _bo.ReadAsync((Guid)id);
-            if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
+            if (!getOperation.Success) return View("Error", new ErrorViewModel() {
+                RequestId = getOperation.Exception.Message });
             if (getOperation.Result == null) return NotFound();
             var vm = BrandViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "Edit Brand";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "Brands", "Edit" };
+            ViewData["BreadCrumbs"] = new List<BreadCrumb>() { new BreadCrumb { Text = "Home" },
+                new BreadCrumb { Text = "Brands" }, new BreadCrumb { Text = "Edit" } };
             return View(vm);
         }
 
@@ -120,14 +123,16 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (ModelState.IsValid)
             {
                 var getOperation = await _bo.ReadAsync(id);
-                if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
+                if (!getOperation.Success) return View("Error", new ErrorViewModel() {
+                    RequestId = getOperation.Exception.Message });
                 if (getOperation.Result == null) return NotFound();
                 var result = getOperation.Result;
                 if (vm.Name != result.Name)
                 {
                     result = vm.ToModel();
                     var updateOperation = await _bo.UpdateAsync(result);
-                    if (!updateOperation.Success) return View("Error", new ErrorViewModel() { RequestId = updateOperation.Exception.Message });
+                    if (!updateOperation.Success) return View("Error", new ErrorViewModel() {
+                        RequestId = updateOperation.Exception.Message });
                 }
             }
             return RedirectToAction(nameof(Index));
@@ -138,7 +143,8 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         {
             if (id == null) return NotFound();
             var deleteOperation = await _bo.DeleteAsync((Guid)id);
-            if (!deleteOperation.Success) return View("Error", new ErrorViewModel() { RequestId = deleteOperation.Exception.Message });
+            if (!deleteOperation.Success) return View("Error", new ErrorViewModel() { 
+                RequestId = deleteOperation.Exception.Message });
             return RedirectToAction(nameof(Index));
         }
     }

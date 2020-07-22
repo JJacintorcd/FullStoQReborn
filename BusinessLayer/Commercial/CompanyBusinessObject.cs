@@ -42,8 +42,9 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         public async Task<OperationResult> CreateAsync(Company item)
         {
             try
-            {
-                if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber)) return new OperationResult() { Success = true, Message = "Vat number already exists" };
+            {                
+                if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber))
+                    return new OperationResult() { Success = true, Message = "Vat number already exists" };
                 await _dao.CreateAsync(item);
                 return new OperationResult() { Success = true };
             }
