@@ -179,7 +179,7 @@ namespace FullStoQTests.Queue
             var resCreate = bo.CreateAsync(res);
             var limit = bo.TwoHourLimitReserveAsync(res.Id);
 
-            Assert.IsTrue(resCreate.Result.Success && res.IsDeleted && limit.Result.Success && !limit.Result.Result);
+            Assert.IsTrue(res.IsDeleted && limit.Result.Success && !limit.Result.Result);
         }
 
         [TestMethod]
@@ -200,7 +200,7 @@ namespace FullStoQTests.Queue
 
             var reserves = bo.DayLimitReserve(res2.Id);
 
-            Assert.IsTrue(!reserves.Success);
+            Assert.IsTrue(!reserves.Result);
         }
 
         [TestMethod]
