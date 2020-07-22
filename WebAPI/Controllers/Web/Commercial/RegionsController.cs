@@ -80,13 +80,13 @@ namespace WebAPI.Controllers.Web.Commercial
             ViewData["Title"] = "Region";
 
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Regions", Icon = "fa-search", Text = "Detail" });
+            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "Regions", Icon = "fa-search", Text = "Detail" });
 
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
-        [HttpGet("new")]
+        [HttpGet("create")]
         public IActionResult Create()
         {
             ViewData["Title"] = "Create Region";
@@ -96,7 +96,7 @@ namespace WebAPI.Controllers.Web.Commercial
             return View();
         }
 
-        [HttpPost("new")]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RegionViewModel vm)
         {

@@ -315,5 +315,49 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
             }
         }
         #endregion
+
+        #region Filter
+        public OperationResult<List<Region>> Filter(Func<Region, bool> predicate)
+        {
+            try
+            {
+                TransactionOptions transactionOptions = new TransactionOptions
+                {
+                    IsolationLevel = IsolationLevel.ReadCommitted,
+                    Timeout = TimeSpan.FromSeconds(30)
+                };
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+                var result = _dao.List();
+                result = result.Where(predicate).ToList();
+                transactionScope.Complete();
+                return new OperationResult<List<Region>> { Result = result, Success = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<List<Region>>() { Success = false, Exception = e };
+            }
+        }
+
+        public async Task<OperationResult<List<Region>>> FilterAsync(Func<Region, bool> predicate)
+        {
+            try
+            {
+                TransactionOptions transactionOptions = new TransactionOptions
+                {
+                    IsolationLevel = IsolationLevel.ReadCommitted,
+                    Timeout = TimeSpan.FromSeconds(30)
+                };
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+                var result = await _dao.ListAsync();
+                result = result.Where(predicate).ToList();
+                transactionScope.Complete();
+                return new OperationResult<List<Region>> { Result = result, Success = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<List<Region>>() { Success = false, Exception = e };
+            }
+        }
+        #endregion
     }
 }

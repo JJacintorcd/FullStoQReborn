@@ -6,46 +6,57 @@
     ViewBag.Title = "Create";
 }
 
-<div class="card ml-5 mr-5">
-    <div class="card-header">
-        <div class="float-right">
-            <a asp-action="Index" asp-controller="Home"><i class="fas fa-home mr-2"></i></a>
-            /
-            <a asp-action="Index" asp-controller="Establishment">
-                <i class="fas fa-copyright mr-2"></i>Establishments
-            </a>
-            /
-            <i class="fas fa-plus mr-2"></i>Create
-
-        </div>
-        <h4 class="m-0 p-0">Create Establishment</h4>
+<div class="card">
+    <div class="card-header bg-greenish-green">
+        <h2 class="float-left">
+            @ViewData["Title"]
+        </h2>
     </div>
     <div class="card-body">
-        <div class="row">
-            <form asp-action="Create" class="pl-4">
+        <div class="ml-5 mr-5">
+            <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                <div class="form-group">
+                <div class="form-group col-lg-3 col-md-6 col-sm-12">
                     <label asp-for="Address" class="control-label"></label>
-                    <input asp-for="Address" class="form-control" />
+                    <input asp-for="Address" class="form-control ml-2" />
                     <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-lg-3 col-md-6 col-sm-12">
                     <label asp-for="OpeningHours" class="control-label"></label>
-                    <input asp-for="OpeningHours" class="form-control" />
+                    <input asp-for="OpeningHours" class="form-control ml-2" />
                     <span asp-validation-for="OpeningHours" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-lg-3 col-md-6 col-sm-12">
                     <label asp-for="ClosingHours" class="control-label"></label>
-                    <input asp-for="ClosingHours" class="form-control" />
+                    <input asp-for="ClosingHours" class="form-control ml-2" />
                     <span asp-validation-for="ClosingHours" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-lg-3 col-md-6 col-sm-12">
                     <label asp-for="ClosingDays" class="control-label"></label>
-                    <input asp-for="ClosingDays" class="form-control" />
+                    <input asp-for="ClosingDays" class="form-control ml-2" />
                     <span asp-validation-for="ClosingDays" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                    <label asp-for="RegionId" class="control-label"></label>
+                    <div class="ml-2">
+                        <select asp-items="@ViewBag.Regions" asp-for="RegionId" class="form-control fk-select">
+                            <option></option>
+                        </select>
+                    </div>
+
+                    <span asp-validation-for="RegionId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                    <label asp-for="CompanyId" class="control-label"></label>
+                    <div class="ml-2">
+                        <select asp-items="@ViewBag.Companies" asp-for="CompanyId" class="form-control fk-select">
+                            <option></option>
+                        </select>
+                    </div>
+
+                    <span asp-validation-for="CompanyId" class="text-danger"></span>
+                </div>
+                <div class="form-group ml-4">
                     <input type="submit" value="Create" class="btn btn-primary" />
                 </div>
             </form>
@@ -53,9 +64,12 @@
     </div>
 </div>
 
-
-
-
 @section Scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>$(document).ready(function () {
+        $('.fk-select').select2({
+            placeholder: "Select a restriction",
+            allowClear: true
+        });
+    });</script>

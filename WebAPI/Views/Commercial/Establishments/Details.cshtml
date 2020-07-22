@@ -4,15 +4,61 @@
 <h2>Establishment - Details</h2>
 <hr />
 
-<div>
-    <dl class="row">
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-    </dl>
+<div class="card">
+    <div class="card-header bg-greenish-green">
+        <h2 class="float-left">
+            @ViewData["Title"]
+        </h2>
+    </div>
+    <div class="card-body">
+        <div class="ml-5 mr-5">
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.Address)
+                </dt>
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.OpeningHours)
+                </dt>
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.ClosingHours)
+                </dt>
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.ClosingDays)
+                </dt>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.Address)
+                </dd>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.OpeningHours)
+                </dd>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.ClosingHours)
+                </dd>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.ClosingDays)
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.RegionId)
+                </dt>
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.CompanyId)
+                </dt>
+                <dd class="col-9">
+                    @{
+                        var rg = ViewData["DietaryRestriction"] as RegionViewModel;
+                    }
+                    <a asp-controller="Regions" asp-action="Details" asp-route-id="@rg.Id">@rg.Name</a>
+                </dd>
+                <dd class="col-9">
+                    @{
+                        var cp = ViewData["Companies"] as CompanyViewModel;
+                    }
+                    <a asp-controller="Companies" asp-action="Details" asp-route-id="@cp.Id">@cp.Name</a>
+                </dd>
+            </dl>
+        </div>
+    </div>
 </div>
 
