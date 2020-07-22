@@ -22,5 +22,15 @@ namespace WebAPI.Models.EssentialGoodsViewModel
         {
             return new ShoppingBasket(ProfileId);
         }
+        public ShoppingBasket ToModel(ShoppingBasket model)
+        {
+            model.ProfileId = ProfileId;
+            return model;
+        }
+
+        public bool CompareToModel(ShoppingBasket model)
+        {
+            return ProfileId == model.ProfileId;
+        }
     }
 }

@@ -23,12 +23,27 @@ namespace WebAPI.Models.PersonViewModel
                 LastName = profile.LastName,
                 VatNumber = profile.VatNumber,
                 PhoneNumber = profile.PhoneNumber,
+                Id = profile.Id
             };
         }
 
         public Profile ToProfile()
         {
             return new Profile(VatNumber, FirstName, LastName, PhoneNumber, BirthDate);
+        }
+        public Profile ToModel(Profile model)
+        {
+            model.BirthDate = BirthDate;
+            model.FirstName = FirstName;
+            model.LastName = LastName;
+            model.VatNumber = VatNumber;
+            model.PhoneNumber = PhoneNumber;
+            return model;
+        }
+
+        public bool CompareToModel(Profile model)
+        {
+            return BirthDate == model.BirthDate && FirstName == model.FirstName && LastName == model.LastName && VatNumber == model.VatNumber && PhoneNumber == model.PhoneNumber;
         }
     }
 }

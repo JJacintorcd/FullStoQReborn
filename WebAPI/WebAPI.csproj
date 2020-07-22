@@ -16,6 +16,17 @@
     <ProjectReference Include="..\Dat\DataLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\EssentialGoods\ShoppingBaskets\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Person\Profiles\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 
 
 </Project>
