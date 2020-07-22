@@ -16,47 +16,50 @@
                 <dt class="col-3">
                     @Html.DisplayNameFor(model => model.Address)
                 </dt>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.Address)
+                </dd>
                 <dt class="col-3">
                     @Html.DisplayNameFor(model => model.OpeningHours)
                 </dt>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.OpeningHours)
+                </dd>
                 <dt class="col-3">
                     @Html.DisplayNameFor(model => model.ClosingHours)
                 </dt>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.ClosingHours)
+                </dd>
                 <dt class="col-3">
                     @Html.DisplayNameFor(model => model.ClosingDays)
                 </dt>
                 <dd class="col-9">
-                    @Html.DisplayFor(model => model.Address)
-                </dd>
-                <dd class="col-9">
-                    @Html.DisplayFor(model => model.OpeningHours)
-                </dd>
-                <dd class="col-9">
-                    @Html.DisplayFor(model => model.ClosingHours)
-                </dd>
-                <dd class="col-9">
                     @Html.DisplayFor(model => model.ClosingDays)
                 </dd>
             </dl>
+
             <dl class="row">
                 <dt class="col-3">
                     @Html.DisplayNameFor(model => model.RegionId)
                 </dt>
+                <dd class="col-9">
+                    @{
+                        var rg = ViewData["Region"] as RegionViewModel;
+                    }
+                    <a asp-controller="Regions" asp-action="Details" asp-route-id="@rg.Id">@rg.Name</a>
+                </dd>
+
                 <dt class="col-3">
                     @Html.DisplayNameFor(model => model.CompanyId)
                 </dt>
                 <dd class="col-9">
                     @{
-                        var rg = ViewData["DietaryRestriction"] as RegionViewModel;
-                    }
-                    <a asp-controller="Regions" asp-action="Details" asp-route-id="@rg.Id">@rg.Name</a>
-                </dd>
-                <dd class="col-9">
-                    @{
-                        var cp = ViewData["Companies"] as CompanyViewModel;
+                        var cp = ViewData["Company"] as CompanyViewModel;
                     }
                     <a asp-controller="Companies" asp-action="Details" asp-route-id="@cp.Id">@cp.Name</a>
                 </dd>
+
             </dl>
         </div>
     </div>

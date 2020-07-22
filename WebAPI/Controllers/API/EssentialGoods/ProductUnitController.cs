@@ -37,44 +37,44 @@ namespace WebAPI.Controllers.Api.EssentialGoods
                 };
         }
 
-        private IActionResult RecordNotFound()
-        {
-            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Information, "The record was not found");
-            return RedirectToAction(nameof(Index));
-        }
+        //private IActionResult RecordNotFound()
+        //{
+        //    TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Information, "The record was not found");
+        //    return RedirectToAction(nameof(Index));
+        //}
 
-        private IActionResult OperationErrorBackToIndex(Exception exception)
-        {
-            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, exception);
-            return RedirectToAction(nameof(Index));
-        }
+        //private IActionResult OperationErrorBackToIndex(Exception exception)
+        //{
+        //    TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, exception);
+        //    return RedirectToAction(nameof(Index));
+        //}
 
-        private IActionResult OperationSuccess(string message)
-        {
-            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Success, message);
-            return RedirectToAction(nameof(Index));
-        }
+        //private IActionResult OperationSuccess(string message)
+        //{
+        //    TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Success, message);
+        //    return RedirectToAction(nameof(Index));
+        //}
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var listOperation = await _bo.ListNotDeletedAsync();
-            if (!listOperation.Success) return OperationErrorBackToIndex(listOperation.Exception);
+        //[HttpGet]
+        //public async Task<IActionResult> Index()
+        //{
+        //    var listOperation = await _bo.ListNotDeletedAsync();
+        //    if (!listOperation.Success) return OperationErrorBackToIndex(listOperation.Exception);
 
-            var lst = new List<ProdctUnitViewModel>();
-            foreach (var item in listOperation.Result)
-            {
-                lst.Add(ProdctUnitViewModel.Parse(item));
-            }
+        //    var lst = new List<ProdctUnitViewModel>();
+        //    foreach (var item in listOperation.Result)
+        //    {
+        //        lst.Add(ProdctUnitViewModel.Parse(item));
+        //    }
 
-            var drList = await GetDietaryRestrictionViewModels(listOperation.Result.Select(x => x.DietaryRestrictionId).Distinct().ToList());
-            ViewData["DietaryRestrictions"] = drList;
-            ViewData["Title"] = "Dishes";
-            ViewData["BreadCrumbs"] = GetCrumbs();
-            ViewData["DeleteHref"] = GetDeleteRef();
+        //    var drList = await GetDietaryRestrictionViewModels(listOperation.Result.Select(x => x.DietaryRestrictionId).Distinct().ToList());
+        //    ViewData["DietaryRestrictions"] = drList;
+        //    ViewData["Title"] = "Dishes";
+        //    ViewData["BreadCrumbs"] = GetCrumbs();
+        //    ViewData["DeleteHref"] = GetDeleteRef();
 
-            return View(lst);
-        }
+        //    return View(lst);
+        //}
 
         [HttpPost]
         public ActionResult Create([FromBody]ProductUnitViewModel vm)

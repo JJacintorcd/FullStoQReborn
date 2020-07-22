@@ -104,7 +104,16 @@ namespace WebAPI.Controllers.Web.Commercial
             {
                 var model = vm.ToModel();
                 var createOperation = await _bo.CreateAsync(model);
-                if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+                if(!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+                if(!createOperation.Result)
+                {
+                    TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
+                    ViewData["Title"] = "Create Region";
+                    var crumbs = GetCrumbs();
+                    crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Regions", Icon = "fa-search", Text = "Create" });
+                    ViewData["BreadCrumbs"] = crumbs;
+                    return View(vm);
+                }
                 return OperationSuccess("The record was successfuly created");
             }
             return View(vm);
@@ -145,6 +154,29 @@ namespace WebAPI.Controllers.Web.Commercial
                     if (!updateOperation.Success)
                     {
                         TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = RegionViewModel.Parse(getOperation.Result);
+                        ViewData["Title"] = "Edit Region";
+                        var crumbs = GetCrumbs();
+                        crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Regions", Icon = "fa-search", Text = "Edit" });
+                        ViewData["BreadCrumbs"] = crumbs;
+                        return View(vm);
+                    }
+                    if (!updateOperation.Result)
+                    {
+                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Message);
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = RegionViewModel.Parse(getOperation.Result);
+                        ViewData["Title"] = "Edit Region";
+                        var crumbs = GetCrumbs();
+                        crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Regions", Icon = "fa-search", Text = "Edit" });
+                        ViewData["BreadCrumbs"] = crumbs;
                         return View(vm);
                     }
                     else return OperationSuccess("The record was successfuly updated");
