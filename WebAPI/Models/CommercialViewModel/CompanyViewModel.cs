@@ -5,20 +5,23 @@ namespace WebAPI.Models.CommercialViewModel
 {
     public class CompanyViewModel : NamedViewModel
     {
+        public CompanyViewModel() { }
         public long VatNumber { get; set; }
 
-        public Company ToCompany()
-        {
-            return new Company(Name, VatNumber);
-        }
         public static CompanyViewModel Parse(Company company)
         {
-            return new CompanyViewModel()
+            var cvm = new CompanyViewModel
             {
+                Id = company.Id,
                 Name = company.Name,
-                VatNumber = company.VatNumber,
-                Id = company.Id
+                VatNumber = company.VatNumber
             };
+            return cvm;
+        }
+
+        public Company ToModel()
+        {
+            return new Company(Name, VatNumber);
         }
 
         public Company ToModel(Company model)
