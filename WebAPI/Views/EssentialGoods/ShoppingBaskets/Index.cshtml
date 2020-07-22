@@ -1,5 +1,5 @@
-﻿@using WebAPI.Models.CommercialViewModel
-@model IEnumerable<CompanyViewModel>
+﻿@using WebAPI.Models.EssentialGoodsViewModel
+@model IEnumerable<ShoppingBasketViewModel>
 
 <div class="card">
     <div class="card-header">
@@ -7,7 +7,7 @@
             @ViewData["Title"]
         </h2>
         <p class="float-right mt-2 mb-0">
-            <a asp-action="New" asp-controller="Companies" class="text-white btn btn-success" style="font-size:0.8em"><i class="fas fa-plus mr-1"></i>New</a>
+            <a asp-action="New" asp-controller="ShoppingBaskets" class="text-white btn btn-success" style="font-size:0.8em"><i class="fas fa-plus mr-1"></i>New</a>
         </p>
     </div>
     <div class="card-body table-responsive">
@@ -15,7 +15,7 @@
             <thead>
                 <tr>
                     <th class="no-sort w-1"></th>
-                    <th class="w-1">@Html.DisplayNameFor(model => model.Name)</th>
+                    <th class="w-1">@Html.DisplayNameFor(model => model.ProfileId)</th>
                     <th class="no-sort"></th>
                 </tr>
             </thead>
@@ -28,7 +28,7 @@
                             <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
                             <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
                         </td>
-                        <td class="w-1">@Html.DisplayFor(x => item.Name)</td>
+                        <td class="w-1">@Html.DisplayFor(x => item.ProfileId)</td>
                         <td></td>
                     </tr>
                 }

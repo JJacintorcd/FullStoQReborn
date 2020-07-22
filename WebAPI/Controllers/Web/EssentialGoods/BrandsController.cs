@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
 using WebAPI.Models;
 using WebAPI.Models.EssentialGoodsViewModel;
+using WebAPI.Models.HtmlComponents;
+using WebAPI.Support;
 
 namespace WebAPI.Controllers.Web.EssentialGoods
 {
@@ -13,6 +15,39 @@ namespace WebAPI.Controllers.Web.EssentialGoods
     public class BrandsController : Controller
     {
         private readonly BrandBusinessObject _bo = new BrandBusinessObject();
+
+        private string GetDeleteRef()
+        {
+            return this.ControllerContext.RouteData.Values["controller"] + "/" + nameof(Delete);
+        }
+
+        private List<BreadCrumb> GetCrumbs()
+        {
+            return new List<BreadCrumb>()
+            {
+                new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
+                new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
+                new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Courses", Text = "Profiles"}
+            };
+        }
+
+        private IActionResult RecordNotFound()
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Information, "The record was not found");
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IActionResult OperationErrorBackToIndex(Exception exception)
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, exception);
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IActionResult OperationSuccess(string message)
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Success, message);
+            return RedirectToAction(nameof(Index));
+        }
 
         [HttpGet]
         public async Task<IActionResult> Index()
