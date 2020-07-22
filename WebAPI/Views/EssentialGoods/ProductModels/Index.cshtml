@@ -1,4 +1,4 @@
-﻿@using WebAPI.Models.EssentialGoodsViewModel
+﻿@using WebAPI.Models.EssentialGoodsViewModel;
 @model IEnumerable<ProductModelViewModel>
 
 <div class="card">
@@ -8,7 +8,7 @@
         </h2>
         <p class="float-right mt-2 mb-0">
 
-            <a asp-controller="ProductModel" asp-action="New" class="text-white btn btn-success"><i class="fas fa-plus mr-1"></i>New</a>
+            <a asp-controller="ProductModels" asp-action="New" class="text-white btn btn-success"><i class="fas fa-plus mr-1"></i>Create</a>
         </p>
     </div>
     <div class="card-body table-responsive">
@@ -31,19 +31,18 @@
                 <tr>
                     <td class="w-1">
                         <a class="link-details" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search mr-2"></i></a>
-                        <a class="link-edit" asp-controller="Product Models" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
+                        <a class="link-edit" asp-controller="ProductModels" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
                         <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
                     </td>
                     <td class="w-1">
                         @item.Name
                     </td>
-                    <td class="w-1">Html.DisplayNameFor(model => model.Name)</td>
                     <td class="w-1">@Html.DisplayFor(x => item.BarCode)</td>
                     <td class="w-1">@Html.DisplayFor(x => item.Price)</td>
                     <td class="w-1">@Html.DisplayFor(x => item.Weight)</td>
                     @{ var brand = (ViewData["Brands"] as List<BrandViewModel>).First(x => x.Id == item.BrandId);}
-                    @{ var category = (ViewData["Categories"] as List<CategoryViewModel>).First(x => x.Id == item.CategoryId);}
                     <td class="w-1"><a class="link-edit" asp-controller="Brands" asp-action="Details" asp-route-id="@brand.Id">@brand.Name </a></td>
+                    @{ var category = (ViewData["Categories"] as List<CategoryViewModel>).First(x => x.Id == item.CategoryId);}
                     <td class="w-1"><a class="link-edit" asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id">@category.Name </a></td>
                     <td></td>
                 </tr>

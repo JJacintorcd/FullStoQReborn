@@ -50,7 +50,6 @@ namespace WebAPI.Models.CommercialViewModel
             model.ClosingDays = ClosingDays;
             model.RegionId = RegionId;
             model.CompanyId = CompanyId;
-            //model.Id = Id;
             return model;
         }
 
