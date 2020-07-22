@@ -1,0 +1,37 @@
+﻿@using WebAPI.Models.QueueViewModel;
+@model ReservedQueueViewModel
+
+@{
+    ViewBag.Title = "New";
+}
+
+<div class="card ml-5 mr-5">
+    <div class="card-header">
+        <h4 class="m-0 p-0">New Reserved Queue</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <form asp-action="Create" class="pl-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="EstablishmentId" class="control-label"></label>
+                    <input asp-for="EstablishmentId" class="form-control" />
+                    <span asp-validation-for="EstablishmentId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProfileId" class="control-label"></label>
+                    <input asp-for="ProfileId" class="form-control" />
+                    <span asp-validation-for="ProfileId" class="text-danger"></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
