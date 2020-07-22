@@ -1,4 +1,5 @@
 ﻿@using WebAPI.Models.EssentialGoodsViewModel
+@using WebAPI.Models.PersonViewModel;
 @model IEnumerable<ShoppingBasketViewModel>
 
 <div class="card">
@@ -7,7 +8,7 @@
             @ViewData["Title"]
         </h2>
         <p class="float-right mt-2 mb-0">
-            <a asp-action="New" asp-controller="ShoppingBaskets" class="text-white btn btn-success" style="font-size:0.8em"><i class="fas fa-plus mr-1"></i>New</a>
+            <a asp-action="Create" asp-controller="ShoppingBaskets" class="text-white btn btn-success" style="font-size:0.8em"><i class="fas fa-plus mr-1"></i>Create</a>
         </p>
     </div>
     <div class="card-body table-responsive">
@@ -15,22 +16,23 @@
             <thead>
                 <tr>
                     <th class="no-sort w-1"></th>
-                    <th class="w-1">@Html.DisplayNameFor(model => model.ProfileId)</th>
+                    <th class="w-1">Profile</th>
                     <th class="no-sort"></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td class="flex-nowrap w-1">
-                            <a class="link-details" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search mr-2"></i></a>
-                            <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
-                            <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
-                        </td>
-                        <td class="w-1">@Html.DisplayFor(x => item.ProfileId)</td>
-                        <td></td>
-                    </tr>
+                <tr>
+                    <td class="flex-nowrap w-1">
+                        <a class="link-details" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search mr-2"></i></a>
+                        <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
+                        <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
+                    </td>
+                    @{ var prod = (ViewData["Profiles"] as List<ProfileViewModel>).First(x => x.Id == item.ProfileId);}
+                    <td class="w-1"><a class="link-edit" asp-controller="Profiles" asp-action="Details" asp-route-id="@prod.Id">@prod.VatNumber</a></td>
+                    <td></td>
+                </tr>
                 }
             </tbody>
         </table>

@@ -69,13 +69,34 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
             }
         }
 
+
+        private Guid _regionId;
+
         [ForeignKey("Region")]
-        public Guid RegionId { get; set; }
+        public Guid RegionId
+        {
+            get => _regionId;
+            set
+            {
+                _regionId = value;
+                RegisterChange();
+            }
+        }
         public virtual Region Region { get; set; }
 
 
+        private Guid _companyId;
+
         [ForeignKey("Company")]
-        public Guid CompanyId { get; set; }
+        public Guid CompanyId
+        {
+            get => _companyId;
+            set
+            {
+                _companyId = value;
+                RegisterChange();
+            }
+        }
         public virtual Company Company { get; set; }
 
         public virtual ICollection<ReservedQueue> ReservedQueues { get; set; }
@@ -90,8 +111,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
             OpeningHours = openingHours;
             ClosingHours = closingHours;
             ClosingDays = closingDays;
-            RegionId = regionId;
-            CompanyId = companyId;
+            _regionId = regionId;
+            _companyId = companyId;
 
         }
 
@@ -103,8 +124,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
             OpeningHours = openingHours;
             ClosingHours = closingHours;
             ClosingDays = closingDays;
-            RegionId = regionId;
-            CompanyId = companyId;
+            _regionId = regionId;
+            _companyId = companyId;
         }
 
     }

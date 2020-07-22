@@ -18,9 +18,20 @@ namespace WebAPI.Models.EssentialGoodsViewModel
             };
         }
 
-        public Category ToCategory()
+        public Category ToModel()
         {
             return new Category(Name);
+        }
+
+        public Category ToModel(Category model)
+        {
+            model.Name = Name;
+            return model;
+        }
+
+        public bool CompareToModel(Category model)
+        {
+            return Name == model.Name;
         }
     }
 }

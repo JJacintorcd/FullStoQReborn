@@ -86,7 +86,7 @@ namespace WebAPI.Controllers.Web.Commercial
             return View(vm);
         }
 
-        [HttpGet("new")]
+        [HttpGet("create")]
         public IActionResult Create()
         {
             ViewData["Title"] = "Create Region";
@@ -96,7 +96,7 @@ namespace WebAPI.Controllers.Web.Commercial
             return View();
         }
 
-        [HttpPost("new")]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RegionViewModel vm)
         {

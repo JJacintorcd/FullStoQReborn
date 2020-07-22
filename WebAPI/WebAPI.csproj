@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\EssentialGoods\Categories\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Update="Views\EssentialGoods\ShoppingBaskets\Index.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

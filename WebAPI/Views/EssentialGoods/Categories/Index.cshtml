@@ -2,20 +2,21 @@
 @model IEnumerable<CategoryViewModel>
 
 <div class="card">
-    <div class="card-header bg-nyanza">
+    <div class="card-header">
         <h2 class="float-left">
             @ViewData["Title"]
         </h2>
         <p class="float-right mt-2 mb-0">
-            <a asp-action="New" asp-controller="Courses" class="text-white btn btn-success" style="font-size:0.8em"><i class="fas fa-plus mr-1"></i>New</a>
+            <a asp-action="Create" asp-controller="Categories" class="text-white btn btn-success" style="font-size:0.8em"><i class="fas fa-plus mr-1"></i>Create</a>
         </p>
     </div>
     <div class="card-body table-responsive">
         <table class="table" id="listTable">
             <thead>
                 <tr>
-                    <th></th>
-                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th class="no-sort w-1"></th>
+                    <th class="w-1">@Html.DisplayNameFor(model => model.Name)</th>
+                    <th class="no-sort"></th>
                 </tr>
             </thead>
             <tbody>
@@ -27,7 +28,9 @@
                             <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
                             <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
                         </td>
-                        <td>@Html.DisplayFor(x => item.Name)</td>
+                        <td class="w-1">@Html.DisplayFor(x => item.Name)</td>
+
+                        <td></td>
                     </tr>
                 }
             </tbody>
@@ -54,11 +57,18 @@
 </div>
 <input type="hidden" id="idToDelete" />
 <script>
-var ConfirmDelete = function (id) {
+    var ConfirmDelete = function (id) {
         $("#deleteBtn").attr("href", $("#deleteBtn").attr("href") + "/" + id);
         $("#modal").modal('show');
     }
 
     $(document).ready(function () {
-        $('#listTable').DataTable();
-    });</script>
+        $('#listTable').DataTable({
+            "order": [],
+            "columnDefs": [{
+                "targets": 'no-sort',
+                "orderable": false,
+            }]
+        });
+    });
+</script>

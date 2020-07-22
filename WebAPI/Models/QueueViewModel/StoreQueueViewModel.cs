@@ -1,5 +1,6 @@
 ﻿using Recodme.RD.FullStoQReborn.DataLayer.Queue;
 using System;
+using System.ComponentModel.DataAnnotations;
 using WebAPI.Models.Base;
 
 namespace WebAPI.Models.QueueViewModel
@@ -7,6 +8,8 @@ namespace WebAPI.Models.QueueViewModel
     public class StoreQueueViewModel : BaseViewModel
     {
         public int Quantity { get; set; }
+        [Display(Name = "Establishment")]
+        [Required(ErrorMessage = "Select an Establishment")] 
         public Guid EstablishmentId { get; set; }
 
         public StoreQueue ToStoreQueue()
@@ -18,7 +21,8 @@ namespace WebAPI.Models.QueueViewModel
             return new StoreQueueViewModel()
             {
                 Quantity = storeQueue.Quantity,
-                EstablishmentId = storeQueue.EstablishmentId
+                EstablishmentId = storeQueue.EstablishmentId,
+                Id = storeQueue.Id
             };
         }
 
