@@ -25,32 +25,32 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         };
 
         #region Create
-        public OperationResult Create(Company item)
+        public OperationResult<bool> Create(Company item)
         {
             try
             {
-                if (_dao.List().Any(x => x.VatNumber == item.VatNumber)) return new OperationResult() { Success = true, Message = "Vat number already exists" };
+                if (_dao.List().Any(x => x.VatNumber == item.VatNumber && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
                 _dao.Create(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
 
-        public async Task<OperationResult> CreateAsync(Company item)
+        public async Task<OperationResult<bool>> CreateAsync(Company item)
         {
             try
             {                
-                if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber))
-                    return new OperationResult() { Success = true, Message = "Vat number already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber && !x.IsDeleted))
+                    return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
                 await _dao.CreateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
         #endregion
@@ -92,39 +92,39 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         #endregion
 
         #region Update
-        public OperationResult Update(Company item)
+        public OperationResult <bool> Update(Company item)
         {
             try
             {
-                if (_dao.List().Any(x => (x.VatNumber == item.VatNumber || x.Name == item.Name) && item.Id != x.Id))
+                if (_dao.List().Any(x => (x.VatNumber == item.VatNumber || x.Name == item.Name) && item.Id != x.Id && !x.IsDeleted))
                 {
-                    if (_dao.List().Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult() { Success = true, Message = "Vat number already exists" };
-                    if (_dao.List().Any(x => x.Name == item.Name && item.Id != x.Id)) return new OperationResult() { Success = true, Message = "Name already exists" };
+                    if (_dao.List().Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
+                    if (_dao.List().Any(x => x.Name == item.Name && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 }
                 _dao.Update(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
 
-        public async Task<OperationResult> UpdateAsync(Company item)
+        public async Task<OperationResult<bool>> UpdateAsync(Company item)
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => (x.VatNumber == item.VatNumber || x.Name == item.Name) && item.Id != x.Id))
+                if (_dao.ListAsync().Result.Any(x => (x.VatNumber == item.VatNumber || x.Name == item.Name) && item.Id != x.Id && !x.IsDeleted))
                 {
-                    if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult() { Success = true, Message = "Vat number already exists" };
-                    if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && item.Id != x.Id)) return new OperationResult() { Success = true, Message = "Name already exists" };
+                    if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
+                    if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 }
                 await _dao.UpdateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
         #endregion
