@@ -19,6 +19,12 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
             _dao = new BrandDataAccessObject();
         }
 
+        TransactionOptions transactionOptions = new TransactionOptions
+        {
+            IsolationLevel = IsolationLevel.ReadCommitted,
+            Timeout = TimeSpan.FromSeconds(30)
+        };
+
         #region C
         public OperationResult<bool> Create(Brand item)
         {
@@ -255,6 +261,42 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
                 var result = res.Where(x => !x.IsDeleted).ToList();
                 transactionScope.Complete();
                 return new OperationResult<List<Brand>>() { Success = true, Result = result };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<List<Brand>>() { Success = false, Exception = e };
+            }
+        }
+        #endregion
+
+        #region Filter
+        public OperationResult<List<Brand>> Filter(Func<Brand, bool> predicate)
+        {
+            try
+            {
+
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+                var result = _dao.List();
+                result = result.Where(predicate).ToList();
+                transactionScope.Complete();
+                return new OperationResult<List<Brand>> { Result = result, Success = true };
+            }
+            catch (Exception e)
+            {
+                return new OperationResult<List<Brand>>() { Success = false, Exception = e };
+            }
+        }
+
+        public async Task<OperationResult<List<Brand>>> FilterAsync(Func<Brand, bool> predicate)
+        {
+            try
+            {
+
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+                var result = await _dao.ListAsync();
+                result = result.Where(predicate).ToList();
+                transactionScope.Complete();
+                return new OperationResult<List<Brand>> { Result = result, Success = true };
             }
             catch (Exception e)
             {

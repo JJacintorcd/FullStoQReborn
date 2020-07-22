@@ -1,6 +1,7 @@
 ﻿using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Models.Base;
@@ -12,7 +13,13 @@ namespace WebAPI.Models.EssentialGoodsViewModel
         public string BarCode { get; set; }
         public double Price { get; set; }
         public double Weight { get; set; }
+
+        [Display(Name = "Brand")]
+        [Required(ErrorMessage = "Select a brand")]
         public Guid BrandId { get; set; }
+
+        [Display(Name = "Category")]
+        [Required(ErrorMessage = "Select a category")]
         public Guid CategoryId { get; set; }
         public static ProductModelViewModel Parse(ProductModel productModel)
         {
@@ -28,7 +35,7 @@ namespace WebAPI.Models.EssentialGoodsViewModel
             };
         }
 
-        public ProductModel ToProductModel()
+        public ProductModel ToModel()
         {
             return new ProductModel(Name, BarCode, Price, Weight, BrandId, CategoryId);
         }
