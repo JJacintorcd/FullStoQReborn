@@ -34,7 +34,7 @@ namespace WebAPI.Controllers.Web.Queue
             return new List<BreadCrumb>()
                 { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
                   new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                  new BreadCrumb(){Icon = "fa-shish-kebab", Action="Index", Controller="ReservedQueuees", Text = "ReservedQueuees"}
+                  new BreadCrumb(){Icon = "fa-shish-kebab", Action="Index", Controller="ReservedQueues", Text = "ReservedQueues"}
                 };
         }
 
@@ -104,9 +104,11 @@ namespace WebAPI.Controllers.Web.Queue
                 lst.Add(ReservedQueueViewModel.Parse(item));
             }
 
-            var drList = await GetEstablishmentViewModels(listOperation.Result.Select(x => x.EstablishmentId).Distinct().ToList());
-            ViewData["Establishments"] = drList;
-            ViewData["Title"] = "ReservedQueuees";
+            var estList = await GetEstablishmentViewModels(listOperation.Result.Select(x => x.EstablishmentId).Distinct().ToList());
+            var profiList = await GetProfileViewModels(listOperation.Result.Select(x => x.ProfileId).Distinct().ToList());
+            ViewData["Establishments"] = estList;
+            ViewData["Profiles"] = profiList;
+            ViewData["Title"] = "ReservedQueues";
             ViewData["BreadCrumbs"] = GetCrumbs();
             ViewData["DeleteHref"] = GetDeleteRef();
 
@@ -123,15 +125,20 @@ namespace WebAPI.Controllers.Web.Queue
             if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
             if (getOperation.Result == null) return RecordNotFound();
 
-            var getDrOperation = await _ebo.ReadAsync(getOperation.Result.EstablishmentId);
-            if (!getDrOperation.Success) return OperationErrorBackToIndex(getDrOperation.Exception);
-            if (getDrOperation.Result == null) return RecordNotFound();
+            var getEstOperation = await _ebo.ReadAsync(getOperation.Result.EstablishmentId);
+            if (!getEstOperation.Success) return OperationErrorBackToIndex(getEstOperation.Exception);
+            if (getEstOperation.Result == null) return RecordNotFound();
+
+            var getProOperation = await _pbo.ReadAsync(getOperation.Result.ProfileId);
+            if (!getProOperation.Success) return OperationErrorBackToIndex(getProOperation.Exception);
+            if (getProOperation.Result == null) return RecordNotFound();
 
             var vm = ReservedQueueViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "ReservedQueue";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "ReservedQueuees", Icon = "fa-search", Text = "Detail" });
-            ViewData["Establishment"] = EstablishmentViewModel.Parse(getDrOperation.Result);
+            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "ReservedQueues", Icon = "fa-search", Text = "Detail" });
+            ViewData["Establishment"] = EstablishmentViewModel.Parse(getEstOperation.Result);
+            ViewData["Profile"] = ProfileViewModel.Parse(getProOperation.Result);
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
@@ -139,18 +146,28 @@ namespace WebAPI.Controllers.Web.Queue
         [HttpGet("new")]
         public async Task<IActionResult> New()
         {
-            var listDrOperation = await _ebo.ListNotDeletedAsync();
-            if (!listDrOperation.Success) return OperationErrorBackToIndex(listDrOperation.Exception);
+            var listEstOperation = await _ebo.ListNotDeletedAsync();
+            if (!listEstOperation.Success) return OperationErrorBackToIndex(listEstOperation.Exception);
 
-            var drList = new List<SelectListItem>();
-            foreach (var item in listDrOperation.Result)
+            var listProOperation = await _pbo.ListNotDeletedAsync();
+            if (!listProOperation.Success) return OperationErrorBackToIndex(listProOperation.Exception);
+
+            var estList = new List<SelectListItem>();
+            foreach (var item in listEstOperation.Result)
             {
-                drList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Address });
+                estList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Address });
             }
-            ViewBag.Establishments = drList;
+
+            var profiList = new List<SelectListItem>();
+            foreach (var item in listEstOperation.Result)
+            {
+                profiList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Address });
+            }
+            ViewBag.Establishments = estList;
+            ViewBag.Profiles = profiList;
             ViewData["Title"] = "New ReservedQueue";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "ReservedQueuees", Icon = "fa-plus", Text = "New" });
+            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "ReservedQueues", Icon = "fa-plus", Text = "New" });
             ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
@@ -180,20 +197,33 @@ namespace WebAPI.Controllers.Web.Queue
             if (getOperation.Result == null) return RecordNotFound();
 
             var vm = ReservedQueueViewModel.Parse(getOperation.Result);
-            var listDrOperation = await _ebo.ListNotDeletedAsync();
-            if (!listDrOperation.Success) return OperationErrorBackToIndex(listDrOperation.Exception);
+            var listEstOperation = await _ebo.ListNotDeletedAsync();
+            if (!listEstOperation.Success) return OperationErrorBackToIndex(listEstOperation.Exception);
 
-            var drList = new List<SelectListItem>();
-            foreach (var item in listDrOperation.Result)
+            var listProOperation = await _pbo.ListNotDeletedAsync();
+            if (!listProOperation.Success) return OperationErrorBackToIndex(listEstOperation.Exception);
+
+            var estList = new List<SelectListItem>();
+            foreach (var item in listEstOperation.Result)
             {
                 var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.Address };
                 if (item.Id == vm.EstablishmentId) listItem.Selected = true;
-                drList.Add(listItem);
+                estList.Add(listItem);
             }
-            ViewBag.Establishments = drList;
-            ViewData["Title"] = "Edit Course";
+
+            var profiList = new List<SelectListItem>();
+            foreach (var item in listEstOperation.Result)
+            {
+                var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.Address };
+                if (item.Id == vm.ProfileId) listItem.Selected = true;
+                profiList.Add(listItem);
+            }
+
+            ViewBag.Establishments = estList;
+            ViewBag.Profiles = profiList;
+            ViewData["Title"] = "Edit Reserved Queues";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "ReservedQueuees", Icon = "fa-edit", Text = "Edit" });
+            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "ReservedQueues", Icon = "fa-edit", Text = "Edit" });
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
