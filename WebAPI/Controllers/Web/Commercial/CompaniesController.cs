@@ -3,6 +3,7 @@ using Recodme.RD.FullStoQReborn.BusinessLayer.Commercial;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebAPI.Models;
 using WebAPI.Models.CommercialViewModel;
 using WebAPI.Models.HtmlComponents;
 using WebAPI.Support;
@@ -24,7 +25,7 @@ namespace WebAPI.Controllers.Web.Commercial
             return new List<BreadCrumb>()
                 { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
                   new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                  new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Companies", Text = "Companies"}
+                  new BreadCrumb(){Icon = "fa-building", Action="Index", Controller="Companies", Text = "Companies"}
                 };
         }
 
@@ -103,6 +104,16 @@ namespace WebAPI.Controllers.Web.Commercial
                 var model = vm.ToModel();
                 var createOperation = await _bo.CreateAsync(model);
                 if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+                if (!createOperation.Result)
+                {
+                    TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
+                    ViewData["Title"] = "New Company";
+                    var crumbs = GetCrumbs();
+                    crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Companies", Icon = "fa-plus", Text = "New" });
+                    ViewData["BreadCrumbs"] = crumbs;
+
+                    return View();
+                }
                 else return OperationSuccess("The record was successfuly created");
             }
             return View(vm);
@@ -125,6 +136,7 @@ namespace WebAPI.Controllers.Web.Commercial
             return View(vm);
         }
 
+
         [HttpPost("edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, CompanyViewModel vm)
@@ -142,6 +154,29 @@ namespace WebAPI.Controllers.Web.Commercial
                     if (!updateOperation.Success)
                     {
                         TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = CompanyViewModel.Parse(getOperation.Result);
+                        ViewData["Title"] = "Edit Company";
+                        var crumbs = GetCrumbs();
+                        crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Companies", Icon = "fa-edit", Text = "Edit" });
+                        ViewData["BreadCrumbs"] = crumbs;
+                        return View(vm);
+                    }
+                    if (!updateOperation.Result)
+                    {
+                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Message);
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = CompanyViewModel.Parse(getOperation.Result);
+                        ViewData["Title"] = "Edit Company";
+                        var crumbs = GetCrumbs();
+                        crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Companies", Icon = "fa-edit", Text = "Edit" });
+                        ViewData["BreadCrumbs"] = crumbs;
                         return View(vm);
                     }
                     else return OperationSuccess("The record was successfuly updated");
