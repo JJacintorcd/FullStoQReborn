@@ -135,7 +135,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             ViewData["Title"] = "Product Model - Details";
 
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "ProductModels", Icon = "fa-search", Text = "Details" });
+            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "ProductModels", Icon = "fa-search", Text = "Details" });
             ViewData["Brand"] = BrandViewModel.Parse(getBOperation.Result);
             ViewData["Category"] = CategoryViewModel.Parse(getCOperation.Result);
 
@@ -168,9 +168,9 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             ViewBag.Brands = bList;
             ViewBag.Categories = cList;
 
-            ViewData["Title"] = "Edit - Product Model";
+            ViewData["Title"] = "Create - Product Model";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "ProductModels", Icon = "fa-plus", Text = "New" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ProductModels", Icon = "fa-plus", Text = "Create" });
             ViewData["BreadCrumbs"] = crumbs;
 
             return View();
@@ -211,9 +211,9 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                     ViewBag.Brands = bList;
                     ViewBag.Categories = cList;
 
-                    ViewData["Title"] = "Edit -  Product Model";
+                    ViewData["Title"] = "Create - Product Model";
                     var crumbs = GetCrumbs();
-                    crumbs.Add(new BreadCrumb() { Action = "New", Controller = "ProductModels", Icon = "fa-plus", Text = "New" });
+                    crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ProductModels", Icon = "fa-plus", Text = "Create" });
                     ViewData["BreadCrumbs"] = crumbs;
 
                     return View(vm);

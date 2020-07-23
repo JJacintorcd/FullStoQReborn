@@ -136,7 +136,7 @@ namespace WebAPI.Controllers.Web.Queue
             var vm = ReservedQueueViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "ReservedQueue";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "ReservedQueues", Icon = "fa-search", Text = "Detail" });
+            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "ReservedQueues", Icon = "fa-search", Text = "Details" });
             ViewData["Establishment"] = EstablishmentViewModel.Parse(getEstOperation.Result);
             ViewData["Profile"] = ProfileViewModel.Parse(getProOperation.Result);
             ViewData["BreadCrumbs"] = crumbs;
@@ -165,7 +165,7 @@ namespace WebAPI.Controllers.Web.Queue
             }
             ViewBag.Establishments = estList;
             ViewBag.Profiles = profiList;
-            ViewData["Title"] = "New ReservedQueue";
+            ViewData["Title"] = "Create ReservedQueue";
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ReservedQueues", Icon = "fa-plus", Text = "Create" });
             ViewData["BreadCrumbs"] = crumbs;
