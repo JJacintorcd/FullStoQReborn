@@ -181,48 +181,6 @@ namespace FullStoQTests.Queue
 
             Assert.IsTrue(res.IsDeleted && limit.Result.Success && !limit.Result.Result);
         }
-
-        [TestMethod]
-        public void TestDailyLimit()
-        {
-            ContextSeeder.Seed();
-
-            var boProf = new ProfileBusinessObject();
-            var profList = boProf.List().Result.First();
-            var boEst = new EstablishmentBusinessObject();
-            var estList = boEst.List().Result.First();
-
-            var bo = new ReservedQueueBusinessObject();
-            var res1 = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, false, estList.Id, profList.Id);
-            var res2 = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, false, estList.Id, profList.Id);
-            bo.Create(res1);
-            bo.Create(res2);
-
-            var reserves = bo.DayLimitReserve(res2.Id);
-
-            Assert.IsTrue(!reserves.Result);
-        }
-
-        [TestMethod]
-        public void TestDailyLimitAsync()
-        {
-            ContextSeeder.Seed();
-
-            var boProf = new ProfileBusinessObject();
-            var profList = boProf.List().Result.First();
-            var boEst = new EstablishmentBusinessObject();
-            var estList = boEst.List().Result.First();
-
-            var bo = new ReservedQueueBusinessObject();
-            var res1 = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, false, estList.Id, profList.Id);
-            var res2 = new ReservedQueue(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, false, estList.Id, profList.Id);
-            var c1 = bo.CreateAsync(res1);
-            var c2 = bo.CreateAsync(res2);
-
-            var reserves = bo.DayLimitReserveAsync(res2.Id);
-
-            Assert.IsTrue(reserves.Result.Result == false);
-        }
     }
 }
 

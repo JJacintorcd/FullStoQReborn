@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Administration()
         {
             return View();
@@ -47,6 +47,5 @@ namespace WebAPI.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         
-
     }
 }
