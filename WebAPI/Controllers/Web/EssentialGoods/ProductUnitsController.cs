@@ -198,6 +198,13 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             ViewData["DeleteHref"] = GetDeleteRef();
             return View(lst);
         }
+        public void Draw(string type, string icon)
+        {
+            ViewData["Title"] = $"{type} Product Model";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "ProductModels", Icon = icon, Text = type });
+            ViewData["BreadCrumbs"] = crumbs;
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(Guid? id)
@@ -229,16 +236,14 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getCOperation.Result == null) return RecordNotFound();
 
             var vm = ProductUnitViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "Product Unit - Details";
-
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "PruductUnits", Icon = "fa-search", Text = "Detail" });
             ViewData["Profile"] = ProfileViewModel.Parse(getPOperation.Result);
             ViewData["Company"] = CompanyViewModel.Parse(getCOperation.Result);
             ViewData["Establishment"] = EstablishmentViewModel.Parse(getEOperation.Result);
             ViewData["ShoppingBasket"] = ShoppingBasketViewModel.Parse(getSBOperation.Result);
             ViewData["ProductModel"] = ProductModelViewModel.Parse(getPMOperation.Result);
-            ViewData["BreadCrumbs"] = crumbs;
+
+            Draw("Details","fa-search");
+
             return View(vm);
         }
 
@@ -278,11 +283,8 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             ViewBag.ShoppingBaskets = sbList;
             ViewBag.ProductModels = pmList;
 
-            ViewData["Title"] = "Create - Product Unit";
+            Draw("Create", "fa-plus");
 
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ProductUnits", Icon = "fa-plus", Text = "Create" });
-            ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
 
@@ -331,11 +333,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                     ViewBag.ShoppingBaskets = sbList;
                     ViewBag.ProductModels = pmList;
 
-                    ViewData["Title"] = "Create - Product Unit";
-
-                    var crumbs = GetCrumbs();
-                    crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ProductUnits", Icon = "fa-plus", Text = "Create" });
-                    ViewData["BreadCrumbs"] = crumbs;
+                    Draw("Create", "fa-plus");
 
                     return View(vm);
                 }
@@ -393,10 +391,8 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             }
             ViewBag.ProductModels = pmList;
 
-            ViewData["Title"] = "Edit - Product Unit";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Dishes", Icon = "fa-edit", Text = "Edit" });
-            ViewData["BreadCrumbs"] = crumbs; 
+            Draw("Edit", "fa-edit");
+
             return View(vm);
         }
 
@@ -450,10 +446,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                         }
                         ViewBag.ShoppingBaskets = sbList;
 
-                        ViewData["Title"] = "Edit - Product Unit";
-                        var crumbs = GetCrumbs();
-                        crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Dishes", Icon = "fa-edit", Text = "Edit" });
-                        ViewData["BreadCrumbs"] = crumbs;
+                        Draw("Edit", "fa-edit");
 
                         return View(vm);
                     }
@@ -493,10 +486,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                         }
                         ViewBag.ShoppingBaskets = sbList;
 
-                        ViewData["Title"] = "Edit - Product Unit";
-                        var crumbs = GetCrumbs();
-                        crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Dishes", Icon = "fa-edit", Text = "Edit" });
-                        ViewData["BreadCrumbs"] = crumbs;
+                        Draw("Edit", "fa-edit");
 
                         return View(vm);
                     }
