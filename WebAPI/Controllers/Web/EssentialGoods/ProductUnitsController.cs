@@ -200,9 +200,9 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         }
         public void Draw(string type, string icon)
         {
-            ViewData["Title"] = $"{type} Product Model";
+            ViewData["Title"] = $"{type} Product Unit";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = type, Controller = "ProductModels", Icon = icon, Text = type });
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "ProductUnits", Icon = icon, Text = type });
             ViewData["BreadCrumbs"] = crumbs;
         }
 

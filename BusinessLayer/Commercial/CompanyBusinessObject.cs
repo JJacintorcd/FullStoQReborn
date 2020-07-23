@@ -30,7 +30,8 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
             try
             {
                 if (_dao.List().Any(x => x.VatNumber == item.VatNumber)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
-                if (_dao.List().Any(x => x.Name.ToLower() == item.Name.ToLower())) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.List().Any(x => x.Name.ToLower().Trim() == item.Name.ToLower().Trim())) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (9 == Math.Floor(Math.Log10(item.VatNumber) + 1)) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
                 _dao.Create(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -45,7 +46,8 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
             try
             {
                 if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
-                if (_dao.ListAsync().Result.Any(x => x.Name.ToLower() == item.Name.ToLower())) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.Name.ToLower().Trim() == item.Name.ToLower().Trim())) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (9 == Math.Floor(Math.Log10(item.VatNumber) + 1)) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
                 await _dao.CreateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -98,7 +100,8 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
             try
             {
                 if (_dao.List().Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
-                if (_dao.List().Any(x => x.Name.ToLower() == item.Name.ToLower() && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.List().Any(x => x.Name.ToLower().Trim() == item.Name.ToLower().Trim() && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (9 == Math.Floor(Math.Log10(item.VatNumber) + 1)) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
                 _dao.Update(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -113,7 +116,8 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
             try
             {
                 if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
-                if (_dao.ListAsync().Result.Any(x => x.Name.ToLower() == item.Name.ToLower() && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.Name.ToLower().Trim() == item.Name.ToLower().Trim() && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (9 == Math.Floor(Math.Log10(item.VatNumber) + 1)) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
                 await _dao.UpdateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }

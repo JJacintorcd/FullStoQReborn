@@ -69,7 +69,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.List().Any(x => x.Address.ToLower() == establishment.Address.ToLower() && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
+                if (_dao.List().Any(x => x.Address.ToLower().Trim() == establishment.Address.ToLower().Trim() && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
                 _dao.Create(establishment);
                 return new OperationResult<bool>() { Success = true, Result = true };
 
@@ -83,7 +83,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Address.ToLower() == establishment.Address.ToLower() && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.Address.ToLower().Trim() == establishment.Address.ToLower().Trim() && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
                 await _dao.CreateAsync(establishment);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -143,7 +143,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.List().Any(x => x.Address.ToLower() == establishment.Address.ToLower() && x.Id != establishment.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
+                if (_dao.List().Any(x => x.Address.ToLower().Trim() == establishment.Address.ToLower().Trim() && x.Id != establishment.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
                 _dao.Update(establishment);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -156,7 +156,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Address.ToLower() == establishment.Address.ToLower() && x.Id != establishment.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.Address.ToLower().Trim() == establishment.Address.ToLower().Trim() && x.Id != establishment.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Address already exists" };
                 await _dao.UpdateAsync(establishment);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
