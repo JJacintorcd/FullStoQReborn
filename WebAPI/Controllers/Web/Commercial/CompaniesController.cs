@@ -78,25 +78,25 @@ namespace WebAPI.Controllers.Web.Commercial
             ViewData["Title"] = "Company";
 
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Companies", Icon = "fa-search", Text = "Detail" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Companies", Icon = "fa-search", Text = "Detail" });
 
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
-        [HttpGet("new")]
-        public IActionResult New()
+        [HttpGet("create")]
+        public IActionResult Create()
         {
-            ViewData["Title"] = "New Company";
+            ViewData["Title"] = "Create Company";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Companies", Icon = "fa-plus", Text = "New" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Companies", Icon = "fa-plus", Text = "Create" });
             ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
 
-        [HttpPost("new")]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> New(CompanyViewModel vm)
+        public async Task<IActionResult> Create(CompanyViewModel vm)
         {
             if (ModelState.IsValid)
             {
