@@ -91,6 +91,13 @@ namespace WebAPI.Controllers.Web.Queue
             return ProfileViewModel.Parse(getOperation.Result);
         }
 
+        public void Draw(string type, string icon)
+        {
+            ViewData["Title"] = $"{type} ReservedQueue";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "ReservedQueues", Icon = icon, Text = type });
+            ViewData["BreadCrumbs"] = crumbs;
+        }
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -134,12 +141,10 @@ namespace WebAPI.Controllers.Web.Queue
             if (getProOperation.Result == null) return RecordNotFound();
 
             var vm = ReservedQueueViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "ReservedQueue";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "ReservedQueues", Icon = "fa-search", Text = "Details" });
+
+            Draw("Details", "fa-search");
             ViewData["Establishment"] = EstablishmentViewModel.Parse(getEstOperation.Result);
             ViewData["Profile"] = ProfileViewModel.Parse(getProOperation.Result);
-            ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
@@ -165,10 +170,9 @@ namespace WebAPI.Controllers.Web.Queue
             }
             ViewBag.Establishments = estList;
             ViewBag.Profiles = profiList;
-            ViewData["Title"] = "Create ReservedQueue";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ReservedQueues", Icon = "fa-plus", Text = "Create" });
-            ViewData["BreadCrumbs"] = crumbs;
+
+            Draw("Create", "fa-plus");
+            
             return View();
         }
 
@@ -182,6 +186,12 @@ namespace WebAPI.Controllers.Web.Queue
                 var model = vm.ToReservedQueue();
                 var createOperation = await _bo.CreateAsync(model);
                 if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+                if (!createOperation.Result)
+                {
+                    TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
+                    Draw("Create", "fa-plus");
+                    return View(vm);
+                }
                 else return OperationSuccess("The record was successfuly created");
             }
             return View(vm);
@@ -221,10 +231,7 @@ namespace WebAPI.Controllers.Web.Queue
 
             ViewBag.Establishments = estList;
             ViewBag.Profiles = profiList;
-            ViewData["Title"] = "Edit Reserved Queues";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "ReservedQueues", Icon = "fa-edit", Text = "Edit" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Edit", "fa-edit");
             return View(vm);
         }
 
@@ -238,7 +245,9 @@ namespace WebAPI.Controllers.Web.Queue
                 var getOperation = await _bo.ReadAsync(id);
                 if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
                 if (getOperation.Result == null) return RecordNotFound();
+
                 var result = getOperation.Result;
+                
                 if (!vm.CompareToModel(result))
                 {
                     result = vm.ToModel(result);
@@ -246,6 +255,25 @@ namespace WebAPI.Controllers.Web.Queue
                     if (!updateOperation.Success)
                     {
                         TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
+
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = ReservedQueueViewModel.Parse(getOperation.Result);
+                        Draw("Edit", "fa-edit");
+
+                        return View(vm);
+                    }
+                    if (!updateOperation.Result)
+                    {
+                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Message);
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = ReservedQueueViewModel.Parse(getOperation.Result);
+                        Draw("Edit", "fa-edit");
                         return View(vm);
                     }
                     else return OperationSuccess("The record was successfuly updated");

@@ -47,6 +47,14 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return RedirectToAction(nameof(Index));
         }
 
+        public void Draw(string type, string icon)
+        {
+            ViewData["Title"] = $"{type} Brand";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "Brands", Icon = icon, Text = type });
+            ViewData["BreadCrumbs"] = crumbs;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -76,22 +84,16 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getOperation.Result == null) return RecordNotFound();
 
             var vm = BrandViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "Brand";
 
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "Brands", Icon = "fa-search", Text = "Detail" });
-
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Details", "fa-search");
+            
             return View(vm);
         }
 
         [HttpGet("Create")]
         public IActionResult Create()
         {
-            ViewData["Title"] = "New Brand";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Brands", Icon = "fa-plus", Text = "Create" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Create", "fa-plus");
             return View();
         }
 
@@ -107,10 +109,8 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                 if (!createOperation.Result)
                 {
                     TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
-                    ViewData["Title"] = "Create Company";
-                    var crumbs = GetCrumbs();
-                    crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Brands", Icon = "fa-plus", Text = "Create" });
-                    ViewData["BreadCrumbs"] = crumbs;
+
+                    Draw("Create", "fa-plus");
 
                     return View();
                 }
@@ -129,10 +129,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getOperation.Result == null) return RecordNotFound();
 
             var vm = BrandViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "Edit Brand";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Brands", Icon = "fa-edit", Text = "Edit" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Edit", "fa-edit");
             return View(vm);
         }
 
@@ -145,7 +142,9 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                 var getOperation = await _bo.ReadAsync(id);
                 if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
                 if (getOperation.Result == null) return RecordNotFound();
+
                 var result = getOperation.Result;
+                
                 if (!vm.CompareToModel(result))
                 {
                     result = vm.ToModel(result);
@@ -153,6 +152,23 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                     if (!updateOperation.Success)
                     {
                         TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = BrandViewModel.Parse(getOperation.Result);
+                        Draw("Edit", "fa-edit");
+
+                        return View(vm);
+                    }
+                    if (!updateOperation.Result)
+                    {
+                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Message);
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = BrandViewModel.Parse(getOperation.Result);
+                        Draw("Edit", "fa-edit");
                         return View(vm);
                     }
                     else return OperationSuccess("The record was successfuly updated");

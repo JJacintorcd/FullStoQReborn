@@ -22,28 +22,33 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
         }
 
         #region Create
-        public OperationResult Create(ReservedQueue item)
+        public OperationResult<bool> Create(ReservedQueue item)
         {
             try
             {
+                var reserveCountToday = _dao.List().Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day);
+                if (reserveCountToday > 0) return new OperationResult<bool>() { Success = true, Result = false };
                 _dao.Create(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
-        public async Task<OperationResult> CreateAsync(ReservedQueue item)
+        public async Task<OperationResult<bool>> CreateAsync(ReservedQueue item)
         {
             try
             {
+                var reserveList = await _dao.ListAsync();
+                var reserveCountToday = reserveList.Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day);
+                if (reserveCountToday > 0) return new OperationResult<bool>() { Success = true, Result = false };
                 await _dao.CreateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
         #endregion
@@ -94,29 +99,34 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
         #endregion
 
         #region Update
-        public OperationResult Update(ReservedQueue item)
+        public OperationResult<bool> Update(ReservedQueue item)
         {
             try
             {
+                var reserveCountToday = _dao.List().Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day);
+                if (reserveCountToday > 0) return new OperationResult<bool>() { Success = true, Result = false };
                 _dao.Update(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
 
-        public async Task<OperationResult> UpdateAsync(ReservedQueue item)
+        public async Task<OperationResult<bool>> UpdateAsync(ReservedQueue item)
         {
             try
             {
+                var reserveList = await _dao.ListAsync();
+                var reserveCountToday = reserveList.Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day);
+                if (reserveCountToday > 0) return new OperationResult<bool>() { Success = true, Result = false };
                 await _dao.UpdateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
             }
         }
         #endregion
@@ -308,37 +318,6 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
                     await _dao.DeleteAsync(item);
                     return new OperationResult<bool>() { Success = true, Result = false };
                 }
-                return new OperationResult<bool>() { Success = true, Result = true };
-            }
-            catch (Exception e)
-            {
-                return new OperationResult<bool>() { Success = false, Exception = e };
-            }
-        }
-
-        public OperationResult<bool> DayLimitReserve(Guid id)
-        {
-            try
-            {
-                var item = _dao.Read(id);
-                var reserveDay = item.CreatedAt.Day;
-                if (DateTime.UtcNow.Day == reserveDay && _dao.List().Any(x => x.ProfileId == item.ProfileId)) return new OperationResult<bool>() { Success = true, Result = false };
-                return new OperationResult<bool>() { Success = true, Result = true };
-            }
-            catch (Exception e)
-            {
-                return new OperationResult<bool>() { Success = false, Exception = e };
-            }
-        }
-
-        public async Task<OperationResult<bool>> DayLimitReserveAsync(Guid id)
-        {
-            try
-            {
-                var item = _dao.ReadAsync(id).Result;
-                var reserveDay = item.CreatedAt.Day;
-                var list = await _dao.ListAsync();
-                if (DateTime.UtcNow.Day == reserveDay && list.Any(x => x.ProfileId == item.ProfileId)) return new OperationResult<bool>() { Success = true, Result = false };
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)

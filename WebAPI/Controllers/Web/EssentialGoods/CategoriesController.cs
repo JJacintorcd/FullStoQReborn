@@ -48,11 +48,11 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return RedirectToAction(nameof(Index));
         }
 
-        public void Draw(string type)
+        public void Draw(string type, string icon)
         {
             ViewData["Title"] = $"{type} Category";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = type, Controller = "Category", Icon = "fa-plus", Text = type });
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "Categories", Icon = icon, Text = type });
             ViewData["BreadCrumbs"] = crumbs;
         }
 
@@ -84,7 +84,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
 
             var vm = CategoryViewModel.Parse(getOperation.Result);
             
-            Draw("Details");
+            Draw("Details", "fa-search");
             return View(vm);
         }
 
@@ -93,7 +93,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         [HttpGet("create")]
         public IActionResult Create()
         {
-            Draw("Create");
+            Draw("Create", "fa-plus");
             return View();
         }
 
@@ -109,7 +109,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                 if (!createOperation.Result)
                 {
                     TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
-                    Draw("Create");
+                    Draw("Create", "fa-plus");
                     return View(vm);
                 }
                 else return OperationSuccess("The record was successfuly created");
@@ -127,7 +127,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getOperation.Result == null) return RecordNotFound();
 
             var vm = CategoryViewModel.Parse(getOperation.Result);
-            Draw("Edit");
+            Draw("Edit", "fa-edit");
             return View(vm);
         }
 
@@ -138,7 +138,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (ModelState.IsValid)
             {
                 var getOperation = await _bo.ReadAsync(id);
-                if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
+                if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
                 if (getOperation.Result == null) return RecordNotFound();
                 
                 var result = getOperation.Result;
@@ -156,7 +156,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                         if (getOperation.Result == null) return RecordNotFound();
 
                         vm = CategoryViewModel.Parse(getOperation.Result);
-                        Draw("Edit");
+                        Draw("Edit", "fa-edit");
 
                         return View(vm);
                     }
@@ -168,7 +168,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                         if (getOperation.Result == null) return RecordNotFound();
 
                         vm = CategoryViewModel.Parse(getOperation.Result);
-                        Draw("Edit");
+                        Draw("Edit", "fa-edit");
                         return View(vm);
                     }
                     else return OperationSuccess("The record was successfuly updated");
