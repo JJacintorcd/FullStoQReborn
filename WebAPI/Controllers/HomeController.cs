@@ -28,14 +28,7 @@ namespace WebAPI.Controllers
         {
             return View();
         }
-
-        [Authorize(Roles = "Admin")]
-        public IActionResult Administration()
-        {
-            return View();
-        }
-
-        
+      
         public IActionResult AboutUs()
         {
             return View();
