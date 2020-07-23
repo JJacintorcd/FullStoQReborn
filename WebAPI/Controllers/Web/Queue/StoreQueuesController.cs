@@ -116,8 +116,8 @@ namespace WebAPI.Controllers.Web.Queue
             return View(vm);
         }
 
-        [HttpGet("new")]
-        public async Task<IActionResult> New()
+        [HttpGet("create")]
+        public async Task<IActionResult> Create()
         {
             var listDrOperation = await _ebo.ListNotDeletedAsync();
             if (!listDrOperation.Success) return OperationErrorBackToIndex(listDrOperation.Exception);
@@ -130,15 +130,15 @@ namespace WebAPI.Controllers.Web.Queue
             ViewBag.Establishments = drList;
             ViewData["Title"] = "New StoreQueue";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "StoreQueues", Icon = "fa-plus", Text = "New" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "StoreQueues", Icon = "fa-plus", Text = "New" });
             ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
 
 
-        [HttpPost("new")]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> New(StoreQueueViewModel vm)
+        public async Task<IActionResult> Create(StoreQueueViewModel vm)
         {
             if (ModelState.IsValid)
             {

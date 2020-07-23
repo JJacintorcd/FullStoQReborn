@@ -81,25 +81,25 @@ namespace WebAPI.Controllers.Web.Person
             ViewData["Title"] = "Profile";
 
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Profiles", Icon = "fa-search", Text = "Detail" });
+            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "Profiles", Icon = "fa-search", Text = "Detail" });
 
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
-        [HttpGet("new")]
-        public IActionResult New()
+        [HttpGet("create")]
+        public IActionResult Create()
         {
             ViewData["Title"] = "New Profile";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Profiles", Icon = "fa-plus", Text = "New" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Profiles", Icon = "fa-plus", Text = "New" });
             ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> New(ProfileViewModel vm)
+        public async Task<IActionResult> Create(ProfileViewModel vm)
         {
             if (ModelState.IsValid)
             {

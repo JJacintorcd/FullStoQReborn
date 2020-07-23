@@ -2,6 +2,7 @@
 using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -31,16 +32,50 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
             }
         }
 
+
+        private Guid _productModel;
+
         [ForeignKey("ProductModel")]
-        public Guid ProductModelId { get; set; }
+        [Display(Name = "Product Model")]
+        public Guid ProductModelId
+        {
+            get => _productModel;
+            set
+            {
+                _productModel = value;
+                RegisterChange();
+            }
+        }
         public virtual ProductModel ProductModel { get; set; }
 
-        [ForeignKey("Establishment")]
-        public Guid EstablishmentId { get; set; }
+
+        private Guid _establishmentId;
+
+        [ForeignKey("Region")]
+        public Guid EstablishmentId
+        {
+            get => _establishmentId;
+            set
+            {
+                _establishmentId = value;
+                RegisterChange();
+            }
+        }
         public virtual Establishment Establishment { get; set; }
 
+        private Guid _shoppingBasket;
+
         [ForeignKey("ShoppingBasket")]
-        public Guid ShoppingBasketId { get; set; }
+        [Display(Name = "Shopping Basket")]
+        public Guid ShoppingBasketId
+        {
+            get => _shoppingBasket;
+            set
+            {
+                _shoppingBasket = value;
+                RegisterChange();
+            }
+        }
         public virtual ShoppingBasket ShoppingBasket { get; set; }
 
 
