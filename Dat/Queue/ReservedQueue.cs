@@ -12,6 +12,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Queue
         private Guid _establishmentId;
 
         [ForeignKey("Establishment")]
+        [Display(Name = "Establishment")]
         public Guid EstablishmentId
         {
             get => _establishmentId;
