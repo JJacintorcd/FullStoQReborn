@@ -79,7 +79,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             ViewData["Title"] = "Brand";
 
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Brands", Icon = "fa-search", Text = "Detail" });
+            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "Brands", Icon = "fa-search", Text = "Detail" });
 
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);

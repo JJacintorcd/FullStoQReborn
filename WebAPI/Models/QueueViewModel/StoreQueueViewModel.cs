@@ -7,9 +7,11 @@ namespace WebAPI.Models.QueueViewModel
 {
     public class StoreQueueViewModel : BaseViewModel
     {
+        [Required(ErrorMessage = "Required Field")] 
         public int Quantity { get; set; }
+        
         [Display(Name = "Establishment")]
-        [Required(ErrorMessage = "Select an Establishment")] 
+        [Required(ErrorMessage = "Required Field")] 
         public Guid EstablishmentId { get; set; }
 
         public StoreQueue ToStoreQueue()
@@ -20,9 +22,9 @@ namespace WebAPI.Models.QueueViewModel
         {
             return new StoreQueueViewModel()
             {
+                Id = storeQueue.Id,
                 Quantity = storeQueue.Quantity,
-                EstablishmentId = storeQueue.EstablishmentId,
-                Id = storeQueue.Id
+                EstablishmentId = storeQueue.EstablishmentId
             };
         }
 

@@ -24,7 +24,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
-                if (_dao.List().Any(x => x.SerialNumber == item.SerialNumber)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
+                if (_dao.List().Any(x => x.SerialNumber.ToLower() == item.SerialNumber.ToLower() && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
                 _dao.Create(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -37,7 +37,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.SerialNumber == item.SerialNumber)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.SerialNumber.ToLower() == item.SerialNumber.ToLower() && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
                 await _dao.CreateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -95,7 +95,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.SerialNumber == item.SerialNumber && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.SerialNumber.ToLower() == item.SerialNumber.ToLower() && x.Id != item.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
                 _dao.Update(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -108,7 +108,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.SerialNumber == item.SerialNumber && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.SerialNumber.ToLower() == item.SerialNumber.ToLower() && x.Id != item.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Serial number already exists" };
                 await _dao.UpdateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }

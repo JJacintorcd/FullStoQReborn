@@ -48,6 +48,14 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return RedirectToAction(nameof(Index));
         }
 
+        public void Draw(string type)
+        {
+            ViewData["Title"] = $"{type} Category";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "Category", Icon = "fa-plus", Text = type });
+            ViewData["BreadCrumbs"] = crumbs;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -75,22 +83,17 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getOperation.Result == null) return RecordNotFound();
 
             var vm = CategoryViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "Category";
-
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Categories", Icon = "fa-search", Text = "Detail" });
-
-            ViewData["BreadCrumbs"] = crumbs;
+            
+            Draw("Details");
             return View(vm);
         }
+
+        
 
         [HttpGet("create")]
         public IActionResult Create()
         {
-            ViewData["Title"] = "New Category";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Category", Icon = "fa-plus", Text = "Create" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Create");
             return View();
         }
 
@@ -103,6 +106,12 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                 var model = vm.ToModel();
                 var createOperation = await _bo.CreateAsync(model);
                 if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+                if (!createOperation.Result)
+                {
+                    TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
+                    Draw("Create");
+                    return View(vm);
+                }
                 else return OperationSuccess("The record was successfuly created");
             }
             return View(vm);
@@ -118,10 +127,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getOperation.Result == null) return RecordNotFound();
 
             var vm = CategoryViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "Edit Category";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Categories", Icon = "fa-search", Text = "Edit" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Edit");
             return View(vm);
         }
 
@@ -134,6 +140,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                 var getOperation = await _bo.ReadAsync(id);
                 if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
                 if (getOperation.Result == null) return RecordNotFound();
+                
                 var result = getOperation.Result;
 
                 if (!vm.CompareToModel(result))
@@ -143,6 +150,25 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                     if (!updateOperation.Success)
                     {
                         TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
+                        
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = CategoryViewModel.Parse(getOperation.Result);
+                        Draw("Edit");
+
+                        return View(vm);
+                    }
+                    if (!updateOperation.Result)
+                    {
+                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Message);
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = CategoryViewModel.Parse(getOperation.Result);
+                        Draw("Edit");
                         return View(vm);
                     }
                     else return OperationSuccess("The record was successfuly updated");

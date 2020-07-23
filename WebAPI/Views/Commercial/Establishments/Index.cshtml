@@ -8,7 +8,7 @@
         </h2>
         <p class="float-right mt-2 mb-0">
 
-            <a asp-controller="Establishments" asp-action="Create" class="text-white btn btn-success"><i class="fas fa-plus mr-1"></i>New</a>
+            <a asp-controller="Establishments" asp-action="Create" class="text-white btn btn-success"><i class="fas fa-plus mr-1"></i>Create</a>
         </p>
     </div>
     <div class="card-body table-responsive">
@@ -17,8 +17,7 @@
                 <tr>
                     <th class="no-sort"></th>
                     <th class="w-1">@Html.DisplayNameFor(model => model.Address)</th>
-                    <th class="w-1">@Html.DisplayNameFor(model => model.OpeningHours)</th>
-                    <th class="w-1">@Html.DisplayNameFor(model => model.ClosingHours)</th>
+                    <th class="w-1">Schedule</th>
                     <th class="w-1">@Html.DisplayNameFor(model => model.ClosingDays)</th>
                     <th class="w-1">@Html.DisplayNameFor(model => model.RegionId)</th>
                     <th class="w-1">@Html.DisplayNameFor(model => model.CompanyId)</th>
@@ -31,25 +30,22 @@
                 <tr>
                     <td class="w-1">
                         <a class="link-details" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search mr-2"></i></a>
-                        <a class="link-edit" asp-controller="Dishes" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
+                        <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
                         <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
                     </td>
                     <td class="w-1">
                         @item.Address
                     </td>
                     <td class="w-1">
-                        @item.OpeningHours
-                    </td>
-                    <td class="w-1">
-                        @item.ClosingHours
+                        @item.OpeningHours - @item.ClosingHours
                     </td>
                     <td class="w-1">
                         @item.ClosingDays
                     </td>
-                    @{ var rg = (ViewData["Region"] as List<RegionViewModel>).First(x => x.Id == item.RegionId);}
-                    <td class="w-1"><a class="link-edit" asp-controller="DietaryRestrictions" asp-action="Details" asp-route-id="@rg.Id">@rg.Name </a></td>
-                    @{ var cp = (ViewData["Company"] as List<CompanyViewModel>).First(x => x.Id == item.CompanyId);}
-                    <td class="w-1"><a class="link-edit" asp-controller="DietaryRestrictions" asp-action="Details" asp-route-id="@cp.Id">@cp.Name </a></td>
+                    @{ var rg = (ViewData["Regions"] as List<RegionViewModel>).First(x => x.Id == item.RegionId);}
+                    <td class="w-1"><a class="link-edit" asp-controller="Regions" asp-action="Details" asp-route-id="@rg.Id">@rg.Name </a></td>
+                    @{ var cp = (ViewData["Companies"] as List<CompanyViewModel>).First(x => x.Id == item.CompanyId);}
+                    <td class="w-1"><a class="link-edit" asp-controller="Companies" asp-action="Details" asp-route-id="@cp.Id">@cp.Name </a></td>
                     <td></td>
                 </tr>
                 }

@@ -10,16 +10,21 @@ namespace WebAPI.Models.EssentialGoodsViewModel
 {
     public class ProductModelViewModel : NamedViewModel
     {
+        [Required(ErrorMessage = "Required Field")] 
         public string BarCode { get; set; }
+
+        [Required(ErrorMessage = "Required Field")]
         public double Price { get; set; }
+
+        [Required(ErrorMessage = "Required Field")]
         public double Weight { get; set; }
 
         [Display(Name = "Brand")]
-        [Required(ErrorMessage = "Select a brand")]
+        [Required(ErrorMessage = "Required Field")]
         public Guid BrandId { get; set; }
 
         [Display(Name = "Category")]
-        [Required(ErrorMessage = "Select a category")]
+        [Required(ErrorMessage = "Required Field")]
         public Guid CategoryId { get; set; }
         public static ProductModelViewModel Parse(ProductModel productModel)
         {

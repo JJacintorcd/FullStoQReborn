@@ -30,7 +30,7 @@ namespace WebAPI.Controllers.Web.Commercial
             return new List<BreadCrumb>()
                 { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
                   new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                  new BreadCrumb(){Icon = "fa-hat-chef", Action="Index", Controller="Establishments", Text = "Establishments"}
+                  new BreadCrumb(){Icon = "fas fa-store", Action="Index", Controller="Establishments", Text = "Establishments"}
                 };
         }
 
@@ -111,7 +111,7 @@ namespace WebAPI.Controllers.Web.Commercial
             if (!getROperation.Success) return OperationErrorBackToIndex(getROperation.Exception);
             if (getROperation.Result == null) return RecordNotFound();
 
-            var getCOperation = await _rbo.ReadAsync(getOperation.Result.CompanyId);
+            var getCOperation = await _cbo.ReadAsync(getOperation.Result.CompanyId);
             if (!getCOperation.Success) return OperationErrorBackToIndex(getCOperation.Exception);
             if (getCOperation.Result == null) return RecordNotFound();
 
@@ -121,6 +121,8 @@ namespace WebAPI.Controllers.Web.Commercial
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "Establishments", Icon = "fa-search", Text = "Detail" });
 
+            ViewData["Region"] = RegionViewModel.Parse(getROperation.Result);
+            ViewData["Company"] = CompanyViewModel.Parse(getCOperation.Result);
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
@@ -135,16 +137,16 @@ namespace WebAPI.Controllers.Web.Commercial
             {
                 rList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
             }
-            ViewBag.Region = rList;
+            ViewBag.Regions = rList;
 
             var listCOperation = await _cbo.ListNotDeletedAsync();
             if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
             var cList = new List<SelectListItem>();
             foreach (var item in listCOperation.Result)
             {
-                rList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
+                cList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
             }
-            ViewBag.Region = cList;
+            ViewBag.Companies = cList;
 
             ViewData["Title"] = "Create Establishment";
             var crumbs = GetCrumbs();
@@ -187,7 +189,7 @@ namespace WebAPI.Controllers.Web.Commercial
                 if (item.Id == vm.RegionId) listItem.Selected = true;
                 rList.Add(listItem);
             }
-            ViewBag.DietaryRestrictions = rList;
+            ViewBag.Regions = rList;
 
             var listCOperation = await _cbo.ListNotDeletedAsync();
             if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
@@ -198,7 +200,7 @@ namespace WebAPI.Controllers.Web.Commercial
                 if (item.Id == vm.CompanyId) listItem.Selected = true;
                 cList.Add(listItem);
             }
-            ViewBag.DietaryRestrictions = cList;
+            ViewBag.Companies = cList;
 
             ViewData["Title"] = "Edit Establishment";
             var crumbs = GetCrumbs();

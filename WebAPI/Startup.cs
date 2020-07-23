@@ -19,6 +19,8 @@ using Microsoft.EntityFrameworkCore;
 using Recodme.RD.FullStoQReborn.DataLayer.Person;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Recodme.RD.FullStoQReborn.BusinessLayer.Person;
 
 namespace WebAPI
 {
@@ -136,6 +138,22 @@ namespace WebAPI
                    name: "api",
                    pattern: "api/{controller=Home}/{action=Index}/{id?}");
             });
+        }
+        public void SetupRolesAndUsers(UserManager<FullStoqUser> userManager, RoleManager<FullStoqRole> roleManager)
+        {
+            if (roleManager.FindByNameAsync("Client").Result == null) roleManager.CreateAsync(new FullStoqRole() { Name = "Client" }).Wait();
+            if (roleManager.FindByNameAsync("Staff").Result == null) roleManager.CreateAsync(new FullStoqRole() { Name = "Staff" }).Wait();
+            if (roleManager.FindByNameAsync("Security").Result == null) roleManager.CreateAsync(new FullStoqRole() { Name = "Security" }).Wait();
+            if (roleManager.FindByNameAsync("Management").Result == null) roleManager.CreateAsync(new FullStoqRole() { Name = "Management" }).Wait();
+            if (roleManager.FindByNameAsync("Admin").Result == null) roleManager.CreateAsync(new FullStoqRole() { Name = "Admin" }).Wait();
+            if (userManager.FindByNameAsync("admin").Result == null)
+            {
+                var person = new Profile(912345678, "Utilizador", "Exemplo", 0000000, DateTime.Now);
+                var abo = new AccountBusinessController(userManager, roleManager);
+                var res = abo.Register("admin", "admin@restLen.com", "Admin123!#", person, "Admin").Result;
+                var roleRes = userManager.AddToRoleAsync(userManager.FindByNameAsync("admin").Result, "Admin");
+            }
+
         }
     }
 }
