@@ -1,0 +1,66 @@
+﻿@using WebAPI.Models.EssentialGoodsViewModel;
+@using WebAPI.Models.CommercialViewModel;
+@using WebAPI.Models.PersonViewModel;
+@model ProductUnitViewModel
+
+<div class="card">
+    <div class="card-header bg-greenish-green">
+        <h2 class="float-left">
+            @ViewData["Title"]
+        </h2>
+    </div>
+    <div class="card-body">
+        <div class="ml-5 mr-5">
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.SerialNumber)
+                </dt>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.SerialNumber)
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.IsReserved)
+                </dt>
+                <dd class="col-9">
+                    @Html.DisplayFor(model => model.IsReserved)
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.EstablishmentId)
+                </dt>
+                <dd class="col-9">
+                    @{
+                        var e = ViewData["Establishment"] as EstablishmentViewModel;
+                        var company = ViewData["Company"] as CompanyViewModel;
+                    }
+                    <a asp-controller="Establishments" asp-action="Details" asp-route-id="@e.Id">@company.Name, @e.Address</a>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.ProductModelId)
+                </dt>
+                <dd class="col-9">
+                    @{
+                        var p = ViewData["ProductModel"] as ProductModelViewModel;
+                    }
+                    <a asp-controller="ProductModels" asp-action="Details" asp-route-id="@p.Id">@p.Name</a>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-3">
+                    @Html.DisplayNameFor(model => model.ShoppingBasketId)
+                </dt>
+                <dd class="col-9">
+                    @{
+                        var profile = ViewData["Profile"] as ProfileViewModel;
+                    }
+                    <a asp-controller="Profiles" asp-action="Details" asp-route-id="@profile.Id">@profile.VatNumber</a>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>

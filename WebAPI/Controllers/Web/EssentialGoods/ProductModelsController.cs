@@ -107,7 +107,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             ViewData["Brands"] = bList;
             var cList = await GetCategoryViewModels(listOperation.Result.Select(x => x.CategoryId).Distinct().ToList());
             ViewData["Categories"] = cList;
-            ViewData["Title"] = "ProductModels";
+            ViewData["Title"] = "Product Models";
             ViewData["BreadCrumbs"] = GetCrumbs();
             ViewData["DeleteHref"] = GetDeleteRef();
 
@@ -132,7 +132,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getBOperation.Result == null) return RecordNotFound();
 
             var vm = ProductModelViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "ProductModel";
+            ViewData["Title"] = "Product Model - Details";
 
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = "New", Controller = "ProductModels", Icon = "fa-search", Text = "Details" });
@@ -168,7 +168,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             ViewBag.Brands = bList;
             ViewBag.Categories = cList;
 
-            ViewData["Title"] = "Edit ProductModel";
+            ViewData["Title"] = "Edit - Product Model";
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = "New", Controller = "ProductModels", Icon = "fa-plus", Text = "New" });
             ViewData["BreadCrumbs"] = crumbs;
@@ -211,7 +211,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                     ViewBag.Brands = bList;
                     ViewBag.Categories = cList;
 
-                    ViewData["Title"] = "Edit ProductModel";
+                    ViewData["Title"] = "Edit -  Product Model";
                     var crumbs = GetCrumbs();
                     crumbs.Add(new BreadCrumb() { Action = "New", Controller = "ProductModels", Icon = "fa-plus", Text = "New" });
                     ViewData["BreadCrumbs"] = crumbs;
@@ -257,7 +257,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             }
             ViewBag.Categories = cList;
 
-            ViewData["Title"] = "Edit Course";
+            ViewData["Title"] = "Edit -  Product Model";
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "ProductModels", Icon = "fa-edit", Text = "Edit" });
             ViewData["BreadCrumbs"] = crumbs;
@@ -313,7 +313,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                         }
                         ViewBag.Categories = cList;
 
-                        ViewData["Title"] = "Edit Course";
+                        ViewData["Title"] = "Edit -  Product Model";
                         var crumbs = GetCrumbs();
                         crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "ProductModels", Icon = "fa-edit", Text = "Edit" });
                         ViewData["BreadCrumbs"] = crumbs;
@@ -354,7 +354,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                         }
                         ViewBag.Categories = cList;
 
-                        ViewData["Title"] = "Edit Course";
+                        ViewData["Title"] = "Edit -  Product Model";
                         var crumbs = GetCrumbs();
                         crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "ProductModels", Icon = "fa-edit", Text = "Edit" });
                         ViewData["BreadCrumbs"] = crumbs;

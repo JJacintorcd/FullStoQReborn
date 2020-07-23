@@ -167,7 +167,7 @@ namespace WebAPI.Controllers.Web.Queue
             ViewBag.Profiles = profiList;
             ViewData["Title"] = "New ReservedQueue";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ReservedQueues", Icon = "fa-plus", Text = "New" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ReservedQueues", Icon = "fa-plus", Text = "Create" });
             ViewData["BreadCrumbs"] = crumbs;
             return View();
         }

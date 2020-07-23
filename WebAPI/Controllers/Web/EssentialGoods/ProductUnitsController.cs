@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Recodme.RD.FullStoQReborn.BusinessLayer.Commercial;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
+using Recodme.RD.FullStoQReborn.BusinessLayer.Person;
 using WebAPI.Models;
 using WebAPI.Models.CommercialViewModel;
 using WebAPI.Models.EssentialGoodsViewModel;
 using WebAPI.Models.HtmlComponents;
+using WebAPI.Models.PersonViewModel;
 using WebAPI.Support;
 
 namespace WebAPI.Controllers.Web.EssentialGoods
@@ -20,6 +23,8 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         private readonly EstablishmentBusinessObject _ebo = new EstablishmentBusinessObject();
         private readonly ProductModelBusinessObject _pmbo = new ProductModelBusinessObject();
         private readonly ShoppingBasketBusinessObject _sbbo = new ShoppingBasketBusinessObject();
+        private readonly CompanyBusinessObject _cbo = new CompanyBusinessObject();
+        private readonly ProfileBusinessObject _pbo = new ProfileBusinessObject();
 
 
         private string GetDeleteRef()
@@ -32,7 +37,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return new List<BreadCrumb>()
                 { new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
                   new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
-                  new BreadCrumb(){Icon = "fa-shish-kebab", Action="Index", Controller="Dishes", Text = "Dishes"}
+                  new BreadCrumb(){Icon = "fa-box-open", Action="Index", Controller="ProductUnits", Text = "Product Units"}
                 };
         }
 
@@ -43,6 +48,12 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         }
 
         private IActionResult OperationErrorBackToIndex(Exception exception)
+        {
+            TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, exception);
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IActionResult OperationErrorBackToIndex(string exception)
         {
             TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, exception);
             return RedirectToAction(nameof(Index));
@@ -72,7 +83,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return EstablishmentViewModel.Parse(getOperation.Result);
         }
 
-        private async Task<List<ProductModelViewModel>> GetProductViewModels(List<Guid> ids)
+        private async Task<List<ProductModelViewModel>> GetProductModelViewModels(List<Guid> ids)
         {
             var filterOperation = await _pmbo.FilterAsync(x => ids.Contains(x.Id));
             var eList = new List<ProductModelViewModel>();
@@ -106,18 +117,85 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return ShoppingBasketViewModel.Parse(getOperation.Result);
         }
 
+
+        private async Task<List<CompanyViewModel>> GetCompanyViewModels(List<Guid> ids)
+        {
+            var filterOperation = await _cbo.FilterAsync(x => ids.Contains(x.Id));
+            var drList = new List<CompanyViewModel>();
+            foreach (var item in filterOperation.Result)
+            {
+                drList.Add(CompanyViewModel.Parse(item));
+            }
+            return drList;
+        }
+        private async Task<CompanyViewModel> GetCompanyViewModel(Guid id)
+        {
+            var getOperation = await _cbo.ReadAsync(id);
+            return CompanyViewModel.Parse(getOperation.Result);
+        }
+
+        private async Task<List<ProfileViewModel>> GetProfileViewModels(List<Guid> ids)
+        {
+            var filterOperation = await _pbo.FilterAsync(x => ids.Contains(x.Id));
+            var drList = new List<ProfileViewModel>();
+            foreach (var item in filterOperation.Result)
+            {
+                drList.Add(ProfileViewModel.Parse(item));
+            }
+            return drList;
+        }
+
+        private async Task<ProfileViewModel> GetProfileViewModel(Guid id)
+        {
+            var getOperation = await _pbo.ReadAsync(id);
+            return ProfileViewModel.Parse(getOperation.Result);
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             var listOperation = await _bo.ListNotDeletedAsync();
-            if (!listOperation.Success) return View("Error", new ErrorViewModel() { RequestId = listOperation.Exception.Message });
+            if (!listOperation.Success) return OperationErrorBackToIndex(listOperation.Exception);
+
             var lst = new List<ProductUnitViewModel>();
             foreach (var item in listOperation.Result)
             {
                 lst.Add(ProductUnitViewModel.Parse(item));
             }
-            ViewData["Title"] = "ProductUnits";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "ProductUnits" };
+
+            var listEOperation = await _ebo.ListNotDeletedAsync();
+            if (!listOperation.Success) return OperationErrorBackToIndex(listOperation.Exception);
+
+            var elst = new List<EstablishmentViewModel>();
+            foreach (var item in listEOperation.Result)
+            {
+                elst.Add(EstablishmentViewModel.Parse(item));
+            }
+
+            var listSBOperation = await _sbbo.ListNotDeletedAsync();
+            if (!listOperation.Success) return OperationErrorBackToIndex(listOperation.Exception);
+
+            var sblst = new List<ShoppingBasketViewModel>();
+            foreach (var item in listSBOperation.Result)
+            {
+                sblst.Add(ShoppingBasketViewModel.Parse(item));
+            }
+
+            var eList = await GetEstablishmentViewModels(listOperation.Result.Select(x => x.EstablishmentId).Distinct().ToList());
+            var sbList = await GetShoppingBasketViewModels(listOperation.Result.Select(x => x.ShoppingBasketId).Distinct().ToList());
+            var pmList = await GetProductModelViewModels(listOperation.Result.Select(x => x.ProductModelId).Distinct().ToList());
+            var cList = await GetCompanyViewModels(listEOperation.Result.Select(x => x.CompanyId).Distinct().ToList());
+            var pList = await GetProfileViewModels(listSBOperation.Result.Select(x => x.ProfileId).Distinct().ToList());
+            ViewData["Profiles"] = pList;
+            ViewData["Companies"] = cList;
+            ViewData["Establishments"] = eList;
+            ViewData["ShoppingBaskets"] = sbList;
+            ViewData["ProductModels"] = pmList;
+
+            ViewData["Title"] = "Product Units";
+            ViewData["BreadCrumbs"] = GetCrumbs();
+            ViewData["DeleteHref"] = GetDeleteRef();
             return View(lst);
         }
 
@@ -126,65 +204,303 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         {
             if (id == null) return NotFound();
             var getOperation = await _bo.ReadAsync((Guid)id);
-            if (!getOperation.Success) return View("Error", getOperation.Exception.Message);
-            if (getOperation.Result == null) return NotFound();
+
+            if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+            if (getOperation.Result == null) return RecordNotFound();
+
+            var getEOperation = await _ebo.ReadAsync(getOperation.Result.EstablishmentId);
+            if (!getEOperation.Success) return OperationErrorBackToIndex(getEOperation.Exception);
+            if (getEOperation.Result == null) return RecordNotFound();
+
+            var getSBOperation = await _sbbo.ReadAsync(getOperation.Result.ShoppingBasketId);
+            if (!getSBOperation.Success) return OperationErrorBackToIndex(getSBOperation.Exception);
+            if (getSBOperation.Result == null) return RecordNotFound();
+
+            var getPMOperation = await _pmbo.ReadAsync(getOperation.Result.ProductModelId);
+            if (!getPMOperation.Success) return OperationErrorBackToIndex(getPMOperation.Exception);
+            if (getPMOperation.Result == null) return RecordNotFound();
+
+            var getPOperation = await _pbo.ReadAsync(getSBOperation.Result.ProfileId);
+            if (!getPOperation.Success) return OperationErrorBackToIndex(getPOperation.Exception);
+            if (getPOperation.Result == null) return RecordNotFound();
+
+            var getCOperation = await _cbo.ReadAsync(getEOperation.Result.CompanyId);
+            if (!getCOperation.Success) return OperationErrorBackToIndex(getPMOperation.Exception);
+            if (getCOperation.Result == null) return RecordNotFound();
+
             var vm = ProductUnitViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "ProductUnit";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "ProductUnits", "Details" };
+            ViewData["Title"] = "Product Unit - Details";
+
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "PruductUnits", Icon = "fa-search", Text = "Detail" });
+            ViewData["Profile"] = ProfileViewModel.Parse(getPOperation.Result);
+            ViewData["Company"] = CompanyViewModel.Parse(getCOperation.Result);
+            ViewData["Establishment"] = EstablishmentViewModel.Parse(getEOperation.Result);
+            ViewData["ShoppingBasket"] = ShoppingBasketViewModel.Parse(getSBOperation.Result);
+            ViewData["ProductModel"] = ProductModelViewModel.Parse(getPMOperation.Result);
+            ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
-        [HttpGet("/create")]
-        public IActionResult Create()
+        [HttpGet("create")]
+        public async Task<IActionResult> CreateAsync()
         {
-            ViewData["Title"] = "Edit ProductUnit";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "ProductUnits", "Create" };
+            var listEOperation = await _ebo.ListNotDeletedAsync();
+            if (!listEOperation.Success) return OperationErrorBackToIndex(listEOperation.Exception);
+
+            var eList = new List<SelectListItem>();
+            foreach (var item in listEOperation.Result)
+            {
+                var company = await _cbo.ReadAsync(item.CompanyId);
+                eList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = company.Result.Name + ", " + item.Address });
+            }
+
+            var listSBOperation = await _sbbo.ListNotDeletedAsync();
+            if (!listSBOperation.Success) return OperationErrorBackToIndex(listSBOperation.Exception);
+
+            var sbList = new List<SelectListItem>();
+            foreach (var item in listSBOperation.Result)
+            {
+                var profile = await _pbo.ReadAsync(item.ProfileId);
+                sbList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = profile.Result.VatNumber.ToString() });
+            }
+
+            var listPMOperation = await _pmbo.ListNotDeletedAsync();
+            if (!listPMOperation.Success) return OperationErrorBackToIndex(listPMOperation.Exception);
+
+            var pmList = new List<SelectListItem>();
+            foreach (var item in listPMOperation.Result)
+            {
+                pmList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
+            }
+
+            ViewBag.Establishments = eList;
+            ViewBag.ShoppingBaskets = sbList;
+            ViewBag.ProductModels = pmList;
+
+            ViewData["Title"] = "Create - Product Unit";
+
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ProductUnits", Icon = "fa-plus", Text = "Create" });
+            ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductUnitViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                var model = vm.ToProductUnit();
+                var model = vm.ToModel();
                 var createOperation = await _bo.CreateAsync(model);
-                if (!createOperation.Success) return View("Error", new ErrorViewModel() { RequestId = createOperation.Exception.Message });
-                return RedirectToAction(nameof(Index));
+                if (!createOperation.Success)
+                {
+                    TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
+
+                    var listEOperation = await _ebo.ListNotDeletedAsync();
+                    if (!listEOperation.Success) return OperationErrorBackToIndex(listEOperation.Exception);
+
+                    var eList = new List<SelectListItem>();
+                    foreach (var item in listEOperation.Result)
+                    {
+                        var company = await _cbo.ReadAsync(item.CompanyId);
+                        eList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = company.Result.Name + ", " + item.Address });
+                    }
+
+                    var listSBOperation = await _sbbo.ListNotDeletedAsync();
+                    if (!listSBOperation.Success) return OperationErrorBackToIndex(listSBOperation.Exception);
+
+                    var sbList = new List<SelectListItem>();
+                    foreach (var item in listSBOperation.Result)
+                    {
+                        var profile = await _pbo.ReadAsync(item.ProfileId);
+                        sbList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = profile.Result.VatNumber.ToString() });
+                    }
+
+                    var listPMOperation = await _pmbo.ListNotDeletedAsync();
+                    if (!listPMOperation.Success) return OperationErrorBackToIndex(listPMOperation.Exception);
+
+                    var pmList = new List<SelectListItem>();
+                    foreach (var item in listPMOperation.Result)
+                    {
+                        pmList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
+                    }
+
+                    ViewBag.Establishments = eList;
+                    ViewBag.ShoppingBaskets = sbList;
+                    ViewBag.ProductModels = pmList;
+
+                    ViewData["Title"] = "Create - Product Unit";
+
+                    var crumbs = GetCrumbs();
+                    crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ProductUnits", Icon = "fa-plus", Text = "Create" });
+                    ViewData["BreadCrumbs"] = crumbs;
+
+                    return View(vm);
+                }
+                else return OperationSuccess("The record was successfuly created");
             }
             return View(vm);
         }
 
-        [HttpGet("/edit/{id}")]
+        [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return RecordNotFound();
 
             var getOperation = await _bo.ReadAsync((Guid)id);
-            if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
-            if (getOperation.Result == null) return NotFound();
+            if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+            if (getOperation.Result == null) return RecordNotFound();
+
             var vm = ProductUnitViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "Edit ProductUnit";
-            ViewData["BreadCrumbs"] = new List<string>() { "Home", "ProductUnits", "Edit" };
+
+            var listEOperation = await _ebo.ListNotDeletedAsync();
+            if (!listEOperation.Success) return OperationErrorBackToIndex(listEOperation.Exception);
+
+            var eList = new List<SelectListItem>();
+            foreach (var item in listEOperation.Result)
+            {
+                var company = await _cbo.ReadAsync(item.CompanyId);
+                var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = company.Result.Name + ", " + item.Address};
+                if (item.Id == vm.EstablishmentId) listItem.Selected = true;
+                eList.Add(listItem);
+            }
+            ViewBag.Establishments = eList;
+
+            var listSBOperation = await _sbbo.ListNotDeletedAsync();
+            if (!listSBOperation.Success) return OperationErrorBackToIndex(listSBOperation.Exception);
+
+            var sbList = new List<SelectListItem>();
+            foreach (var item in listSBOperation.Result)
+            {
+                var profile = await _pbo.ReadAsync(item.ProfileId);
+                var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = profile.Result.VatNumber.ToString() };
+                if (item.Id == vm.ProductModelId) listItem.Selected = true;
+                sbList.Add(listItem);
+            }
+            ViewBag.ShoppingBaskets = sbList;
+
+            var listPMOperation = await _pmbo.ListNotDeletedAsync();
+            if (!listPMOperation.Success) return OperationErrorBackToIndex(listPMOperation.Exception);
+
+            var pmList = new List<SelectListItem>();
+            foreach (var item in listPMOperation.Result)
+            {
+                var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.Name };
+                if (item.Id == vm.ShoppingBasketId) listItem.Selected = true;
+                pmList.Add(listItem);
+            }
+            ViewBag.ProductModels = pmList;
+
+            ViewData["Title"] = "Edit - Product Unit";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Dishes", Icon = "fa-edit", Text = "Edit" });
+            ViewData["BreadCrumbs"] = crumbs; 
             return View(vm);
         }
 
-        [HttpPost]
+        [HttpPost("edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, ProductUnitViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 var getOperation = await _bo.ReadAsync(id);
-                if (!getOperation.Success) return View("Error", new ErrorViewModel() { RequestId = getOperation.Exception.Message });
-                if (getOperation.Result == null) return NotFound();
+                if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                if (getOperation.Result == null) return RecordNotFound();
                 var result = getOperation.Result;
-                if (vm.IsReserved != result.IsReserved && vm.SerialNumber != result.SerialNumber && vm.ProductModelId != result.ProductModelId)
+                if (!vm.CompareToModel(result))
                 {
-                    result = vm.ToProductUnit();
+                    result = vm.ToModel(result);
                     var updateOperation = await _bo.UpdateAsync(result);
-                    if (!updateOperation.Success) return View("Error", new ErrorViewModel() { RequestId = updateOperation.Exception.Message });
+                    if (!updateOperation.Success)
+                    {
+                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
+
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = ProductUnitViewModel.Parse(getOperation.Result);
+
+                        var listEOperation = await _ebo.ListNotDeletedAsync();
+                        if (!listEOperation.Success) return OperationErrorBackToIndex(listEOperation.Exception);
+
+                        var eList = new List<SelectListItem>();
+                        foreach (var item in listEOperation.Result)
+                        {
+                            var company = await _cbo.ReadAsync(item.CompanyId);
+                            var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = company.Result.Name + ", " + item.Address };
+                            if (item.Id == vm.EstablishmentId) listItem.Selected = true;
+                            eList.Add(listItem);
+                        }
+                        ViewBag.Establishments = eList;
+
+                        var listSBOperation = await _sbbo.ListNotDeletedAsync();
+                        if (!listSBOperation.Success) return OperationErrorBackToIndex(listSBOperation.Exception);
+
+                        var sbList = new List<SelectListItem>();
+                        foreach (var item in listSBOperation.Result)
+                        {
+                            var profile = await _pbo.ReadAsync(item.ProfileId);
+                            var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = profile.Result.VatNumber.ToString() };
+                            if (item.Id == vm.ProductModelId) listItem.Selected = true;
+                            sbList.Add(listItem);
+                        }
+                        ViewBag.ShoppingBaskets = sbList;
+
+                        ViewData["Title"] = "Edit - Product Unit";
+                        var crumbs = GetCrumbs();
+                        crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Dishes", Icon = "fa-edit", Text = "Edit" });
+                        ViewData["BreadCrumbs"] = crumbs;
+
+                        return View(vm);
+                    }
+                    if (!updateOperation.Result)
+                    {
+                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Message);
+
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = ProductUnitViewModel.Parse(getOperation.Result);
+
+                        var listEOperation = await _ebo.ListNotDeletedAsync();
+                        if (!listEOperation.Success) return OperationErrorBackToIndex(listEOperation.Exception);
+
+                        var eList = new List<SelectListItem>();
+                        foreach (var item in listEOperation.Result)
+                        {
+                            var company = await _cbo.ReadAsync(item.CompanyId);
+                            var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = company.Result.Name + ", " + item.Address };
+                            if (item.Id == vm.EstablishmentId) listItem.Selected = true;
+                            eList.Add(listItem);
+                        }
+                        ViewBag.Establishments = eList;
+
+                        var listSBOperation = await _sbbo.ListNotDeletedAsync();
+                        if (!listSBOperation.Success) return OperationErrorBackToIndex(listSBOperation.Exception);
+
+                        var sbList = new List<SelectListItem>();
+                        foreach (var item in listSBOperation.Result)
+                        {
+                            var profile = await _pbo.ReadAsync(item.ProfileId);
+                            var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = profile.Result.VatNumber.ToString() };
+                            if (item.Id == vm.ProductModelId) listItem.Selected = true;
+                            sbList.Add(listItem);
+                        }
+                        ViewBag.ShoppingBaskets = sbList;
+
+                        ViewData["Title"] = "Edit - Product Unit";
+                        var crumbs = GetCrumbs();
+                        crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Dishes", Icon = "fa-edit", Text = "Edit" });
+                        ViewData["BreadCrumbs"] = crumbs;
+
+                        return View(vm);
+                    }
+                    else return OperationSuccess("The record was successfuly updated");
                 }
             }
             return RedirectToAction(nameof(Index));

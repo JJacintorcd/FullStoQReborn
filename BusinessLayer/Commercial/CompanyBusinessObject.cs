@@ -96,10 +96,10 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.List().Any(x => (x.VatNumber == item.VatNumber || x.Name == item.Name) && item.Id != x.Id && !x.IsDeleted))
+                if (_dao.List().Any(x => (x.VatNumber == item.VatNumber || x.Name.ToLower() == item.Name.ToLower()) && item.Id != x.Id && !x.IsDeleted))
                 {
                     if (_dao.List().Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
-                    if (_dao.List().Any(x => x.Name == item.Name && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                    if (_dao.List().Any(x => x.Name.ToLower() == item.Name.ToLower() && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 }
                 _dao.Update(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
@@ -117,7 +117,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
                 if (_dao.ListAsync().Result.Any(x => (x.VatNumber == item.VatNumber || x.Name == item.Name) && item.Id != x.Id && !x.IsDeleted))
                 {
                     if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
-                    if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                    if (_dao.ListAsync().Result.Any(x => x.Name.ToLower() == item.Name.ToLower() && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 }
                 await _dao.UpdateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
