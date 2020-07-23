@@ -127,6 +127,14 @@ namespace WebAPI.Controllers.Web.Commercial
             return View(vm);
         }
 
+        public void Draw(string type, string icon)
+        {
+            ViewData["Title"] = $"{type} Establishment";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "Establishments", Icon = icon, Text = type });
+            ViewData["BreadCrumbs"] = crumbs;
+        }
+
         [HttpGet("create")]
         public async Task<IActionResult> Create()
         {
@@ -148,10 +156,7 @@ namespace WebAPI.Controllers.Web.Commercial
             }
             ViewBag.Companies = cList;
 
-            ViewData["Title"] = "Create Establishment";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Establishments", Icon = "fa-search", Text = "Create" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Create", "fa-plus");
             return View();
         }
 
@@ -164,7 +169,13 @@ namespace WebAPI.Controllers.Web.Commercial
                 var model = vm.ToModel();
                 var createOperation = await _bo.CreateAsync(model);
                 if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
-                return OperationSuccess("The record was successfuly created");
+                if (!createOperation.Result)
+                {
+                    TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
+                    Draw("Create", "fa-plus");
+                    return View(vm);
+                }
+                else return OperationSuccess("The record was successfuly created");
             }
             return View(vm);
         }
@@ -202,10 +213,7 @@ namespace WebAPI.Controllers.Web.Commercial
             }
             ViewBag.Companies = cList;
 
-            ViewData["Title"] = "Edit Establishment";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Establishments", Icon = "fa-search", Text = "Edit" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Edit", "fa-edit");
             return View(vm);
         }
 
@@ -227,6 +235,23 @@ namespace WebAPI.Controllers.Web.Commercial
                     if (!updateOperation.Success)
                     {
                         TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = EstablishmentViewModel.Parse(getOperation.Result);
+                        Draw("Edit", "fa-edit");
+                        return View(vm);
+                    }
+                    if (!updateOperation.Result)
+                    {
+                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Message);
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = EstablishmentViewModel.Parse(getOperation.Result);
+                        Draw("Edit", "fa-edit");
                         return View(vm);
                     }
                     else return OperationSuccess("The record was successfuly updated");

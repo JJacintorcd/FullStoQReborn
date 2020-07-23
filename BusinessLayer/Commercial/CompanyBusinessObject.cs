@@ -29,7 +29,11 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.List().Any(x => x.VatNumber == item.VatNumber && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
+                if (_dao.List().Any(x => (x.VatNumber == item.VatNumber || x.Name.ToLower() == item.Name.ToLower()) && !x.IsDeleted))
+                {
+                    if (_dao.List().Any(x => x.VatNumber == item.VatNumber)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
+                    if (_dao.List().Any(x => x.Name.ToLower() == item.Name.ToLower())) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                }
                 _dao.Create(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -42,9 +46,12 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         public async Task<OperationResult<bool>> CreateAsync(Company item)
         {
             try
-            {                
-                if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber && !x.IsDeleted))
-                    return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
+            {
+                if (_dao.List().Any(x => (x.VatNumber == item.VatNumber || x.Name.ToLower() == item.Name.ToLower()) && !x.IsDeleted))
+                {
+                    if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
+                    if (_dao.ListAsync().Result.Any(x => x.Name.ToLower() == item.Name.ToLower())) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                }
                 await _dao.CreateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
