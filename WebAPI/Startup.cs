@@ -21,6 +21,7 @@ using Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Recodme.RD.FullStoQReborn.BusinessLayer.Person;
+using Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders;
 
 namespace WebAPI
 {
@@ -29,6 +30,8 @@ namespace WebAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            ContextSeeder.Seed();
+
         }
 
         public IConfiguration Configuration { get; }
