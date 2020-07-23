@@ -24,10 +24,6 @@ a {
     color:#FFE100;
 }
 
-.label{
-    margin-left:400px;
-
-}
 
 .logo {
     height: auto;
@@ -53,7 +49,9 @@ a {
 html {
     font-size: 14px;
 }
-
+.label{
+    margin-left:400px;
+}
 @media (min-width: 768px) {
     html {
         font-size: 16px;
