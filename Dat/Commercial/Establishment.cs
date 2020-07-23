@@ -56,7 +56,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
 
         private string _closingDays;
 
-        [Required]
+        //[Required]
         [Display(Name = "Closing Days")]
         public string ClosingDays
         {
@@ -104,26 +104,26 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
         public virtual ICollection<ProductUnit> ProductUnits { get; set; }
 
 
-        public Establishment(string address, string openingHours, string closingHours, string closingDays, Guid regionId,
+        public Establishment(string address, string openingHours, string closingHours, string? closingDays, Guid regionId,
             Guid companyId)
         {
             Address = address;
             OpeningHours = openingHours;
             ClosingHours = closingHours;
-            ClosingDays = closingDays;
+            ClosingDays = (string)closingDays;
             _regionId = regionId;
             _companyId = companyId;
 
         }
 
         public Establishment(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted,
-            string address, string openingHours, string closingHours, string closingDays, Guid regionId,
+            string address, string openingHours, string closingHours, string? closingDays, Guid regionId,
             Guid companyId) : base(id, createdAt, updatedAt, isDeleted)
         {
             Address = address;
             OpeningHours = openingHours;
             ClosingHours = closingHours;
-            ClosingDays = closingDays;
+            ClosingDays = (string)closingDays;
             _regionId = regionId;
             _companyId = companyId;
         }

@@ -2,22 +2,14 @@
 @model RegionViewModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create Region";
 }
 
-<div class="card ml-5 mr-5">
+<div class="card">
     <div class="card-header">
-        <div class="float-right">
-            <a asp-action="Index" asp-controller="Home"><i class="fas fa-home mr-2"></i></a>
-            /
-            <a asp-action="Index" asp-controller="Region">
-                <i class="fas fa-copyright mr-2"></i>Regions
-            </a>
-            /
-            <i class="fas fa-plus mr-2"></i>Create
-
-        </div>
-        <h4 class="m-0 p-0">Create Region</h4>
+        <h2 class="float-left">
+            @ViewData["Title"]
+        </h2>
     </div>
     <div class="card-body">
         <div class="row">
@@ -36,9 +28,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 @section Scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
