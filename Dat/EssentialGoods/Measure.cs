@@ -9,6 +9,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
         Kg,
         g,
         L,
-        mL
+        mL, 
+        Units
     }
 }

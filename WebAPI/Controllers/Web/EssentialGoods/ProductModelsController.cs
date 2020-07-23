@@ -203,14 +203,13 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                     {
                         bList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
                     }
+                    ViewBag.Brands = bList;
 
                     var cList = new List<SelectListItem>();
                     foreach (var item in listCOperation.Result)
                     {
                         cList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
                     }
-
-                    ViewBag.Brands = bList;
                     ViewBag.Categories = cList;
 
                     Draw("Create", "fa-plus");
