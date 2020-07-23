@@ -22,8 +22,7 @@ namespace WebAPI.Models.QueueViewModel
             {
                 Id = storeQueue.Id,
                 Quantity = storeQueue.Quantity,
-                EstablishmentId = storeQueue.EstablishmentId,
-                Id = storeQueue.Id
+                EstablishmentId = storeQueue.EstablishmentId
             };
         }
 

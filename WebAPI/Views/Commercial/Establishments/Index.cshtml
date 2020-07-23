@@ -46,10 +46,10 @@
                     <td class="w-1">
                         @item.ClosingDays
                     </td>
-                    @{ var rg = (ViewData["Region"] as List<RegionViewModel>).First(x => x.Id == item.RegionId);}
-                    <td class="w-1"><a class="link-edit" asp-controller="DietaryRestrictions" asp-action="Details" asp-route-id="@rg.Id">@rg.Name </a></td>
-                    @{ var cp = (ViewData["Company"] as List<CompanyViewModel>).First(x => x.Id == item.CompanyId);}
-                    <td class="w-1"><a class="link-edit" asp-controller="DietaryRestrictions" asp-action="Details" asp-route-id="@cp.Id">@cp.Name </a></td>
+                    @{ var rg = (ViewData["Regions"] as List<RegionViewModel>).First(x => x.Id == item.RegionId);}
+                    <td class="w-1"><a class="link-edit" asp-controller="Regions" asp-action="Details" asp-route-id="@rg.Id">@rg.Name </a></td>
+                    @{ var cp = (ViewData["Companies"] as List<CompanyViewModel>).First(x => x.Id == item.CompanyId);}
+                    <td class="w-1"><a class="link-edit" asp-controller="Companies" asp-action="Details" asp-route-id="@cp.Id">@cp.Name </a></td>
                     <td></td>
                 </tr>
                 }
