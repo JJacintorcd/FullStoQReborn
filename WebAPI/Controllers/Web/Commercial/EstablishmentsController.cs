@@ -258,7 +258,30 @@ namespace WebAPI.Controllers.Web.Commercial
                         if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
                         if (getOperation.Result == null) return RecordNotFound();
 
+                        var listROperation = await _rbo.ListNotDeletedAsync();
+                        if (!listROperation.Success) return OperationErrorBackToIndex(listROperation.Exception);
+                        var rList = new List<SelectListItem>();
+                        foreach (var item in listROperation.Result)
+                        {
+                            var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.Name };
+                            if (item.Id == vm.RegionId) listItem.Selected = true;
+                            rList.Add(listItem);
+                        }
+                        ViewBag.Regions = rList;
+
+                        var listCOperation = await _cbo.ListNotDeletedAsync();
+                        if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
+                        var cList = new List<SelectListItem>();
+                        foreach (var item in listCOperation.Result)
+                        {
+                            var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.Name };
+                            if (item.Id == vm.CompanyId) listItem.Selected = true;
+                            cList.Add(listItem);
+                        }
+                        ViewBag.Companies = cList;
+
                         vm = EstablishmentViewModel.Parse(getOperation.Result);
+
                         Draw("Edit", "fa-edit");
                         return View(vm);
                     }
@@ -268,8 +291,30 @@ namespace WebAPI.Controllers.Web.Commercial
                         getOperation = await _bo.ReadAsync((Guid)id);
                         if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
                         if (getOperation.Result == null) return RecordNotFound();
+                        var listROperation = await _rbo.ListNotDeletedAsync();
+                        if (!listROperation.Success) return OperationErrorBackToIndex(listROperation.Exception);
+                        var rList = new List<SelectListItem>();
+                        foreach (var item in listROperation.Result)
+                        {
+                            var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.Name };
+                            if (item.Id == vm.RegionId) listItem.Selected = true;
+                            rList.Add(listItem);
+                        }
+                        ViewBag.Regions = rList;
+
+                        var listCOperation = await _cbo.ListNotDeletedAsync();
+                        if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
+                        var cList = new List<SelectListItem>();
+                        foreach (var item in listCOperation.Result)
+                        {
+                            var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.Name };
+                            if (item.Id == vm.CompanyId) listItem.Selected = true;
+                            cList.Add(listItem);
+                        }
+                        ViewBag.Companies = cList;
 
                         vm = EstablishmentViewModel.Parse(getOperation.Result);
+
                         Draw("Edit", "fa-edit");
                         return View(vm);
                     }
