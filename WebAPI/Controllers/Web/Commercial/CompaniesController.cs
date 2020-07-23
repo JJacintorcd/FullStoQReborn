@@ -106,9 +106,9 @@ namespace WebAPI.Controllers.Web.Commercial
                 if (!createOperation.Result)
                 {
                     TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
-                    ViewData["Title"] = "New Company";
+                    ViewData["Title"] = "Create Company";
                     var crumbs = GetCrumbs();
-                    crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Companies", Icon = "fa-plus", Text = "New" });
+                    crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Companies", Icon = "fa-plus", Text = "New" });
                     ViewData["BreadCrumbs"] = crumbs;
 
                     return View();

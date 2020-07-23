@@ -8,11 +8,6 @@ namespace WebAPI.Models.PersonViewModel
 {
     public class RegisterViewModel
     {
-
-        [Display(Name = "BirthDate")]
-        [Required(ErrorMessage = "Input the birthdate")]
-        public DateTime BirthDate { get; set; }
-
         [Display(Name = "User Name")]
         [Required(ErrorMessage = "Input the user name")]
         public string UserName { get; set; }
@@ -24,6 +19,10 @@ namespace WebAPI.Models.PersonViewModel
         [Display(Name = "Last Name")]
         [Required(ErrorMessage = "Input the last name")]
         public string LastName { get; set; }
+
+        [Display(Name = "BirthDate")]
+        [Required(ErrorMessage = "Input the birthdate")]
+        public DateTime BirthDate { get; set; }
 
         [Display(Name = "VAT Number")]
         [Required(ErrorMessage = "Input the VAT number")]

@@ -90,7 +90,7 @@ namespace WebAPI.Controllers.Web.Person
         [HttpGet("create")]
         public IActionResult Create()
         {
-            ViewData["Title"] = "New Profile";
+            ViewData["Title"] = "Create Profile";
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Profiles", Icon = "fa-plus", Text = "New" });
             ViewData["BreadCrumbs"] = crumbs;

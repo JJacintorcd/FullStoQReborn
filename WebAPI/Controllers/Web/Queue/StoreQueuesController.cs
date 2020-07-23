@@ -110,7 +110,7 @@ namespace WebAPI.Controllers.Web.Queue
             var vm = StoreQueueViewModel.Parse(getOperation.Result);
             ViewData["Title"] = "StoreQueue";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "StoreQueues", Icon = "fa-search", Text = "Detail" });
+            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "StoreQueues", Icon = "fa-search", Text = "Details" });
             ViewData["Establishment"] = EstablishmentViewModel.Parse(getDrOperation.Result);
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
@@ -128,7 +128,7 @@ namespace WebAPI.Controllers.Web.Queue
                 drList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Address });
             }
             ViewBag.Establishments = drList;
-            ViewData["Title"] = "New StoreQueue";
+            ViewData["Title"] = "Create StoreQueue";
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "StoreQueues", Icon = "fa-plus", Text = "New" });
             ViewData["BreadCrumbs"] = crumbs;

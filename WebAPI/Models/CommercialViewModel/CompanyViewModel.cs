@@ -1,4 +1,5 @@
 ﻿using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
+using System.ComponentModel.DataAnnotations;
 using WebAPI.Models.Base;
 
 namespace WebAPI.Models.CommercialViewModel
@@ -6,6 +7,8 @@ namespace WebAPI.Models.CommercialViewModel
     public class CompanyViewModel : NamedViewModel
     {
         public CompanyViewModel() { }
+
+        [Required(ErrorMessage = "Required Field")]
         public long VatNumber { get; set; }
 
         public static CompanyViewModel Parse(Company company)

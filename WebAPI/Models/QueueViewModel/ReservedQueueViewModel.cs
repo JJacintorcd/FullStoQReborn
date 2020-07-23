@@ -1,12 +1,18 @@
 ﻿using Recodme.RD.FullStoQReborn.DataLayer.Queue;
 using System;
+using System.ComponentModel.DataAnnotations;
 using WebAPI.Models.Base;
 
 namespace WebAPI.Models.QueueViewModel
 {
     public class ReservedQueueViewModel:BaseViewModel
     {
+        [Display(Name = "Profile")]
+        [Required(ErrorMessage = "Required Field")]
         public Guid ProfileId { get; set; }
+        
+        [Display(Name = "Establishment")]
+        [Required(ErrorMessage = "Required Field")] 
         public Guid EstablishmentId { get; set; }
 
         public ReservedQueue ToReservedQueue()

@@ -11,22 +11,23 @@ namespace WebAPI.Models.EssentialGoodsViewModel
     public class ProductUnitViewModel : BaseViewModel
     {
         [Display(Name = "Serial Number")]
-        [Required(ErrorMessage = "Select a serial number")]
+        [Required(ErrorMessage = "Required Field")]
         public string SerialNumber { get; set; }
 
-        [Display]
-        [Required]
+        [Display(Name = "Is Reserved")]
         public bool IsReserved { get; set; }
 
         [Display(Name = "Product Model")]
-        [Required(ErrorMessage = "Select a product model")]
+        [Required(ErrorMessage = "Required Field")]
         public Guid ProductModelId { get; set; }
 
         [Display(Name = "Establishment")]
-        [Required(ErrorMessage = "Select an establishment")]
+        [Required(ErrorMessage = "Required Field")]
         public Guid EstablishmentId { get; set; }
 
+
         [Display(Name = "Shopping Basket")]
+        [Required(ErrorMessage = "Required Field")]
         public Guid ShoppingBasketId { get; set; }
 
 
