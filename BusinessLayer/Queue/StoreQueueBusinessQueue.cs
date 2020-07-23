@@ -22,17 +22,17 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
 
         #region C
 
-        public OperationResult Create(StoreQueue item)
+        public OperationResult<bool> Create(StoreQueue item)
         {
             try
             {
                 _dao.Create(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true };
 
             }
             catch (Exception e)
             {
-                return new OperationResult() { Success = false, Exception = e };
+                return new OperationResult<bool>() { Success = false, Exception = e };
 
             }
 
@@ -42,7 +42,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
             try
             {
                 await _dao.CreateAsync(item);
-                return new OperationResult() { Success = true };
+                return new OperationResult<bool>() { Success = true };
 
             }
             catch (Exception e)

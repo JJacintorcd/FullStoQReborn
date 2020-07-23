@@ -71,6 +71,14 @@ namespace WebAPI.Controllers.Web.Queue
             return EstablishmentViewModel.Parse(getOperation.Result);
         }
 
+        public void Draw(string type, string icon)
+        {
+            ViewData["Title"] = $"{type} Store Queue";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "StoreQueues", Icon = icon, Text = type });
+            ViewData["BreadCrumbs"] = crumbs;
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -108,11 +116,8 @@ namespace WebAPI.Controllers.Web.Queue
             if (getDrOperation.Result == null) return RecordNotFound();
 
             var vm = StoreQueueViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "StoreQueue";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "StoreQueues", Icon = "fa-search", Text = "Details" });
+            Draw("Details", "fa-search");
             ViewData["Establishment"] = EstablishmentViewModel.Parse(getDrOperation.Result);
-            ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
@@ -128,10 +133,7 @@ namespace WebAPI.Controllers.Web.Queue
                 drList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Address });
             }
             ViewBag.Establishments = drList;
-            ViewData["Title"] = "Create StoreQueue";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "StoreQueues", Icon = "fa-plus", Text = "New" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Create", "fa-plus");
             return View();
         }
 
@@ -145,6 +147,7 @@ namespace WebAPI.Controllers.Web.Queue
                 var model = vm.ToStoreQueue();
                 var createOperation = await _bo.CreateAsync(model);
                 if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+
                 else return OperationSuccess("The record was successfuly created");
             }
             return View(vm);
@@ -171,10 +174,7 @@ namespace WebAPI.Controllers.Web.Queue
                 drList.Add(listItem);
             }
             ViewBag.Establishments = drList;
-            ViewData["Title"] = "Edit StoreQueue";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "StoreQueues", Icon = "fa-edit", Text = "Edit" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Edit", "fa-edit");
             return View(vm);
         }
 
@@ -196,6 +196,7 @@ namespace WebAPI.Controllers.Web.Queue
                     if (!updateOperation.Success)
                     {
                         TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
+                        Draw("Edit", "fa-edit");
                         return View(vm);
                     }
                     else return OperationSuccess("The record was successfuly updated");
