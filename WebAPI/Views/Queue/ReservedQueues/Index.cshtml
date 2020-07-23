@@ -1,4 +1,6 @@
 ﻿@using WebAPI.Models.QueueViewModel;
+@using WebAPI.Models.CommercialViewModel;
+@using WebAPI.Models.PersonViewModel;
 @model IEnumerable<ReservedQueueViewModel>
 
 <div class="card">
@@ -7,7 +9,7 @@
             @ViewData["Title"]
         </h2>
         <p class="float-right mt-2 mb-0">
-            <a asp-action="New" asp-controller="ReservedQueues" class="text-white btn btn-success" style="font-size:0.8em"><i class="fas fa-plus mr-1"></i>New</a>
+            <a asp-action="Create" asp-controller="ReservedQueues" class="text-white btn btn-success" style="font-size:0.8em"><i class="fas fa-plus mr-1"></i>Create</a>
         </p>
     </div>
     <div class="card-body table-responsive">
@@ -15,8 +17,8 @@
             <thead>
                 <tr>
                     <th class="no-sort w-1"></th>
-                    <th class="w-1">@Html.DisplayNameFor(model => model.EstablishmentId)</th>
-                    <th class="w-1">@Html.DisplayNameFor(model => model.ProfileId)</th>
+                    <th class="w-1">Establishment</th>
+                    <th class="w-1">Profile</th>
 
                     <th class="no-sort"></th>
                 </tr>
@@ -30,8 +32,12 @@
                             <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
                             <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
                         </td>
-                        <td class="w-1">@Html.DisplayFor(x => item.EstablishmentId)</td>
-                        <td class="w-1">@Html.DisplayFor(x => item.ProfileId)</td>
+                        
+                        @{ var est = (ViewData["Establishments"] as List<EstablishmentViewModel>).First(x => x.Id == item.EstablishmentId);}
+                        <td class="w-1"><a class="link-edit" asp-controller="Establishments" asp-action="Details" asp-route-id="@est.Id">@est.Address </a></td>
+                        
+                        @{ var prod = (ViewData["Profiles"] as List<ProfileViewModel>).First(x => x.Id == item.ProfileId);}
+                        <td class="w-1"><a class="link-edit" asp-controller="Profiles" asp-action="Details" asp-route-id="@prod.Id">@prod.VatNumber </a></td>
                         <td></td>
                     </tr>
                 }

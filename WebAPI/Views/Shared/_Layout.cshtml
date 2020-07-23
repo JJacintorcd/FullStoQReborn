@@ -19,23 +19,24 @@
     <script src="~/lib/bootstrap/dist/js/dataTables.bootstrap4.min.js"></script>
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body>
+<body >
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-phthalo-green mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-company mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/logo.svg" />
-                    Full StoQ
+                   
+                    <img src="~/images/logo.svg" class="logo" />
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse float-left">
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse float-left bg-blue">
                     <ul class="navbar-nav">
+
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
+                            <li class="nav-item font">
                                 <a class="nav-link text-light" title="Manage">
                                     <i class="fas fa-user"></i>
                                     Hello @User.Identity.Name!

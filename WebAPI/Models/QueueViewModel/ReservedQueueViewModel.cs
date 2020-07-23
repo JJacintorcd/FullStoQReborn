@@ -19,7 +19,8 @@ namespace WebAPI.Models.QueueViewModel
             {
                 Id = reservedQueue.Id,
                 ProfileId = reservedQueue.ProfileId,
-                EstablishmentId = reservedQueue.EstablishmentId
+                EstablishmentId = reservedQueue.EstablishmentId,
+                Id = reservedQueue.Id
             };
         }
 

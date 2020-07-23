@@ -3,7 +3,6 @@ using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebAPI.Models;
 using WebAPI.Models.EssentialGoodsViewModel;
 using WebAPI.Models.HtmlComponents;
 using WebAPI.Support;
@@ -80,31 +79,41 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             ViewData["Title"] = "Brand";
 
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Brands", Icon = "fa-search", Text = "Detail" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Brands", Icon = "fa-search", Text = "Detail" });
 
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
-        [HttpGet("new")]
-        public IActionResult New()
+        [HttpGet("Create")]
+        public IActionResult Create()
         {
             ViewData["Title"] = "New Brand";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "Brands", Icon = "fa-plus", Text = "New" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Brands", Icon = "fa-plus", Text = "Create" });
             ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
 
-        [HttpPost("new")]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> New(BrandViewModel vm)
+        public async Task<IActionResult> Create(BrandViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 var model = vm.ToModel();
                 var createOperation = await _bo.CreateAsync(model);
                 if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+                if (!createOperation.Result)
+                {
+                    TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
+                    ViewData["Title"] = "Create Company";
+                    var crumbs = GetCrumbs();
+                    crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Brands", Icon = "fa-plus", Text = "Create" });
+                    ViewData["BreadCrumbs"] = crumbs;
+
+                    return View();
+                }
                 else return OperationSuccess("The record was successfuly created");
             }
             return View(vm);

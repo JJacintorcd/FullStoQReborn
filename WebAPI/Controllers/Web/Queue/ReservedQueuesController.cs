@@ -143,8 +143,8 @@ namespace WebAPI.Controllers.Web.Queue
             return View(vm);
         }
 
-        [HttpGet("new")]
-        public async Task<IActionResult> New()
+        [HttpGet("create")]
+        public async Task<IActionResult> Create()
         {
             var listEstOperation = await _ebo.ListNotDeletedAsync();
             if (!listEstOperation.Success) return OperationErrorBackToIndex(listEstOperation.Exception);
@@ -159,23 +159,23 @@ namespace WebAPI.Controllers.Web.Queue
             }
 
             var profiList = new List<SelectListItem>();
-            foreach (var item in listEstOperation.Result)
+            foreach (var item in listProOperation.Result)
             {
-                profiList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Address });
+                profiList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.VatNumber.ToString() });
             }
             ViewBag.Establishments = estList;
             ViewBag.Profiles = profiList;
             ViewData["Title"] = "New ReservedQueue";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "ReservedQueues", Icon = "fa-plus", Text = "New" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ReservedQueues", Icon = "fa-plus", Text = "Create" });
             ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
 
 
-        [HttpPost("new")]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> New(ReservedQueueViewModel vm)
+        public async Task<IActionResult> Create(ReservedQueueViewModel vm)
         {
             if (ModelState.IsValid)
             {

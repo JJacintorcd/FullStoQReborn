@@ -23,7 +23,6 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
         }
 
         [Required]
-        [Display(Name = "Price")]
         private double _price;
         public double Price
         {
@@ -36,7 +35,6 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
         }
 
         [Required]
-        [Display(Name = "Weight")]
         private double _weight;
         public double Weight
         {
@@ -48,12 +46,33 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
             }
         }
 
+
+        private Guid brandId;
+
         [ForeignKey("Brand")]
-        public Guid BrandId { get; set; }
+        public Guid BrandId
+        {
+            get => brandId;
+            set
+            {
+                brandId = value;
+                RegisterChange();
+            }
+        }
         public virtual Brand Brand { get; set; }
 
+        private Guid _categoryId;
+
         [ForeignKey("Category")]
-        public Guid CategoryId { get; set; }
+        public Guid CategoryId
+        {
+            get => _categoryId;
+            set
+            {
+                _categoryId = value;
+                RegisterChange();
+            }
+        }
         public virtual Category Category { get; set; }
 
         public virtual ICollection<ProductUnit> ProductUnits { get; set; }

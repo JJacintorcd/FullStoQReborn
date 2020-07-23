@@ -81,25 +81,25 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             ViewData["Title"] = "ShoppingBasket";
 
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "ShoppingBaskets", Icon = "fa-search", Text = "Detail" });
+            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "ShoppingBaskets", Icon = "fa-search", Text = "Detail" });
 
             ViewData["BreadCrumbs"] = crumbs;
             return View(vm);
         }
 
-        [HttpGet("new")]
-        public IActionResult New()
+        [HttpGet("create")]
+        public IActionResult Create()
         {
             ViewData["Title"] = "New ShoppingBasket";
             var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "New", Controller = "ShoppingBaskets", Icon = "fa-plus", Text = "New" });
+            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "ShoppingBaskets", Icon = "fa-plus", Text = "New" });
             ViewData["BreadCrumbs"] = crumbs;
             return View();
         }
 
-        [HttpPost("new")]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> New(ShoppingBasketViewModel vm)
+        public async Task<IActionResult> Create(ShoppingBasketViewModel vm)
         {
             if (ModelState.IsValid)
             {

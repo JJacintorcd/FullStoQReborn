@@ -3,7 +3,6 @@ using Recodme.RD.FullStoQReborn.BusinessLayer.Commercial;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebAPI.Models;
 using WebAPI.Models.CommercialViewModel;
 using WebAPI.Models.HtmlComponents;
 using WebAPI.Support;
