@@ -48,6 +48,14 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return RedirectToAction(nameof(Index));
         }
 
+        public void Draw(string type)
+        {
+            ViewData["Title"] = $"{type} Category";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "Category", Icon = "fa-plus", Text = type });
+            ViewData["BreadCrumbs"] = crumbs;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -75,22 +83,12 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getOperation.Result == null) return RecordNotFound();
 
             var vm = CategoryViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "Category";
-
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "Categories", Icon = "fa-search", Text = "Detail" });
-
-            ViewData["BreadCrumbs"] = crumbs;
+            
+            Draw("Details");
             return View(vm);
         }
 
-        public void Draw(string type)
-        {
-            ViewData["Title"] = $"{type} Category";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = type, Controller = "Category", Icon = "fa-plus", Text = type });
-            ViewData["BreadCrumbs"] = crumbs;
-        }
+        
 
         [HttpGet("create")]
         public IActionResult Create()
