@@ -12,16 +12,21 @@ a {
     color: #EDE9EA;
 }
 
+
 .bg-blue {
     background-color: #0A1550;
     height:70px;
 }
 
+.text h1{
+    text-align: center;
+    margin:
+}
+
 .logo {
     height: auto;
     width: 150px;
-    margin-right:150px;
-    
+    margin-right: 100px;
 }
 
 

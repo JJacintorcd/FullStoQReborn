@@ -88,7 +88,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         [HttpGet("Create")]
         public IActionResult Create()
         {
-            ViewData["Title"] = "New Brand";
+            ViewData["Title"] = "Create Brand";
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Brands", Icon = "fa-plus", Text = "Create" });
             ViewData["BreadCrumbs"] = crumbs;

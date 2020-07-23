@@ -19,12 +19,11 @@
     <script src="~/lib/bootstrap/dist/js/dataTables.bootstrap4.min.js"></script>
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body >
+<body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-company mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                   
                     <img src="~/images/logo.svg" class="logo" />
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -33,6 +32,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse float-left bg-blue">
                     <ul class="navbar-nav">
+
 
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -110,6 +110,7 @@
             </nav>
         }
     </header>
+
     <div class="container">
         @{
             if (TempData["Alert"] != null)
@@ -130,6 +131,22 @@
         }
         <main role="main" class="pb-3">
             @RenderBody()
+            <div class="text">
+                <h1>  Hello @User.Identity.Name! </h1>
+            </div>
+            
+            <form class="form-row">
+                <div class="form-group  col-lg-3 col-md-6 col-sm-12">
+                    <select class="form-control form-control-lg">
+                        <option>Store</option>
+                    </select>
+                </div>
+                <div class="form-group  col-lg-3 col-md-6 col-sm-12">
+                    <select class="form-control form-control-lg">
+                        <option>Region</option>
+                    </select>
+                </div>
+            </form>
         </main>
     </div>
 
