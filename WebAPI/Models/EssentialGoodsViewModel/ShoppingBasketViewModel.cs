@@ -17,6 +17,7 @@ namespace WebAPI.Models.EssentialGoodsViewModel
         {
             return new ShoppingBasketViewModel()
             {
+                Id = shoppingBasket.Id,
                 ProfileId = shoppingBasket.ProfileId
             };
         }

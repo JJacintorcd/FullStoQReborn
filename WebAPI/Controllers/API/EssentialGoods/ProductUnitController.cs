@@ -23,7 +23,7 @@ namespace WebAPI.Controllers.Api.EssentialGoods
         [HttpPost]
         public ActionResult Create([FromBody]ProductUnitViewModel vm)
         {
-            var productUnit = vm.ToProductUnit();
+            var productUnit = vm.ToModel();
             var res = _bo.Create(productUnit);
             return StatusCode(res.Success ? (int)HttpStatusCode.OK : (int)HttpStatusCode.InternalServerError);
         }
