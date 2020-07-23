@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ConnectionString" xml:space="preserve">
-    <value>Server=RECODME-VASCOV\SQLEXPRESS;Database=FullStoQ;Trusted_Connection=true;</value>
+    <value>Server=RECODME-AMARTIM\SQLEXPRESS;Database=FullStoQ;Trusted_Connection=true;</value>
   </data>
   <data name="ConnectionStringAna" xml:space="preserve">
     <value>Server=RECODME-ALUIZA\SQLEXPRESS;Database=FullStoQ;Trusted_Connection=true;</value>

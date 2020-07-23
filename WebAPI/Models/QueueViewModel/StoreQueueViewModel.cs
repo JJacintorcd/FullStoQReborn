@@ -20,6 +20,7 @@ namespace WebAPI.Models.QueueViewModel
         {
             return new StoreQueueViewModel()
             {
+                Id = storeQueue.Id,
                 Quantity = storeQueue.Quantity,
                 EstablishmentId = storeQueue.EstablishmentId,
                 Id = storeQueue.Id
