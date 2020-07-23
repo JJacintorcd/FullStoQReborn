@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebAPI.Models;
@@ -24,6 +25,18 @@ namespace WebAPI.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult Administration()
+        {
+            return View();
+        }
+
+        
+        public IActionResult AboutUs()
         {
             return View();
         }
