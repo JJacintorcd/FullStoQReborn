@@ -9,9 +9,9 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 {
     public class ProductModel : NamedEntity
     {
-        [Required]
-        [Display (Name="Bar Code")]
         private string _barCode;
+        [Required]
+        [Display(Name = "Bar Code")]
         public string BarCode
         {
             get => _barCode;
@@ -22,8 +22,20 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
             }
         }
 
+        private string _description;
         [Required]
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                _description = value;
+                RegisterChange();
+            }
+        }
+
         private double _price;
+        [Required]
         public double Price
         {
             get => _price;
@@ -34,14 +46,25 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
             }
         }
 
+        private double _amount;
         [Required]
-        private double _weight;
-        public double Weight
+        public double Amount
         {
-            get => _weight;
+            get => _amount;
             set
             {
-                _weight = value;
+                _amount = value;
+                RegisterChange();
+            }
+        }
+
+        private Measure _measure;
+        public Measure Measure
+        {
+            get => _measure;
+            set
+            {
+                _measure = value;
                 RegisterChange();
             }
         }
@@ -49,6 +72,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 
         private Guid brandId;
 
+        [Required]
         [ForeignKey("Brand")]
         public Guid BrandId
         {
@@ -63,6 +87,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 
         private Guid _categoryId;
 
+        [Required]
         [ForeignKey("Category")]
         public Guid CategoryId
         {
@@ -78,20 +103,24 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
         public virtual ICollection<ProductUnit> ProductUnits { get; set; }
 
 
-        public ProductModel(string name, string barCode, double price, double weight, Guid brandId, Guid categoryId) : base(name)
+        public ProductModel(string name, string barCode, string description, double price, double amount, Measure measure, Guid brandId, Guid categoryId) : base(name)
         {
             _barCode = barCode;
+            _description = description;
             _price = price;
-            _weight = weight;
+            _amount = amount;
+            _measure = measure;
             BrandId = brandId;
             CategoryId = categoryId;
         }
 
-        public ProductModel(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string name, string barCode, double price, double weight, Guid brandId, Guid categoryId) : base(id, createdAt, updatedAt, isDeleted, name)
+        public ProductModel(Guid id, DateTime createdAt, DateTime updatedAt, bool isDeleted, string name, string barCode, string description, double price, double amount, Measure measure, Guid brandId, Guid categoryId) : base(id, createdAt, updatedAt, isDeleted, name)
         {
             _barCode = barCode;
+            _description = description;
             _price = price;
-            _weight = weight;
+            _amount = amount;
+            _measure = measure;
             BrandId = brandId;
             CategoryId = categoryId;
         }

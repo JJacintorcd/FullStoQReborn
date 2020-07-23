@@ -1,27 +1,26 @@
 ﻿@{
     ViewData["Title"] = "Home Full StoQ";
 }
-
 <section class="title">
     <div class="text">
         <h1>  Hello @User.Identity.Name! </h1>
     </div>
 </section>
 <section class="labels">
-
-    <form class="form-row label">
-        <div class="form-group  col-lg-3 col-md-6 col-sm-12 ">
+    <form asp-for="Search"></form>
+    <form class="row">
+        <div class="offset-3 col-3">
             <select class="form-control form-control-lg">
                 <option>Store</option>
             </select>
         </div>
-        <div class="form-group  col-lg-3 col-md-6 col-sm-12">
+        <div class="col-3">
             <select class="form-control form-control-lg">
                 <option>Region</option>
             </select>
         </div>
-        <div class="form-group  col-lg-3 col-md-6 col-sm-12">
-            <button type="button" class="btn btn-default">Search</button>
+        <div class="col-1 p-1">
+            <button type="button" class="btn btn-primary">Search</button>
         </div>
     </form>
 </section>
@@ -32,15 +31,15 @@
         </h2>
     </div>
     <section class="images">
-    <img src="~/images/logo-company1.jpg" class="img" />
-    <img src="~/images/logo-company1.jpg" class="img" />
-    <img src="~/images/logo-company1.jpg" class="img" />
-    <img src="~/images/logo-company1.jpg" class="img" />
-    <img src="~/images/logo-company1.jpg" class="img" />
-        </section>
+        <img src="~/images/logo-company1.jpg" class="img" />
+        <img src="~/images/logo-company1.jpg" class="img" />
+        <img src="~/images/logo-company1.jpg" class="img" />
+        <img src="~/images/logo-company1.jpg" class="img" />
+        <img src="~/images/logo-company1.jpg" class="img" />
+    </section>
 </section>
 
-     
+
 
 
 

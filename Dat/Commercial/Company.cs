@@ -10,6 +10,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
         private long _vatNumber;
 
         [Required]
+        [Display (Name = "Vat Number")]
         public long VatNumber
         {
             get => _vatNumber;

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
-using WebAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebAPI.Models.EssentialGoodsViewModel;
 using WebAPI.Models.HtmlComponents;
 using WebAPI.Support;
@@ -24,7 +22,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         private List<BreadCrumb> GetCrumbs()
         {
             return new List<BreadCrumb>()
-            {   
+            {
                 new BreadCrumb(){Icon ="fa-home", Action="Index", Controller="Home", Text="Home"},
                 new BreadCrumb(){Icon = "fa-user-cog", Action="Administration", Controller="Home", Text = "Administration"},
                 new BreadCrumb(){Icon = "fa-shopping-basket", Action="Index", Controller="ShoppingBaskets", Text = "ShoppingBaskets"}
@@ -88,7 +86,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             var vm = ShoppingBasketViewModel.Parse(getOperation.Result);
 
             Draw("Details", "fa-search");
-            
+
             return View(vm);
         }
 
@@ -126,7 +124,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             var vm = ShoppingBasketViewModel.Parse(getOperation.Result);
 
             Draw("Edit", "fa-edit");
-            
+
             return View(vm);
         }
 
@@ -147,7 +145,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                     if (!updateOperation.Success)
                     {
                         TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
-                        
+
                         Draw("Edit", "fa-edit");
 
                         return View(vm);

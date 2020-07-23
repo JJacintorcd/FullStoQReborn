@@ -71,7 +71,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
 
 
         private Guid _regionId;
-
+        
+        [Required]
         [ForeignKey("Region")]
         public Guid RegionId
         {
@@ -87,6 +88,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Commercial
 
         private Guid _companyId;
 
+        [Required]
         [ForeignKey("Company")]
         public Guid CompanyId
         {

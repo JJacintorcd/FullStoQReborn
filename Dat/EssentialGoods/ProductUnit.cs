@@ -11,6 +11,9 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
     public class ProductUnit : Entity
     {
         private string _serialNumber;
+        
+        [Required]
+        [Display(Name = "Serial Number")]
         public string SerialNumber
         {
             get => _serialNumber;
@@ -22,6 +25,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
         }
 
         private bool _isReserved;
+        [Required]
+        [Display(Name = "Is Reserved")]
         public bool IsReserved
         {
             get => _isReserved;
@@ -35,8 +40,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 
         private Guid _productModel;
 
+        [Required]
         [ForeignKey("ProductModel")]
-        [Display(Name = "Product Model")]
         public Guid ProductModelId
         {
             get => _productModel;
@@ -51,7 +56,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 
         private Guid _establishmentId;
 
-        [ForeignKey("Region")]
+        [Required]
+        [ForeignKey("Establishment")]
         public Guid EstablishmentId
         {
             get => _establishmentId;
@@ -65,8 +71,8 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 
         private Guid _shoppingBasket;
 
+        [Required]
         [ForeignKey("ShoppingBasket")]
-        [Display(Name = "Shopping Basket")]
         public Guid ShoppingBasketId
         {
             get => _shoppingBasket;
