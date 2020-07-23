@@ -46,5 +46,11 @@ namespace WebAPI.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        
+        //[Authorize(Roles = "Admin")]
+        public IActionResult Administration()
+        {
+            return View();
+        }
     }
 }
