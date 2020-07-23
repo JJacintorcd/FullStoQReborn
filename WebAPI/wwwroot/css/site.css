@@ -20,7 +20,13 @@ a {
 
 .text h1{
     text-align: center;
-    margin:
+    margin:50px;
+    color:#FFE100;
+}
+
+.label{
+    margin-left:400px;
+
 }
 
 .logo {
