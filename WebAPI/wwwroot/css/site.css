@@ -180,3 +180,12 @@ body {
 .font-style {
     font-family: Muli, Helvética, H, Trebuchet MS;
 }
+
+
+.text-lg-center {
+    color: #FFE100;
+}
+
+.text-justify {
+    font-size:22px;
+}
