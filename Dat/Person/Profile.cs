@@ -14,7 +14,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Person
         private long _vatNumber;
 
         [Required]
-        [Display(Name = "VAT")]
+        [Display(Name = "Vat Number")]
         public long VatNumber
         {
             get => _vatNumber;
@@ -70,7 +70,7 @@ namespace Recodme.RD.FullStoQReborn.DataLayer.Person
         private DateTime _birthDate;
 
         [Required]
-        [Display(Name = "Birthday")]
+        [Display(Name = "Birth Date")]
         public DateTime BirthDate
         {
             get => _birthDate;
