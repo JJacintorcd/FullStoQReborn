@@ -17,8 +17,7 @@
                 <tr>
                     <th class="no-sort"></th>
                     <th class="w-1">@Html.DisplayNameFor(model => model.Address)</th>
-                    <th class="w-1">@Html.DisplayNameFor(model => model.OpeningHours)</th>
-                    <th class="w-1">@Html.DisplayNameFor(model => model.ClosingHours)</th>
+                    <th class="w-1">@Html.DisplayNameFor(model => model.OpeningHours) - @Html.DisplayNameFor(model => model.ClosingHours)</th>
                     <th class="w-1">@Html.DisplayNameFor(model => model.ClosingDays)</th>
                     <th class="w-1">@Html.DisplayNameFor(model => model.RegionId)</th>
                     <th class="w-1">@Html.DisplayNameFor(model => model.CompanyId)</th>
@@ -38,10 +37,7 @@
                         @item.Address
                     </td>
                     <td class="w-1">
-                        @item.OpeningHours
-                    </td>
-                    <td class="w-1">
-                        @item.ClosingHours
+                        @item.OpeningHours - @item.ClosingHours
                     </td>
                     <td class="w-1">
                         @item.ClosingDays
