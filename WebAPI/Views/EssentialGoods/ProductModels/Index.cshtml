@@ -19,7 +19,7 @@
                     <th>@Html.DisplayNameFor(model => model.Name)</th>
                     <th>@Html.DisplayNameFor(model => model.BarCode)</th>
                     <th>@Html.DisplayNameFor(model => model.Price)</th>
-                    <th>@Html.DisplayNameFor(model => model.Weight)</th>
+                    <th>@Html.DisplayNameFor(model => model.Amount)</th>
                     <th class="w-1">@Html.DisplayNameFor(model => model.BrandId)</th>
                     <th class="w-1">@Html.DisplayNameFor(model => model.CategoryId)</th>
                     <th class="no-sort"></th>
@@ -39,7 +39,7 @@
                     </td>
                     <td class="w-1">@Html.DisplayFor(x => item.BarCode)</td>
                     <td class="w-1">@Html.DisplayFor(x => item.Price)</td>
-                    <td class="w-1">@Html.DisplayFor(x => item.Weight)</td>
+                    <td class="w-1">@Html.DisplayFor(x => item.Amount)</td>
                     @{ var brand = (ViewData["Brands"] as List<BrandViewModel>).First(x => x.Id == item.BrandId);}
                     <td class="w-1"><a class="link-edit" asp-controller="Brands" asp-action="Details" asp-route-id="@brand.Id">@brand.Name </a></td>
                     @{ var category = (ViewData["Categories"] as List<CategoryViewModel>).First(x => x.Id == item.CategoryId);}
