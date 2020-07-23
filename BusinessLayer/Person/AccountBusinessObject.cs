@@ -107,5 +107,20 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Person
             else return new OperationResult<bool>() { Success = true, Result = false, Message = "User is a staff member" };
         }
 
+        public async Task<OperationResult<bool>> IsSecurity(Profile person)
+        {
+            var users = await UserManager.GetUsersInRoleAsync("Security");
+            var user = users.FirstOrDefault(x => x.ProfileId == person.Id);
+            if (user == null) return new OperationResult<bool>() { Success = true, Result = false, Message = "User is not a Security member" };
+            else return new OperationResult<bool>() { Success = true, Result = false, Message = "User is a Security member" };
+        }
+
+        public async Task<OperationResult<bool>> IsManagement(Profile person)
+        {
+            var users = await UserManager.GetUsersInRoleAsync("Management");
+            var user = users.FirstOrDefault(x => x.ProfileId == person.Id);
+            if (user == null) return new OperationResult<bool>() { Success = true, Result = false, Message = "User is not a Management member" };
+            else return new OperationResult<bool>() { Success = true, Result = false, Message = "User is a Management member" };
+        }
     }
 }
