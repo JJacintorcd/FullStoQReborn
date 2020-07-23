@@ -112,7 +112,7 @@ namespace WebAPI.Controllers.Web.Commercial
                 {
                     TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
                     Draw("Create", "fa-plus");
-                    return View(vm);
+                    return View();
                 }
                 else return OperationSuccess("The record was successfuly created");
             }

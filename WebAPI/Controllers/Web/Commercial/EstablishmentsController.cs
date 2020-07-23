@@ -172,8 +172,27 @@ namespace WebAPI.Controllers.Web.Commercial
                 if (!createOperation.Result)
                 {
                     TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
+
+                    var listCOperation = await _cbo.ListNotDeletedAsync();
+                    if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
+                    var cList = new List<SelectListItem>();
+                    foreach (var item in listCOperation.Result)
+                    {
+                        cList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
+                    }
+
+                    var listROperation = await _rbo.ListNotDeletedAsync();
+                    if (!listROperation.Success) return OperationErrorBackToIndex(listROperation.Exception);
+                    var rList = new List<SelectListItem>();
+                    foreach (var item in listROperation.Result)
+                    {
+                        rList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
+                    }
+
+                    ViewBag.Regions = rList;
+                    ViewBag.Companies = cList;
                     Draw("Create", "fa-plus");
-                    return View(vm);
+                    return View();
                 }
                 else return OperationSuccess("The record was successfuly created");
             }
