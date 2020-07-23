@@ -80,17 +80,36 @@ body {
     white-space: nowrap;
 }
 
-.bg-nyanza {
-    background-color: #E4FDE1;
+.bg-fsq-white {
+    background-color: #EDE9EA;
+}
+
+.bg-fsq-menu-bar {
+    background-color: #0A1550;
+}
+.bg-fsq-menu-back {
+    background-color: #0F0F0F;
+}
+
+.txt-fsq-menu-back {
+    color: #EDE9EA;
+}
+
+.txt-fsq-details1 {
+    background-color: #FEE100;
+}
+
+.txt-fsq-details2 {
+    background-color: #8A0303;
 }
 
 .link-delete {
     color: #dc3545;
 }
 
-    .link-delete:hover {
-        color: #91232d;
-    }
+.link-delete:hover {
+    color: #91232d;
+}
 
 .link-details {
     color: #007bff;
@@ -107,4 +126,8 @@ body {
 
 .link-edit:hover {
     color: #6f42c1;
+}
+
+.font-style {
+    font-family: Muli, Helvética, H, Trebuchet MS;
 }
