@@ -180,3 +180,7 @@ body {
 .font-style {
     font-family: Muli, Helvética, H, Trebuchet MS;
 }
+
+.no-underline:hover {
+    text-decoration: none;
+}
