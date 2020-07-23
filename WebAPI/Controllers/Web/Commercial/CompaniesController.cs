@@ -84,13 +84,18 @@ namespace WebAPI.Controllers.Web.Commercial
             return View(vm);
         }
 
+        public void Draw(string type, string icon)
+        {
+            ViewData["Title"] = $"{type} Company";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "Companies", Icon = icon, Text = type });
+            ViewData["BreadCrumbs"] = crumbs;
+        }
+
         [HttpGet("create")]
         public IActionResult Create()
         {
-            ViewData["Title"] = "Create Company";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Companies", Icon = "fa-plus", Text = "Create" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Create", "fa-plus");
             return View();
         }
 
@@ -106,12 +111,8 @@ namespace WebAPI.Controllers.Web.Commercial
                 if (!createOperation.Result)
                 {
                     TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
-                    ViewData["Title"] = "Create Company";
-                    var crumbs = GetCrumbs();
-                    crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Companies", Icon = "fa-plus", Text = "New" });
-                    ViewData["BreadCrumbs"] = crumbs;
-
-                    return View();
+                    Draw("Create", "fa-plus");
+                    return View(vm);
                 }
                 else return OperationSuccess("The record was successfuly created");
             }
@@ -128,10 +129,7 @@ namespace WebAPI.Controllers.Web.Commercial
             if (getOperation.Result == null) return RecordNotFound();
 
             var vm = CompanyViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "Edit Company";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Companies", Icon = "fa-edit", Text = "Edit" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Edit", "fa-edit");
             return View(vm);
         }
 
@@ -158,10 +156,7 @@ namespace WebAPI.Controllers.Web.Commercial
                         if (getOperation.Result == null) return RecordNotFound();
 
                         vm = CompanyViewModel.Parse(getOperation.Result);
-                        ViewData["Title"] = "Edit Company";
-                        var crumbs = GetCrumbs();
-                        crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Companies", Icon = "fa-edit", Text = "Edit" });
-                        ViewData["BreadCrumbs"] = crumbs;
+                        Draw("Edit", "fa-plus");
                         return View(vm);
                     }
                     if (!updateOperation.Result)
@@ -172,10 +167,7 @@ namespace WebAPI.Controllers.Web.Commercial
                         if (getOperation.Result == null) return RecordNotFound();
 
                         vm = CompanyViewModel.Parse(getOperation.Result);
-                        ViewData["Title"] = "Edit Company";
-                        var crumbs = GetCrumbs();
-                        crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Companies", Icon = "fa-edit", Text = "Edit" });
-                        ViewData["BreadCrumbs"] = crumbs;
+                        Draw("Edit", "fa-plus");
                         return View(vm);
                     }
                     else return OperationSuccess("The record was successfuly updated");
