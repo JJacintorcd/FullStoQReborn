@@ -26,7 +26,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.List().Any(x => x.Name == item.Name)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.List().Any(x => x.Name == item.Name && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 _dao.Create(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
 
@@ -42,7 +42,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 await _dao.CreateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
 
@@ -116,7 +116,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.List().Any(x => x.Name == item.Name && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.List().Any(x => x.Name == item.Name && x.Id != item.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 _dao.Update(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
 
@@ -132,7 +132,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Commercial
         {
             try
             {
-                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && x.Id != item.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.Name == item.Name && x.Id != item.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 await _dao.UpdateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
 

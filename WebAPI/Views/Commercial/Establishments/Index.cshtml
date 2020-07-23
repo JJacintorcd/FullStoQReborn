@@ -8,7 +8,7 @@
         </h2>
         <p class="float-right mt-2 mb-0">
 
-            <a asp-controller="Establishments" asp-action="Create" class="text-white btn btn-success"><i class="fas fa-plus mr-1"></i>New</a>
+            <a asp-controller="Establishments" asp-action="Create" class="text-white btn btn-success"><i class="fas fa-plus mr-1"></i>Create</a>
         </p>
     </div>
     <div class="card-body table-responsive">
@@ -31,7 +31,7 @@
                 <tr>
                     <td class="w-1">
                         <a class="link-details" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search mr-2"></i></a>
-                        <a class="link-edit" asp-controller="Dishes" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
+                        <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
                         <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
                     </td>
                     <td class="w-1">
