@@ -116,7 +116,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
             {
                 if (_dao.List().Any(x => x.Name.ToLower().Trim() == item.Name.ToLower().Trim() && x.Id != item.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Name already exists" };
                 await _dao.UpdateAsync(item);
-                return new OperationResult<bool>() { Success = true };
+                return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
             {
