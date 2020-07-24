@@ -18,11 +18,11 @@ namespace WebAPI.Models.EssentialGoodsViewModel
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Required Field")]
-        //[RegularExpression("^([0-9]+,[0-9]{1,2})$")]
+        [RegularExpression("^([0-9]+,[0-9]{1,2})€")]
         public string Price { get; set; }
 
         [Required(ErrorMessage = "Required Field")]
-        [RegularExpression("^([0-9]+,[0-9]{1,2})$")]
+        [RegularExpression("^([0-9]+,[0-9]{1,2})")]
         public string Amount { get; set; }
 
         [Required(ErrorMessage = "Required Field")]
