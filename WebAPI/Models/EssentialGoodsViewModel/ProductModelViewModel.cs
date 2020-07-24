@@ -1,4 +1,5 @@
-﻿using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
+﻿using Recodme.RD.FullStoQReborn.DataLayer.Enums;
+using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,10 +18,12 @@ namespace WebAPI.Models.EssentialGoodsViewModel
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Required Field")]
-        public double Price { get; set; }
+        //[RegularExpression("^([0-9]+,[0-9]{1,2})$")]
+        public string Price { get; set; }
 
         [Required(ErrorMessage = "Required Field")]
-        public double Amount { get; set; }
+        [RegularExpression("^([0-9]+,[0-9]{1,2})$")]
+        public string Amount { get; set; }
 
         [Required(ErrorMessage = "Required Field")]
         public Measure Measure { get; set; }
@@ -39,8 +42,8 @@ namespace WebAPI.Models.EssentialGoodsViewModel
                 Name = productModel.Name,
                 BarCode = productModel.BarCode,
                 Description = productModel.Description,
-                Price = productModel.Price,
-                Amount = productModel.Amount,
+                Price = productModel.Price.ToString(),
+                Amount = productModel.Amount.ToString(),
                 Measure = productModel.Measure,
                 BrandId = productModel.BrandId,
                 CategoryId = productModel.CategoryId,
@@ -50,7 +53,7 @@ namespace WebAPI.Models.EssentialGoodsViewModel
 
         public ProductModel ToModel()
         {
-            return new ProductModel(Name, BarCode, Description, Price, Amount, Measure, BrandId, CategoryId);
+            return new ProductModel(Name, BarCode, Description, double.Parse(Price), double.Parse(Amount), Measure, BrandId, CategoryId);
         }
 
         public ProductModel ToModel(ProductModel model)
@@ -58,8 +61,8 @@ namespace WebAPI.Models.EssentialGoodsViewModel
             model.Name = Name;
             model.BarCode = BarCode;
             model.Description = Description;
-            model.Price = Price;
-            model.Amount = Amount;
+            model.Price = double.Parse(Price);
+            model.Amount = double.Parse(Amount);
             model.Measure = Measure;
             model.BrandId = BrandId;
             model.CategoryId = CategoryId;
@@ -68,7 +71,7 @@ namespace WebAPI.Models.EssentialGoodsViewModel
 
         public bool CompareToModel(ProductModel model)
         {
-            return Name == model.Name && BarCode == model.BarCode && Description == model.Description && Price == model.Price && Amount == model.Amount && Measure == model.Measure && BrandId == model.BrandId && CategoryId == model.CategoryId;
+            return Name == model.Name && BarCode == model.BarCode && Description == model.Description && Price == model.Price.ToString() && Amount == model.Amount.ToString() && Measure == model.Measure && BrandId == model.BrandId && CategoryId == model.CategoryId;
         }
     }
 }
