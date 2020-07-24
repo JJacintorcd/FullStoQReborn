@@ -146,23 +146,23 @@ namespace WebAPI
                    pattern: "api/{controller=Home}/{action=Index}/{id?}");
             });
 
-            var enUsCulture = new CultureInfo("en-US");
-            var localizationOptions = new RequestLocalizationOptions()
-            {
-                SupportedCultures = new List<CultureInfo>()
-                {
-                    enUsCulture
-                },
-                SupportedUICultures = new List<CultureInfo>()
-                {
-                    enUsCulture
-                },
-                DefaultRequestCulture = new RequestCulture(enUsCulture),
-                FallBackToParentCultures = false,
-                FallBackToParentUICultures = false,
-                RequestCultureProviders = null
-            };
-            app.UseRequestLocalization(localizationOptions);
+            //var enUsCulture = new CultureInfo("en-US");
+            //var localizationOptions = new RequestLocalizationOptions()
+            //{
+            //    SupportedCultures = new List<CultureInfo>()
+            //    {
+            //        enUsCulture
+            //    },
+            //    SupportedUICultures = new List<CultureInfo>()
+            //    {
+            //        enUsCulture
+            //    },
+            //    DefaultRequestCulture = new RequestCulture(enUsCulture),
+            //    FallBackToParentCultures = false,
+            //    FallBackToParentUICultures = false,
+            //    RequestCultureProviders = null
+            //};
+            //app.UseRequestLocalization(localizationOptions);
         }
         public void SetupRolesAndUsers(UserManager<FullStoqUser> userManager, RoleManager<FullStoqRole> roleManager)
         {
