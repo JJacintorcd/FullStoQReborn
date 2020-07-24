@@ -47,7 +47,7 @@
                     @{
                         var rg = ViewData["Region"] as RegionViewModel;
                     }
-                    <a asp-controller="Regions" asp-action="Details" asp-route-id="@rg.Id">@rg.Name</a>
+                    <a asp-controller="Regions" asp-action="Details" asp-route-id="@rg.Id" class="text-primary no-underline">@rg.Name</a>
                 </dd>
 
                 <dt class="col-3">
@@ -57,7 +57,7 @@
                     @{
                         var cp = ViewData["Company"] as CompanyViewModel;
                     }
-                    <a asp-controller="Companies" asp-action="Details" asp-route-id="@cp.Id">@cp.Name</a>
+                    <a asp-controller="Companies" asp-action="Details" asp-route-id="@cp.Id"class="text-primary no-underline">@cp.Name</a>
                 </dd>
 
             </dl>

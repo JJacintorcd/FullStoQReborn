@@ -13,24 +13,43 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-lg-3 col-md-6 col-sm-12">
                     <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control ml-2" />
+                    <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group col-lg-3 col-md-6 col-sm-12">
                     <label asp-for="BarCode" class="control-label"></label>
-                    <input asp-for="BarCode" class="form-control ml-2" />
+                    <input asp-for="BarCode" class="form-control" />
                     <span asp-validation-for="BarCode" class="text-danger"></span>
                 </div>
                 <div class="form-group col-lg-3 col-md-6 col-sm-12">
-                    <label asp-for="Price" class="control-label"></label>
-                    <input asp-for="Price" class="form-control ml-2" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
+                <div class="form-row">
+                    <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                        <label asp-for="Amount" class="control-label"></label>
+                        <input lang="en-us" asp-for="Amount" class="form-control" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+                </div>
+
                 <div class="form-group col-lg-3 col-md-6 col-sm-12">
-                    <label asp-for="Amount" class="control-label"></label>
-                    <input asp-for="Amount" class="form-control ml-2" />
-                    <span asp-validation-for="Amount" class="text-danger"></span>
+                    <label asp-for="Measure" class="control-label"></label>
+                    <div class="ml-2">
+                        <select asp-items="@ViewBag.Measure" asp-for="Measure" class="form-control fk-select">
+                            <option></option>
+                        </select>
+                    </div>
+
+                    <span asp-validation-for="Measure" class="text-danger"></span>
                 </div>
+
                 <div class="form-group col-lg-3 col-md-6 col-sm-12">
                     <label asp-for="BrandId" class="control-label"></label>
                     <div class="ml-2">
@@ -48,9 +67,8 @@
                             <option></option>
                         </select>
                     </div>
-
-                    <span asp-validation-for="CategoryId" class="text-danger"></span>
                 </div>
+
                 <div class="form-group ml-4">
                     <input type="submit" value="Create" class="btn btn-primary" />
                 </div>
@@ -65,7 +83,7 @@
 <script>
     $(document).ready(function () {
         $('.fk-select').select2({
-            placeholder: "Select a restriction",
+            placeholder: "Select a value",
             allowClear: true
         });
     });

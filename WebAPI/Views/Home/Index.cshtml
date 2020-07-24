@@ -1,4 +1,6 @@
-﻿@{
+﻿@using WebAPI.Models.HomeViewModel;
+@model SearchViewModel
+@{
     ViewData["Title"] = "Home Full StoQ";
 }
 <section class="title">
@@ -9,18 +11,26 @@
 <section class="labels">
     <form asp-for="Search"></form>
     <form class="row">
-        <div class="offset-3 col-3">
-            <select class="form-control form-control-lg">
-                <option>Store</option>
-            </select>
+        <div class="form-group col-4 ml-1">
+            <label asp-for="CompanyId" class="control-label"></label>
+            <div>
+                <select asp-items="@ViewBag.Companies" asp-for="CompanyId" class="form-control fk-select">
+                    <option></option>
+                </select>
+            </div>
+            <span asp-validation-for="CompanyId" class="text-danger"></span>
         </div>
-        <div class="col-3">
-            <select class="form-control form-control-lg">
-                <option>Region</option>
-            </select>
+        <div class="form-group col-4 ml-1">
+            <label asp-for="RegionId" class="control-label"></label>
+            <div>
+                <select asp-items="@ViewBag.Regions" asp-for="RegionId" class="form-control fk-select">
+                    <option></option>
+                </select>
+            </div>
+            <span asp-validation-for="RegionId" class="text-danger"></span>
         </div>
-        <div class="col-1 p-1">
-            <button type="button" class="btn btn-primary">Search</button>
+        <div class="form-group col-2">
+            <input type="submit" value="Search" class="btn btn-primary" />
         </div>
     </form>
 </section>
@@ -38,6 +48,15 @@
         <img src="~/images/logo-company1.jpg" class="img" />
     </section>
 </section>
+
+<script>
+    $(document).ready(function () {
+        $('.fk-select').select2({
+            placeholder: "Select a Value",
+            allowClear: true
+        });
+    });
+</script>
 
 
 

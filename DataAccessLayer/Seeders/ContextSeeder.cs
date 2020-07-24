@@ -1,5 +1,6 @@
 ﻿using Recodme.RD.FullStoQReborn.DataAccessLayer.Contexts;
 using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
+using Recodme.RD.FullStoQReborn.DataLayer.Enums;
 using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using Recodme.RD.FullStoQReborn.DataLayer.Person;
 using Recodme.RD.FullStoQReborn.DataLayer.Queue;

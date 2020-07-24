@@ -22,11 +22,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Recodme.RD.FullStoQReborn.BusinessLayer.Person;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace WebAPI
 {
     public class Startup
     {
+        
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -141,6 +145,24 @@ namespace WebAPI
                    name: "api",
                    pattern: "api/{controller=Home}/{action=Index}/{id?}");
             });
+
+            var enUsCulture = new CultureInfo("en-US");
+            var localizationOptions = new RequestLocalizationOptions()
+            {
+                SupportedCultures = new List<CultureInfo>()
+                {
+                    enUsCulture
+                },
+                SupportedUICultures = new List<CultureInfo>()
+                {
+                    enUsCulture
+                },
+                DefaultRequestCulture = new RequestCulture(enUsCulture),
+                FallBackToParentCultures = false,
+                FallBackToParentUICultures = false,
+                RequestCultureProviders = null
+            };
+            app.UseRequestLocalization(localizationOptions);
         }
         public void SetupRolesAndUsers(UserManager<FullStoqUser> userManager, RoleManager<FullStoqRole> roleManager)
         {
