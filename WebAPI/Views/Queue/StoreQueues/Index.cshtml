@@ -16,25 +16,28 @@
             <thead>
                 <tr>
                     <th class="no-sort w-1"></th>
-                    <th class="w-1">Establishment</th>
                     <th class="w-1">@Html.DisplayNameFor(model => model.Quantity)</th>
+                    <th class="w-1">Establishment</th>
                     <th class="no-sort"></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td class="w-1">
-                            <a class="link-details" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search mr-2"></i></a>
-                            <a class="link-edit" asp-controller="Companies" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
-                            <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
-                        </td>
-                        @{ var cp = (ViewData["Establishments"] as List<EstablishmentViewModel>).First(x => x.Id == item.EstablishmentId);}
-                        <td class="w-1"><a class="link-edit" asp-controller="Establishments" asp-action="Details" asp-route-id="@cp.Id">@cp.Address </a></td>
-                        <td class="w-1">@Html.DisplayFor(x => item.Quantity)</td>
-                        <td></td>
-                    </tr>
+                <tr>
+                    <td class="flex-nowrap w-1">
+                        <a class="link-details" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search mr-2"></i></a>
+                        <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
+                        <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
+                    </td>
+                    <td class="w-1">@Html.DisplayFor(x => item.Quantity)</td>
+                    @{ 
+                        var cp = (ViewData["Establishments"] as List<EstablishmentViewModel>).First(x => x.Id == item.EstablishmentId);
+                        var company = (ViewData["Companies"] as List<CompanyViewModel>).First(x => x.Id == cp.CompanyId);
+                     }
+                    <td class="w-1"><a class="link-edit text-primary no-underline" asp-controller="Establishments" asp-action="Details" asp-route-id="@cp.Id">@company.Name, @cp.Address </a></td>
+                    <td></td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -60,9 +63,8 @@
 </div>
 <input type="hidden" id="idToDelete" />
 <script>
-
     var ConfirmDelete = function (id) {
-        $("#deleteBtn").attr("href", "@ViewData["DeleteHref"]" + "/" + id);
+        $("#deleteBtn").attr("href", $("#deleteBtn").attr("href") + "/" + id);
         $("#modal").modal('show');
     }
 

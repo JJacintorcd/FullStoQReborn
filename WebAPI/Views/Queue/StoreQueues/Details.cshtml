@@ -1,31 +1,37 @@
 ﻿@using WebAPI.Models.QueueViewModel;
 @using WebAPI.Models.CommercialViewModel;
-@model StoreQueueViewModel;
+@model StoreQueueViewModel
 
-<h2>Profile - Details</h2>
-<hr />
+<div class="card">
+    <div class="card-header">
+        <h2 class="float-left">
+            @ViewData["Title"]
+        </h2>
+    </div>
+    <div class="card-body">
+        <div class="ml-5 mr-5">
+            <dl class="row">
+                <dt class="col-2">
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </dt>
 
-<div>
-    <dl class="row">
-        <dt class="col-3">
-            @Html.DisplayNameFor(model => model.EstablishmentId)
-        </dt>
-        <dd class="col-9">
-            @{
-                var e = ViewData["Establishment"] as EstablishmentViewModel;
-                var company = ViewData["Company"] as CompanyViewModel;
-            }
-            <a asp-controller="Establishments" asp-action="Details" asp-route-id="@e.Id" class="text-primary no-underline">@company.Name, @e.Address</a>
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-    </dl>
+                <dd class="col-10">
+                    @Html.DisplayFor(model => model.Quantity)
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-2">
+                    @Html.DisplayNameFor(model => model.EstablishmentId)
+                </dt>
+                <dd class="col-10">
+                    @{
+                        var e = ViewData["Establishment"] as EstablishmentViewModel;
+                        var company = ViewData["Company"] as CompanyViewModel;
+                    }
+                    <a asp-controller="Establishments" asp-action="Details" asp-route-id="@e.Id" class="text-primary no-underline">@company.Name, @e.Address</a>
+                </dd>
+            </dl>
+        </div>
+    </div>
 </div>
 
