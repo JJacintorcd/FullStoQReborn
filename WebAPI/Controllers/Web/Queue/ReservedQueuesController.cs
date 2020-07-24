@@ -226,6 +226,27 @@ namespace WebAPI.Controllers.Web.Queue
                 if (!createOperation.Result)
                 {
                     TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
+
+                    var listEstOperation = await _ebo.ListNotDeletedAsync();
+                    if (!listEstOperation.Success) return OperationErrorBackToIndex(listEstOperation.Exception);
+
+                    var listProOperation = await _pbo.ListNotDeletedAsync();
+                    if (!listProOperation.Success) return OperationErrorBackToIndex(listProOperation.Exception);
+
+                    var estList = new List<SelectListItem>();
+                    foreach (var item in listEstOperation.Result)
+                    {
+                        estList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Address });
+                    }
+
+                    var profiList = new List<SelectListItem>();
+                    foreach (var item in listProOperation.Result)
+                    {
+                        profiList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.VatNumber.ToString() });
+                    }
+                    ViewBag.Establishments = estList;
+                    ViewBag.Profiles = profiList;
+
                     Draw("Create", "fa-plus");
                     return View(vm);
                 }
