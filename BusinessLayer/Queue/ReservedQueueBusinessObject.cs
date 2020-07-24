@@ -28,7 +28,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
             {
                 var reserveCountToday = _dao.List().Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day && !x.IsDeleted && x.CreatedAt.AddHours(2) > DateTime.UtcNow);
                 var reserveCancelationCountToday = _dao.List().Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day && x.IsDeleted);
-                if (reserveCountToday > 0 && reserveCancelationCountToday < 2) return new OperationResult<bool>() { Success = true, Result = false, Message = "Daily limit reached" };
+                if (reserveCountToday > 0 || reserveCancelationCountToday == 2) return new OperationResult<bool>() { Success = true, Result = false, Message = "Daily limit reached" };
                 _dao.Create(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -45,7 +45,7 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
                 var reserveCountToday = reserveList.Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day && !x.IsDeleted && x.CreatedAt.AddHours(2) > DateTime.UtcNow);
                 var reserveCancelledList = await _dao.ListAsync();
                 var reserveCancelationCountToday = reserveCancelledList.Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day && x.IsDeleted);
-                if (reserveCountToday > 0 && reserveCancelationCountToday < 2) return new OperationResult<bool>() { Success = true, Result = false, Message = "Daily limit reached" };
+                if (reserveCountToday > 0 || reserveCancelationCountToday == 2) return new OperationResult<bool>() { Success = true, Result = false, Message = "Daily limit reached" };
                 await _dao.CreateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -106,8 +106,9 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
         {
             try
             {
-                var reserveCountToday = _dao.List().Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day);
-                if (reserveCountToday > 0) return new OperationResult<bool>() { Success = true, Result = false };
+                var reserveCountToday = _dao.List().Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day && !x.IsDeleted && x.CreatedAt.AddHours(2) > DateTime.UtcNow);
+                var reserveCancelationCountToday = _dao.List().Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day && x.IsDeleted);
+                if (reserveCountToday > 0 || reserveCancelationCountToday == 2) return new OperationResult<bool>() { Success = true, Result = false, Message = "Daily limit reached" };
                 _dao.Update(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -122,9 +123,11 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
             try
             {
                 var reserveList = await _dao.ListAsync();
-                var reserveCountToday = reserveList.Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day);
-                if (reserveCountToday > 0) return new OperationResult<bool>() { Success = true, Result = false };
-                await _dao.UpdateAsync(item);
+                var reserveCountToday = reserveList.Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day && !x.IsDeleted && x.CreatedAt.AddHours(2) > DateTime.UtcNow);
+                var reserveCancelledList = await _dao.ListAsync();
+                var reserveCancelationCountToday = reserveCancelledList.Count(x => x.ProfileId == item.ProfileId && x.CreatedAt.Day == DateTime.UtcNow.Day && x.IsDeleted);
+                if (reserveCountToday > 0 || reserveCancelationCountToday == 2) return new OperationResult<bool>() { Success = true, Result = false, Message = "Daily limit reached" };
+                await _dao.UpdateAsync(item); ;
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
