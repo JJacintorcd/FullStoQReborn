@@ -232,7 +232,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getPOperation.Result == null) return RecordNotFound();
 
             var getCOperation = await _cbo.ReadAsync(getEOperation.Result.CompanyId);
-            if (!getCOperation.Success) return OperationErrorBackToIndex(getPMOperation.Exception);
+            if (!getCOperation.Success) return OperationErrorBackToIndex(getCOperation.Exception);
             if (getCOperation.Result == null) return RecordNotFound();
 
             var vm = ProductUnitViewModel.Parse(getOperation.Result);
