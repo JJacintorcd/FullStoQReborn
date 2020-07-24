@@ -206,8 +206,10 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             ViewData["Measure"] = Enum.GetNames(typeof(Measure)).Select(r => new SelectListItem { Text = r, Value = r }); ;
 
             ViewBag.Brands = bList;
-            ViewBag.Categories = cList; 
-            
+            ViewBag.Categories = cList;
+
+            Draw("Create", "fa-plus");
+
             if (ModelState.IsValid)
             {
                 var model = vm.ToModel();
@@ -216,10 +218,6 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                 if (!createOperation.Result)
                 {
                     TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
-
-                   
-
-                    Draw("Create", "fa-plus");
 
                     return View(vm);
                 }
