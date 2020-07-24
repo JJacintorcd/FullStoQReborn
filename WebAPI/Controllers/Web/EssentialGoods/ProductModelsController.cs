@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
+using Recodme.RD.FullStoQReborn.DataLayer.Enums;
+using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using WebAPI.Models;
 using WebAPI.Models.EssentialGoodsViewModel;
 using WebAPI.Models.HtmlComponents;
@@ -116,7 +118,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
 
         public void Draw(string type, string icon)
         {
-            ViewData["Title"] = $"{type} Product Model";
+            ViewData["Title"] = $"{type} - Product Model";
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = type, Controller = "ProductModels", Icon = icon, Text = type });
             ViewData["BreadCrumbs"] = crumbs;
@@ -169,6 +171,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             {
                 cList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
             }
+            ViewBag.Measure = Enum.GetNames(typeof(Measure)).Select(r => new SelectListItem { Text = r, Value = r }); ;
 
             ViewBag.Brands = bList;
             ViewBag.Categories = cList;
@@ -182,6 +185,29 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductModelViewModel vm)
         {
+            var listBOperation = await _bbo.ListNotDeletedAsync();
+            if (!listBOperation.Success) return OperationErrorBackToIndex(listBOperation.Exception);
+
+            var listCOperation = await _cbo.ListNotDeletedAsync();
+            if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
+
+
+            var bList = new List<SelectListItem>();
+            foreach (var item in listBOperation.Result)
+            {
+                bList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
+            }
+
+            var cList = new List<SelectListItem>();
+            foreach (var item in listCOperation.Result)
+            {
+                cList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
+            }
+            ViewData["Measure"] = Enum.GetNames(typeof(Measure)).Select(r => new SelectListItem { Text = r, Value = r }); ;
+
+            ViewBag.Brands = bList;
+            ViewBag.Categories = cList; 
+            
             if (ModelState.IsValid)
             {
                 var model = vm.ToModel();
@@ -191,26 +217,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                 {
                     TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
 
-                    var listBOperation = await _bbo.ListNotDeletedAsync();
-                    if (!listBOperation.Success) return OperationErrorBackToIndex(listBOperation.Exception);
-
-                    var listCOperation = await _cbo.ListNotDeletedAsync();
-                    if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
-
-
-                    var bList = new List<SelectListItem>();
-                    foreach (var item in listBOperation.Result)
-                    {
-                        bList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
-                    }
-                    ViewBag.Brands = bList;
-
-                    var cList = new List<SelectListItem>();
-                    foreach (var item in listCOperation.Result)
-                    {
-                        cList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
-                    }
-                    ViewBag.Categories = cList;
+                   
 
                     Draw("Create", "fa-plus");
 
@@ -237,6 +244,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             var listCOperation = await _cbo.ListNotDeletedAsync();
             if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
 
+            ViewBag.Measure = Enum.GetNames(typeof(Measure)).Select(r => new SelectListItem { Text = r, Value = r}); ;
             var bList = new List<SelectListItem>();
             foreach (var item in listBOperation.Result)
             {
@@ -290,6 +298,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                         var listCOperation = await _cbo.ListNotDeletedAsync();
                         if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
 
+                        ViewBag.Measure = Enum.GetNames(typeof(Measure)).Select(r => new SelectListItem { Text = r, Value = r }); ;
                         var bList = new List<SelectListItem>();
                         foreach (var item in listBOperation.Result)
                         {
@@ -327,6 +336,8 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                         if (!listBOperation.Success) return OperationErrorBackToIndex(listBOperation.Exception);
                         var listCOperation = await _cbo.ListNotDeletedAsync();
                         if (!listCOperation.Success) return OperationErrorBackToIndex(listCOperation.Exception);
+
+                        ViewBag.Measure = Enum.GetNames(typeof(Measure)).Select(r => new SelectListItem { Text = r, Value = r }); ;
 
                         var bList = new List<SelectListItem>();
                         foreach (var item in listBOperation.Result)

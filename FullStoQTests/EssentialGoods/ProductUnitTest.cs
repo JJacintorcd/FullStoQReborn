@@ -3,6 +3,7 @@ using Recodme.RD.FullStoQReborn.BusinessLayer.Commercial;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders;
 using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
+using Recodme.RD.FullStoQReborn.DataLayer.Enums;
 using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using System;
 using System.Collections.Generic;
@@ -130,7 +131,7 @@ namespace FullStoQTests.EssentialGoods
             var cat = new Category("Non-Alcoholic Beverages");
             catBo.Create(cat);
             var pmbo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", "", 4.24, 0.80, Measure.L, bra.Id, cat.Id);
             pmbo.Create(prodMod);
             var sbo = new ShoppingBasketBusinessObject();
             var sbk = sbo.ListNotDeleted().Result.First();
@@ -155,7 +156,7 @@ namespace FullStoQTests.EssentialGoods
             var cat = new Category("Non-Alcoholic Beverages");
             catBo.Create(cat);
             var pmbo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", "", 4.24, 0.80, Measure.L, bra.Id, cat.Id);
             pmbo.Create(prodMod);
             var sbo = new ShoppingBasketBusinessObject();
             var sbk = sbo.ListNotDeleted().Result.First();
