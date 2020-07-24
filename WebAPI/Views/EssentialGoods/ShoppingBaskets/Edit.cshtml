@@ -14,7 +14,7 @@
             <form asp-action="Edit" class="pl-4">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                <div class="form-group col-lg-12 col-md-6 col-sm-3">
                     <label asp-for="ProfileId" class="control-label"></label>
                     <div class="ml-2">
                         <select asp-items="@ViewBag.Profiles" asp-for="ProfileId" class="form-control fk-select">
@@ -24,6 +24,7 @@
 
                     <span asp-validation-for="ProfileId" class="text-danger"></span>
                 </div>
+
                 <div class="form-group">
                     <input type="submit" value="Edit" class="btn btn-primary" />
                 </div>
@@ -38,3 +39,11 @@
 @section Scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    $(document).ready(function () {
+        $('.fk-select').select2({
+            placeholder: "Select a value",
+            allowClear: true
+        });
+    });
+</script>

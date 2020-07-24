@@ -1,27 +1,39 @@
 ﻿@using WebAPI.Models.QueueViewModel;
+@using WebAPI.Models.CommercialViewModel;
+@using WebAPI.Models.PersonViewModel;
 @model ReservedQueueViewModel
 
-<h2>ReservedQueue - Details</h2>
-<hr />
-
-<div>
-    <dl class="row">
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.EstablishmentId)
-        </dt>
-
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.EstablishmentId)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.ProfileId)
-        </dt>
-
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.ProfileId)
-        </dd>
-    </dl>
+<div class="card">
+    <div class="card-header bg-greenish-green">
+        <h2 class="float-left">
+            @ViewData["Title"]
+        </h2>
+    </div>
+    <div class="card-body">
+        <div class="ml-5 mr-5">
+            <dl class="row">
+                <dt class="col-2">
+                    @Html.DisplayNameFor(model => model.EstablishmentId)
+                </dt>
+                <dd class="col-9">
+                    @{
+                        var e = ViewData["Establishment"] as EstablishmentViewModel;
+                        var company = ViewData["Company"] as CompanyViewModel;
+                    }
+                    <a asp-controller="Establishments" asp-action="Details" asp-route-id="@e.Id" class="text-primary no-underline">@company.Name, @e.Address</a>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-2">
+                    @Html.DisplayNameFor(model => model.ProfileId)
+                </dt>
+                <dd class="col-9">
+                    @{
+                        var profile = ViewData["Profile"] as ProfileViewModel;
+                    }
+                    <a asp-controller="Profiles" asp-action="Details" asp-route-id="@profile.Id" class="text-primary no-underline">@profile.VatNumber</a>
+                </dd>
+            </dl>
+        </div>
+    </div>
 </div>
-

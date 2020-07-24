@@ -232,7 +232,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (getPOperation.Result == null) return RecordNotFound();
 
             var getCOperation = await _cbo.ReadAsync(getEOperation.Result.CompanyId);
-            if (!getCOperation.Success) return OperationErrorBackToIndex(getPMOperation.Exception);
+            if (!getCOperation.Success) return OperationErrorBackToIndex(getCOperation.Exception);
             if (getCOperation.Result == null) return RecordNotFound();
 
             var vm = ProductUnitViewModel.Parse(getOperation.Result);
@@ -248,7 +248,7 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         }
 
         [HttpGet("create")]
-        public async Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> Create()
         {
             var listEOperation = await _ebo.ListNotDeletedAsync();
             if (!listEOperation.Success) return OperationErrorBackToIndex(listEOperation.Exception);
@@ -296,7 +296,8 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             {
                 var model = vm.ToModel();
                 var createOperation = await _bo.CreateAsync(model);
-                if (!createOperation.Success)
+                if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+                if (!createOperation.Result)
                 {
                     TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
 
@@ -420,6 +421,17 @@ namespace WebAPI.Controllers.Web.EssentialGoods
 
                         vm = ProductUnitViewModel.Parse(getOperation.Result);
 
+                        var listPMOperation = await _pmbo.ListNotDeletedAsync();
+                        if (!listPMOperation.Success) return OperationErrorBackToIndex(listPMOperation.Exception);
+
+                        var pmList = new List<SelectListItem>();
+                        foreach (var item in listPMOperation.Result)
+                        {
+                            pmList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
+                        }
+                        ViewBag.ProductModels = pmList;
+
+
                         var listEOperation = await _ebo.ListNotDeletedAsync();
                         if (!listEOperation.Success) return OperationErrorBackToIndex(listEOperation.Exception);
 
@@ -462,6 +474,17 @@ namespace WebAPI.Controllers.Web.EssentialGoods
 
                         var listEOperation = await _ebo.ListNotDeletedAsync();
                         if (!listEOperation.Success) return OperationErrorBackToIndex(listEOperation.Exception);
+
+                        var listPMOperation = await _pmbo.ListNotDeletedAsync();
+                        if (!listPMOperation.Success) return OperationErrorBackToIndex(listPMOperation.Exception);
+
+                        var pmList = new List<SelectListItem>();
+                        foreach (var item in listPMOperation.Result)
+                        {
+                            pmList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name });
+                        }
+                        ViewBag.ProductModels = pmList;
+
 
                         var eList = new List<SelectListItem>();
                         foreach (var item in listEOperation.Result)

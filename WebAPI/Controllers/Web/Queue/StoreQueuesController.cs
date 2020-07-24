@@ -19,6 +19,7 @@ namespace WebAPI.Controllers.Web.Queue
     {
         private readonly StoreQueueBusinessObject _bo = new StoreQueueBusinessObject();
         private readonly EstablishmentBusinessObject _ebo = new EstablishmentBusinessObject();
+        private readonly CompanyBusinessObject _cbo = new CompanyBusinessObject();
 
 
         private string GetDeleteRef()
@@ -71,9 +72,27 @@ namespace WebAPI.Controllers.Web.Queue
             return EstablishmentViewModel.Parse(getOperation.Result);
         }
 
+        private async Task<List<CompanyViewModel>> GetCompanyViewModels(List<Guid> ids)
+        {
+            var filterOperation = await _cbo.FilterAsync(x => ids.Contains(x.Id));
+            var drList = new List<CompanyViewModel>();
+            foreach (var item in filterOperation.Result)
+            {
+                drList.Add(CompanyViewModel.Parse(item));
+            }
+            return drList;
+        }
+
+        private async Task<CompanyViewModel> GetCompanyViewModel(Guid id)
+        {
+            var getOperation = await _cbo.ReadAsync(id);
+            return CompanyViewModel.Parse(getOperation.Result);
+        }
+
+
         public void Draw(string type, string icon)
         {
-            ViewData["Title"] = $"{type} Store Queue";
+            ViewData["Title"] = $"{type} - Store Queue";
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = type, Controller = "StoreQueues", Icon = icon, Text = type });
             ViewData["BreadCrumbs"] = crumbs;
@@ -92,9 +111,20 @@ namespace WebAPI.Controllers.Web.Queue
                 lst.Add(StoreQueueViewModel.Parse(item));
             }
 
+            var listEOperation = await _ebo.ListNotDeletedAsync();
+            if (!listOperation.Success) return OperationErrorBackToIndex(listOperation.Exception);
+
+            var elst = new List<EstablishmentViewModel>();
+            foreach (var item in listEOperation.Result)
+            {
+                elst.Add(EstablishmentViewModel.Parse(item));
+            }
+
             var drList = await GetEstablishmentViewModels(listOperation.Result.Select(x => x.EstablishmentId).Distinct().ToList());
+            var cList = await GetCompanyViewModels(listEOperation.Result.Select(x => x.CompanyId).Distinct().ToList());
+            ViewData["Companies"] = cList;
             ViewData["Establishments"] = drList;
-            ViewData["Title"] = "StoreQueues";
+            ViewData["Title"] = "Store Queues";
             ViewData["BreadCrumbs"] = GetCrumbs();
             ViewData["DeleteHref"] = GetDeleteRef();
 
@@ -115,9 +145,14 @@ namespace WebAPI.Controllers.Web.Queue
             if (!getDrOperation.Success) return OperationErrorBackToIndex(getDrOperation.Exception);
             if (getDrOperation.Result == null) return RecordNotFound();
 
+            var getCOperation = await _cbo.ReadAsync(getDrOperation.Result.CompanyId);
+            if (!getCOperation.Success) return OperationErrorBackToIndex(getCOperation.Exception);
+            if (getCOperation.Result == null) return RecordNotFound();
+
             var vm = StoreQueueViewModel.Parse(getOperation.Result);
-            Draw("Details", "fa-search");
+            ViewData["Company"] = CompanyViewModel.Parse(getCOperation.Result);
             ViewData["Establishment"] = EstablishmentViewModel.Parse(getDrOperation.Result);
+            Draw("Details", "fa-search");
             return View(vm);
         }
 

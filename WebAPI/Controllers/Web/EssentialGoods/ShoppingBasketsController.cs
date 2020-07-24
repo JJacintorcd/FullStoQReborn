@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
+using Recodme.RD.FullStoQReborn.BusinessLayer.Person;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Models.EssentialGoodsViewModel;
 using WebAPI.Models.HtmlComponents;
+using WebAPI.Models.PersonViewModel;
 using WebAPI.Support;
 
 namespace WebAPI.Controllers.Web.EssentialGoods
@@ -13,6 +17,8 @@ namespace WebAPI.Controllers.Web.EssentialGoods
     public class ShoppingBasketsController : Controller
     {
         private readonly ShoppingBasketBusinessObject _bo = new ShoppingBasketBusinessObject();
+        private readonly ProfileBusinessObject _pbo = new ProfileBusinessObject();
+
 
         private string GetDeleteRef()
         {
@@ -47,6 +53,25 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return RedirectToAction(nameof(Index));
         }
 
+        private async Task<List<ProfileViewModel>> GetProfileViewModels(List<Guid> ids)
+        {
+            var filterOperation = await _pbo.FilterAsync(x => ids.Contains(x.Id));
+            var cList = new List<ProfileViewModel>();
+            foreach (var item in filterOperation.Result)
+            {
+                cList.Add(ProfileViewModel.Parse(item));
+            }
+            return cList;
+        }
+
+        public void Draw(string type, string icon)
+        {
+            ViewData["Title"] = $"{type} Product Model";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "ProductModels", Icon = icon, Text = type });
+            ViewData["BreadCrumbs"] = crumbs;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -59,6 +84,9 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                 lst.Add(ShoppingBasketViewModel.Parse(item));
             }
 
+            var pList = await GetProfileViewModels(listOperation.Result.Select(x => x.ProfileId).Distinct().ToList());
+            ViewData["Profiles"] = pList;
+
             ViewData["Title"] = "ShoppingBaskets";
             ViewData["BreadCrumbs"] = GetCrumbs();
             ViewData["DeleteHref"] = GetDeleteRef();
@@ -66,13 +94,6 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return View(lst);
         }
 
-        public void Draw(string type, string icon)
-        {
-            ViewData["Title"] = $"{type} Product Model";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = type, Controller = "ProductModels", Icon = icon, Text = type });
-            ViewData["BreadCrumbs"] = crumbs;
-        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(Guid? id)
@@ -83,7 +104,14 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
             if (getOperation.Result == null) return RecordNotFound();
 
+            var getROperation = await _pbo.ReadAsync(getOperation.Result.ProfileId);
+            if (!getROperation.Success) return OperationErrorBackToIndex(getROperation.Exception);
+            if (getROperation.Result == null) return RecordNotFound();
+
             var vm = ShoppingBasketViewModel.Parse(getOperation.Result);
+
+
+            ViewData["Profile"] = ProfileViewModel.Parse(getROperation.Result);
 
             Draw("Details", "fa-search");
 
@@ -91,8 +119,17 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         }
 
         [HttpGet("create")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var listProfOperation = await _pbo.ListNotDeletedAsync();
+            if (!listProfOperation.Success) return OperationErrorBackToIndex(listProfOperation.Exception);
+            var pList = new List<SelectListItem>();
+            foreach (var item in listProfOperation.Result)
+            {
+                pList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.VatNumber.ToString() });
+            }
+            ViewBag.Profiles = pList;
+            
             Draw("Create", "fa-plus");
 
             return View();
@@ -102,6 +139,18 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ShoppingBasketViewModel vm)
         {
+            var listROperation = await _pbo.ListNotDeletedAsync();
+            if (!listROperation.Success) return OperationErrorBackToIndex(listROperation.Exception);
+            var pList = new List<SelectListItem>();
+            foreach (var item in listROperation.Result)
+            {
+                pList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.VatNumber.ToString() });
+            }
+
+            ViewBag.Profiles = pList;
+
+            Draw("Create", "fa-plus");
+
             if (ModelState.IsValid)
             {
                 var model = vm.ToShoppingBasket();
@@ -123,6 +172,17 @@ namespace WebAPI.Controllers.Web.EssentialGoods
 
             var vm = ShoppingBasketViewModel.Parse(getOperation.Result);
 
+            var listROperation = await _pbo.ListNotDeletedAsync();
+            if (!listROperation.Success) return OperationErrorBackToIndex(listROperation.Exception);
+            var pList = new List<SelectListItem>();
+            foreach (var item in listROperation.Result)
+            {
+                var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.VatNumber.ToString() };
+                if (item.Id == vm.ProfileId) listItem.Selected = true;
+                pList.Add(listItem);
+            }
+            ViewBag.Profiles = pList;
+
             Draw("Edit", "fa-edit");
 
             return View(vm);
@@ -132,6 +192,20 @@ namespace WebAPI.Controllers.Web.EssentialGoods
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, ShoppingBasketViewModel vm)
         {
+
+            var listROperation = await _pbo.ListNotDeletedAsync();
+            if (!listROperation.Success) return OperationErrorBackToIndex(listROperation.Exception);
+            var pList = new List<SelectListItem>();
+            foreach (var item in listROperation.Result)
+            {
+                var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.VatNumber.ToString() };
+                if (item.Id == vm.ProfileId) listItem.Selected = true;
+                pList.Add(listItem);
+            }
+            ViewBag.Regions = pList;
+
+            Draw("Edit", "fa-edit");
+            
             if (ModelState.IsValid)
             {
                 var getOperation = await _bo.ReadAsync(id);
@@ -146,7 +220,6 @@ namespace WebAPI.Controllers.Web.EssentialGoods
                     {
                         TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
 
-                        Draw("Edit", "fa-edit");
 
                         return View(vm);
                     }

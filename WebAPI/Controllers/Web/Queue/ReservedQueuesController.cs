@@ -22,6 +22,7 @@ namespace WebAPI.Controllers.Web.Queue
         private readonly ReservedQueueBusinessObject _bo = new ReservedQueueBusinessObject();
         private readonly EstablishmentBusinessObject _ebo = new EstablishmentBusinessObject();
         private readonly ProfileBusinessObject _pbo = new ProfileBusinessObject();
+        private readonly CompanyBusinessObject _cbo = new CompanyBusinessObject();
 
 
         private string GetDeleteRef()
@@ -91,9 +92,25 @@ namespace WebAPI.Controllers.Web.Queue
             return ProfileViewModel.Parse(getOperation.Result);
         }
 
+        private async Task<List<CompanyViewModel>> GetCompanyViewModels(List<Guid> ids)
+        {
+            var filterOperation = await _cbo.FilterAsync(x => ids.Contains(x.Id));
+            var drList = new List<CompanyViewModel>();
+            foreach (var item in filterOperation.Result)
+            {
+                drList.Add(CompanyViewModel.Parse(item));
+            }
+            return drList;
+        }
+        private async Task<CompanyViewModel> GetCompanyViewModel(Guid id)
+        {
+            var getOperation = await _cbo.ReadAsync(id);
+            return CompanyViewModel.Parse(getOperation.Result);
+        }
+
         public void Draw(string type, string icon)
         {
-            ViewData["Title"] = $"{type} ReservedQueue";
+            ViewData["Title"] = $"{type} - Reserved Queue";
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = type, Controller = "ReservedQueues", Icon = icon, Text = type });
             ViewData["BreadCrumbs"] = crumbs;
@@ -108,14 +125,27 @@ namespace WebAPI.Controllers.Web.Queue
             var lst = new List<ReservedQueueViewModel>();
             foreach (var item in listOperation.Result)
             {
-                lst.Add(ReservedQueueViewModel.Parse(item));
+                var limitCheck = await _bo.TwoHourLimitReserveAsync(item.Id);
+                if (limitCheck.Result && limitCheck.Success)
+                    lst.Add(ReservedQueueViewModel.Parse(item));
+            }
+
+            var listEOperation = await _ebo.ListNotDeletedAsync();
+            if (!listOperation.Success) return OperationErrorBackToIndex(listOperation.Exception);
+
+            var elst = new List<EstablishmentViewModel>();
+            foreach (var item in listEOperation.Result)
+            {
+                elst.Add(EstablishmentViewModel.Parse(item));
             }
 
             var estList = await GetEstablishmentViewModels(listOperation.Result.Select(x => x.EstablishmentId).Distinct().ToList());
             var profiList = await GetProfileViewModels(listOperation.Result.Select(x => x.ProfileId).Distinct().ToList());
+            var cList = await GetCompanyViewModels(listEOperation.Result.Select(x => x.CompanyId).Distinct().ToList());
+            ViewData["Companies"] = cList;
             ViewData["Establishments"] = estList;
             ViewData["Profiles"] = profiList;
-            ViewData["Title"] = "ReservedQueues";
+            ViewData["Title"] = "Reserved Queues";
             ViewData["BreadCrumbs"] = GetCrumbs();
             ViewData["DeleteHref"] = GetDeleteRef();
 
@@ -140,9 +170,18 @@ namespace WebAPI.Controllers.Web.Queue
             if (!getProOperation.Success) return OperationErrorBackToIndex(getProOperation.Exception);
             if (getProOperation.Result == null) return RecordNotFound();
 
+            var getEOperation = await _ebo.ReadAsync(getOperation.Result.EstablishmentId);
+            if (!getEOperation.Success) return OperationErrorBackToIndex(getEOperation.Exception);
+            if (getEOperation.Result == null) return RecordNotFound();
+
+            var getCOperation = await _cbo.ReadAsync(getEOperation.Result.CompanyId);
+            if (!getCOperation.Success) return OperationErrorBackToIndex(getCOperation.Exception);
+            if (getCOperation.Result == null) return RecordNotFound();
+
             var vm = ReservedQueueViewModel.Parse(getOperation.Result);
 
             Draw("Details", "fa-search");
+            ViewData["Company"] = CompanyViewModel.Parse(getCOperation.Result);
             ViewData["Establishment"] = EstablishmentViewModel.Parse(getEstOperation.Result);
             ViewData["Profile"] = ProfileViewModel.Parse(getProOperation.Result);
             return View(vm);
@@ -189,6 +228,27 @@ namespace WebAPI.Controllers.Web.Queue
                 if (!createOperation.Result)
                 {
                     TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
+
+                    var listEstOperation = await _ebo.ListNotDeletedAsync();
+                    if (!listEstOperation.Success) return OperationErrorBackToIndex(listEstOperation.Exception);
+
+                    var listProOperation = await _pbo.ListNotDeletedAsync();
+                    if (!listProOperation.Success) return OperationErrorBackToIndex(listProOperation.Exception);
+
+                    var estList = new List<SelectListItem>();
+                    foreach (var item in listEstOperation.Result)
+                    {
+                        estList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Address });
+                    }
+
+                    var profiList = new List<SelectListItem>();
+                    foreach (var item in listProOperation.Result)
+                    {
+                        profiList.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.VatNumber.ToString() });
+                    }
+                    ViewBag.Establishments = estList;
+                    ViewBag.Profiles = profiList;
+
                     Draw("Create", "fa-plus");
                     return View(vm);
                 }
@@ -222,9 +282,9 @@ namespace WebAPI.Controllers.Web.Queue
             }
 
             var profiList = new List<SelectListItem>();
-            foreach (var item in listEstOperation.Result)
+            foreach (var item in listProOperation.Result)
             {
-                var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.Address };
+                var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.VatNumber.ToString() };
                 if (item.Id == vm.ProfileId) listItem.Selected = true;
                 profiList.Add(listItem);
             }
