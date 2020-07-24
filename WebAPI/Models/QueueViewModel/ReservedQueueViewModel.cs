@@ -15,6 +15,9 @@ namespace WebAPI.Models.QueueViewModel
         [Required(ErrorMessage = "Required Field")] 
         public Guid EstablishmentId { get; set; }
 
+        [Display(Name = "Expiration Date")]
+        public DateTime ExpirationDate { get; set; }
+
         public ReservedQueue ToReservedQueue()
         {
             return new ReservedQueue(EstablishmentId, ProfileId);
@@ -26,7 +29,7 @@ namespace WebAPI.Models.QueueViewModel
                 Id = reservedQueue.Id,
                 ProfileId = reservedQueue.ProfileId,
                 EstablishmentId = reservedQueue.EstablishmentId,
-                //Id = reservedQueue.Id
+                ExpirationDate = reservedQueue.CreatedAt.AddHours(2),
             };
         }
 

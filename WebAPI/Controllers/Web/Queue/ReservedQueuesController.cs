@@ -125,7 +125,9 @@ namespace WebAPI.Controllers.Web.Queue
             var lst = new List<ReservedQueueViewModel>();
             foreach (var item in listOperation.Result)
             {
-                lst.Add(ReservedQueueViewModel.Parse(item));
+                var limitCheck = await _bo.TwoHourLimitReserveAsync(item.Id);
+                if (limitCheck.Result && limitCheck.Success)
+                    lst.Add(ReservedQueueViewModel.Parse(item));
             }
 
             var listEOperation = await _ebo.ListNotDeletedAsync();
