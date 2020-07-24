@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Recodme.RD.FullStoQReborn.DataLayer.Enums;
 
 namespace Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods
 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
 using Recodme.RD.FullStoQReborn.DataAccessLayer.Seeders;
+using Recodme.RD.FullStoQReborn.DataLayer.Enums;
 using Recodme.RD.FullStoQReborn.DataLayer.EssentialGoods;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace FullStoQTests.EssentialGoods
             var cat = catBo.ListNotDeleted().Result.First();
 
             var bo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco", "506-1234-422", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", "", 4.24, 0.80, Measure.L, bra.Id, cat.Id);
             var resCreate = bo.Create(prodMod);
 
             var resGet = bo.Read(prodMod.Id);
@@ -39,7 +40,7 @@ namespace FullStoQTests.EssentialGoods
             var cat = catBo.ListNotDeletedAsync().Result.Result.First();
 
             var bo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", "506-1234-422", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", "", 4.24, 0.80, Measure.L, bra.Id, cat.Id);
             var resCreate = bo.CreateAsync(prodMod).Result;
 
             var resGet = bo.ReadAsync(prodMod.Id).Result;
@@ -123,7 +124,7 @@ namespace FullStoQTests.EssentialGoods
             var cat = catBo.ListNotDeleted().Result.First();
 
             var bo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco", "506-1237-424", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", "", 4.24, 0.80, Measure.L, bra.Id, cat.Id);
             var resCreate = bo.Create(prodMod);
 
             Assert.IsTrue(!resCreate.Result);
@@ -139,7 +140,7 @@ namespace FullStoQTests.EssentialGoods
             var cat = catBo.ListNotDeletedAsync().Result.Result.First();
 
             var bo = new ProductModelBusinessObject();
-            var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", "506-1237-424", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", "", 4.24, 0.80, Measure.L, bra.Id, cat.Id);
             var resCreate = bo.CreateAsync(prodMod).Result;
 
             Assert.IsTrue(!resCreate.Result);
@@ -153,7 +154,7 @@ namespace FullStoQTests.EssentialGoods
             var bra = bo.ListNotDeleted().Result.First();
             var catBo = new CategoryBusinessObject();
             var cat = catBo.ListNotDeleted().Result.First();
-            var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", "506-1234-424", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", "", 4.24, 0.80, Measure.L, bra.Id, cat.Id);
             prodMod.BarCode = "506-1237-424";
             var resUpdate = bo.Update(prodMod);
             Assert.IsTrue(!resUpdate.Result);
@@ -167,7 +168,7 @@ namespace FullStoQTests.EssentialGoods
             var bra = bo.ListNotDeletedAsync().Result.Result.First();
             var catBo = new CategoryBusinessObject();
             var cat = catBo.ListNotDeletedAsync().Result.Result.First();
-            var prodMod = new ProductModel("Vinho Branco da Barraca do Tejo", "506-1234-424", 4.24, 0.80, bra.Id, cat.Id);
+            var prodMod = new ProductModel("Vinho Branco", "506-1237-422", "", 4.24, 0.80, Measure.L, bra.Id, cat.Id);
             prodMod.BarCode = "506-1237-424";
             var resUpdate = bo.UpdateAsync(prodMod).Result;
             Assert.IsTrue(!resUpdate.Result);
