@@ -110,7 +110,7 @@ namespace WebAPI.Controllers.Web.Queue
 
         public void Draw(string type, string icon)
         {
-            ViewData["Title"] = $"{type} ReservedQueue";
+            ViewData["Title"] = $"{type} - Reserved Queue";
             var crumbs = GetCrumbs();
             crumbs.Add(new BreadCrumb() { Action = type, Controller = "ReservedQueues", Icon = icon, Text = type });
             ViewData["BreadCrumbs"] = crumbs;
@@ -143,7 +143,7 @@ namespace WebAPI.Controllers.Web.Queue
             ViewData["Companies"] = cList;
             ViewData["Establishments"] = estList;
             ViewData["Profiles"] = profiList;
-            ViewData["Title"] = "ReservedQueues";
+            ViewData["Title"] = "Reserved Queues";
             ViewData["BreadCrumbs"] = GetCrumbs();
             ViewData["DeleteHref"] = GetDeleteRef();
 
@@ -259,9 +259,9 @@ namespace WebAPI.Controllers.Web.Queue
             }
 
             var profiList = new List<SelectListItem>();
-            foreach (var item in listEstOperation.Result)
+            foreach (var item in listProOperation.Result)
             {
-                var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.Address };
+                var listItem = new SelectListItem() { Value = item.Id.ToString(), Text = item.VatNumber.ToString() };
                 if (item.Id == vm.ProfileId) listItem.Selected = true;
                 profiList.Add(listItem);
             }

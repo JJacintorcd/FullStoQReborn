@@ -37,10 +37,10 @@
                         var est = (ViewData["Establishments"] as List<EstablishmentViewModel>).First(x => x.Id == item.EstablishmentId);
                         var company = (ViewData["Companies"] as List<CompanyViewModel>).First(x => x.Id == est.CompanyId);
                     }
-                    <td class="w-1"><a class="link-edit" asp-controller="Establishments" asp-action="Details" asp-route-id="@est.Id">@company.Name, @est.Address </a></td>
+                    <td class="w-1"><a class="link-edit text-primary no-underline" asp-controller="Establishments" asp-action="Details" asp-route-id="@est.Id">@company.Name, @est.Address </a></td>
 
                     @{ var prod = (ViewData["Profiles"] as List<ProfileViewModel>).First(x => x.Id == item.ProfileId);}
-                    <td class="w-1"><a class="link-edit" asp-controller="Profiles" asp-action="Details" asp-route-id="@prod.Id">@prod.VatNumber </a></td>
+                    <td class="w-1"><a class="link-edit text-primary no-underline" asp-controller="Profiles" asp-action="Details" asp-route-id="@prod.Id">@prod.VatNumber </a></td>
                     <td></td>
                 </tr>
                 }
