@@ -36,7 +36,7 @@
                         var e = ViewData["Establishment"] as EstablishmentViewModel;
                         var company = ViewData["Company"] as CompanyViewModel;
                     }
-                    <a asp-controller="Establishments" asp-action="Details" asp-route-id="@e.Id">@company.Name, @e.Address</a>
+                    <a asp-controller="Establishments" asp-action="Details" asp-route-id="@e.Id" class="text-primary no-underline">@company.Name, @e.Address</a>
                 </dd>
             </dl>
             <dl class="row">
@@ -47,7 +47,7 @@
                     @{
                         var p = ViewData["ProductModel"] as ProductModelViewModel;
                     }
-                    <a asp-controller="ProductModels" asp-action="Details" asp-route-id="@p.Id">@p.Name</a>
+                    <a asp-controller="ProductModels" asp-action="Details" asp-route-id="@p.Id" class="text-primary no-underline">@p.Name</a>
                 </dd>
             </dl>
             <dl class="row">
@@ -58,7 +58,7 @@
                     @{
                         var profile = ViewData["Profile"] as ProfileViewModel;
                     }
-                    <a asp-controller="Profiles" asp-action="Details" asp-route-id="@profile.Id">@profile.VatNumber</a>
+                    <a asp-controller="Profiles" asp-action="Details" asp-route-id="@profile.Id" class="text-primary no-underline">@profile.VatNumber</a>
                 </dd>
             </dl>
         </div>

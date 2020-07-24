@@ -35,7 +35,14 @@
 
 
 
-
 @section Scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    $(document).ready(function () {
+        $('.fk-select').select2({
+            placeholder: "Select a value",
+            allowClear: true
+        });
+    });
+</script>
