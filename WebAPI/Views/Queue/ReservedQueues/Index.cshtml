@@ -38,7 +38,7 @@
                     </td>
 
                     <input type="hidden" class="expirationDate" value="@list[i].ExpirationDate" />
-                    <td class="w-1" id="eDates @i"></td>
+                    <td class="w-1" id="@Html.Raw("eDates"+i)"></td>
 
                     @{
                         var est = (ViewData["Establishments"] as List<EstablishmentViewModel>).First(x => x.Id == list[i].EstablishmentId);
@@ -75,34 +75,30 @@
 </div>
 <input type="hidden" id="idToDelete" />
 <script>
-
     var eDates = $(".expirationDate").get();
-
-    // Update the count down every 1 second
     var x = setInterval(function () {
-
         for (var i = 0; i < eDates.length; i++) {
-            var date = moment(eDates[i].value, 'dd/MM/yyyy hh:mm:ss');
-
-            // Get today's date and time
-            var now = moment(new Date());
-
-            // Find the distance between now and the count down date
-            var distanceM = moment(date.diff(now));
-            var distance = distanceM.utcOffset(1).format('HH:mm:ss');
-
-            console.log(moment().diff(date, 'seconds'));
+            var date = new moment(eDates[i].value, 'DD-MM-YYYY HH:mm:ss');
+            var now = new moment();
+            var distance = moment(date.diff(now));
             // Display the result in the element with id="demo"
-            var td = (document.getElementById("eDates " + i));
-            td.innerHTML = distance;
+            var td = $("#eDates" + i)[0];
+
+            td.innerHTML = distance.format('HH:mm:ss');
 
             // If the count down is finished, write some text
-            if (date.isBefore(moment())) {
-                clearInterval(x);
+            if (distance < -3599999) {
                 td.innerHTML = "EXPIRED";
             }
+
+            if (distance < -3599999) $('#eDates' + i).addClass("font-weight-bold text-danger");
+            else if (distance < -1800000) $('#eDates' + i).addClass("font-weight-bold text-warning");
+            else $('#eDates' + i).addClass("font-weight-bold text-success");
+
         }
     }, 1000);
+
+
 
     var ConfirmDelete = function (id) {
         $("#deleteBtn").attr("href", $("#deleteBtn").attr("href") + "/" + id);

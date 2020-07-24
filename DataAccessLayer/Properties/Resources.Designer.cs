@@ -61,7 +61,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server=RECODME-JOAOJ\SQLEXPRESS;Database=FullStoQ;Trusted_Connection=true;.
+        ///   Looks up a localized string similar to Server=(localdb)\MSSQLLocalDB;Database=STK;.
         /// </summary>
         public static string ConnectionString {
             get {
