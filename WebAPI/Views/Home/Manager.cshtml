@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewData["Title"] = "Manager";
+}
+
+<div class="title-manager">
+    <h2 class="text-center">Nome da loja - Região @User.Identity.Name!</h2>
+</div>
+
+<div class="card-group ml-5">
+    <section class="card-staff  text-center ml-5 mr-5 ">
+        <div class="card border-dark mb-3" style="max-width: 25rem;">
+            <div class="card-header text-center">Staff</div>
+            <div class="card-body border-primary" style="width:400px">
+                <i class="fas fa-user-plus fa-2x  mr-2"></i>
+                <a href="#" class="btn btn-primary mb-2 ">
+                    Register
+                </a>
+            </div>
+            <div class="card-body">
+                <i class="fas fa-user fa-2x  mr-2"></i>
+                <a href="#" class="btn btn-primary mb-2 ml-3" style="width:85px">
+                    List
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="card-stock text-center">
+        <div class="card border-dark mb-3" style="max-width: 25rem;">
+            <div class="card-header text-center">
+                Stock
+            </div>
+            <div class="card-body border-primary" style="width:400px">
+                <i class="fas fa-cart-plus fa-2x  mr-3"></i>
+                <a href="#" class="btn btn-primary mb-2">
+                    Register
+                </a>
+            </div>
+            <div class="card-body ">
+                <i class="fas fa-cart-plus fa-2x  mr-4"></i>
+                <a href="#" class="btn btn-primary mb-2" style="width:5rem">
+                    List
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="card-group ml-5">
+    <section class="card-reservation  text-center ml-5">
+        <div class="card border-dark mb-3" style="max-width: 25rem;">
+            <div class="card-header text-center">
+                Reservation Management
+            </div>
+            <div class="card-body border-primary" style="width:400px">
+                <i class="fas fa-user-plus fa-2x mr-3"></i>
+                <a href="#" class="btn btn-primary mb-2">
+                    Queue Reservation
+                </a>
+            </div>
+            <div class="card-body ">
+                <i class="fas fa-shopping-basket fa-2x mr-4"></i>
+                <a href="#" class="btn btn-primary mb-2" style="width:170px">
+                    Product Reservation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="card-queue  text-center ml-5">
+        <div class="card border-dark mb-3" style="max-width: 25rem;">
+            <div class="card-header text-center">
+                Queue
+            </div>
+            <div class="card-body border-primary" style="width:400px">
+                <i class="fas fa-users fa-2x mr-3"></i>
+                <a href="#" class="btn btn-primary mb-2">
+                    Status
+                </a>
+            </div>
+        </div>
+    </section>
+</div>

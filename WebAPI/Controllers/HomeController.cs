@@ -50,6 +50,7 @@ namespace WebAPI.Controllers
         {
             return View();
         }
+
         public IActionResult Privacy()
         {
             return View();
@@ -67,6 +68,15 @@ namespace WebAPI.Controllers
             return View();
         }
 
+        public IActionResult Manager()
+        {
+            return View();
+        }
+
+        public IActionResult Security()
+        {
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

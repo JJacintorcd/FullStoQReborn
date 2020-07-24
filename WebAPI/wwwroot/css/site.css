@@ -187,7 +187,7 @@ body {
 
 .text-lg-center {
     color: #FFE100;
-background:}
+}
 
 .text-justify {
     font-size:22px;
@@ -197,4 +197,11 @@ background:}
     margin-left:450px;
     height:auto;
     width:150px;
+}
+
+.title-security,
+.title-manager {
+    color: #FFE100;
+    margin-bottom: 50px;
+    margin-top: 50px;
 }
