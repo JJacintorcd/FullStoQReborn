@@ -27,26 +27,26 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @{ var list = Model as List<ReservedQueueViewModel>;}
+                @for(var i = 0; i < list.Count; i++)
                 {
                 <tr>
                     <td class="flex-nowrap w-1">
-                        <a class="link-details" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search mr-2"></i></a>
-                        <a class="link-edit" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit mr-2"></i></a>
-                        <a id="deleteItem" onclick="ConfirmDelete('@item.Id')"><i class="link-delete fas fa-trash"></i></a>
+                        <a class="link-details" asp-action="Details" asp-route-id="@list[i].Id"><i class="fas fa-search mr-2"></i></a>
+                        <a class="link-edit" asp-action="Edit" asp-route-id="@list[i].Id"><i class="fas fa-edit mr-2"></i></a>
+                        <a id="deleteItem" onclick="ConfirmDelete('@list[i].Id')"><i class="link-delete fas fa-trash"></i></a>
                     </td>
 
-                    var ExpirationDate = @Html.Raw(item.ExpirationDate);
-
-                    <td class="w-1"><a id="demo"></a></td>
+                    <input type="hidden" class="expirationDate" value="@list[i].ExpirationDate" />
+                    <td class="w-1" id="eDates @i"></td>
 
                     @{
-                        var est = (ViewData["Establishments"] as List<EstablishmentViewModel>).First(x => x.Id == item.EstablishmentId);
+                        var est = (ViewData["Establishments"] as List<EstablishmentViewModel>).First(x => x.Id == list[i].EstablishmentId);
                         var company = (ViewData["Companies"] as List<CompanyViewModel>).First(x => x.Id == est.CompanyId);
                     }
                     <td class="w-1"><a class="link-edit text-primary no-underline" asp-controller="Establishments" asp-action="Details" asp-route-id="@est.Id">@company.Name, @est.Address </a></td>
 
-                    @{ var prod = (ViewData["Profiles"] as List<ProfileViewModel>).First(x => x.Id == item.ProfileId);}
+                    @{ var prod = (ViewData["Profiles"] as List<ProfileViewModel>).First(x => x.Id == list[i].ProfileId);}
                     <td class="w-1"><a class="link-edit text-primary no-underline" asp-controller="Profiles" asp-action="Details" asp-route-id="@prod.Id">@prod.VatNumber </a></td>
                     <td></td>
                 </tr>
@@ -76,29 +76,31 @@
 <input type="hidden" id="idToDelete" />
 <script>
 
+    var eDates = $(".expirationDate").get();
+
     // Update the count down every 1 second
-    var x = setInterval(function() {
-        
-        // Get today's date and time
-        var now = new Date().getTime();
-        var date = new Date(ExpirationDate.parse(myCSharpString)).getTime;
+    var x = setInterval(function () {
 
-        // Find the distance between now and the count down date
-        var distance = date - now;
+        for (var i = 0; i < eDates.length; i++) {
+            var date = moment(eDates[i].value, 'dd/MM/yyyy hh:mm:ss');
 
-        // Time calculations for days, hours, minutes and seconds
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // Get today's date and time
+            var now = moment(new Date());
 
-        // Display the result in the element with id="demo"
-        document.getElementById("demo").innerHTML = hours + "h "
-        + minutes + "m " + seconds + "s ";
+            // Find the distance between now and the count down date
+            var distanceM = moment(date.diff(now));
+            var distance = distanceM.utcOffset(1).format('HH:mm:ss');
 
-        // If the count down is finished, write some text
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById("demo").innerHTML = "EXPIRED";
+            console.log(moment().diff(date, 'seconds'));
+            // Display the result in the element with id="demo"
+            var td = (document.getElementById("eDates " + i));
+            td.innerHTML = distance;
+
+            // If the count down is finished, write some text
+            if (date.isBefore(moment())) {
+                clearInterval(x);
+                td.innerHTML = "EXPIRED";
+            }
         }
     }, 1000);
 
