@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\images\about.png" />
     <Content Remove="wwwroot\images\fullsstoQ-logo.png" />
   </ItemGroup>
 
