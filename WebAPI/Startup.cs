@@ -34,7 +34,7 @@ namespace WebAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            //ContextSeeder.Seed();
+            ContextSeeder.Seed();
 
         }
 

@@ -49,6 +49,15 @@ namespace WebAPI.Controllers.Web.Person
             return RedirectToAction(nameof(Index));
         }
 
+        public void Draw(string type, string icon)
+        {
+            ViewData["Title"] = "Profile";
+            var crumbs = GetCrumbs();
+            crumbs.Add(new BreadCrumb() { Action = type, Controller = "Profiles", Icon = icon, Text = type });
+
+            ViewData["BreadCrumbs"] = crumbs;
+        } 
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -78,34 +87,34 @@ namespace WebAPI.Controllers.Web.Person
             if (getOperation.Result == null) return RecordNotFound();
 
             var vm = ProfileViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "Profile";
 
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Details", Controller = "Profiles", Icon = "fa-search", Text = "Detail" });
-
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Details", "fa-search");
+            
             return View(vm);
         }
 
-        [HttpGet("create")]
+        [HttpGet("Create")]
         public IActionResult Create()
         {
-            ViewData["Title"] = "Create Profile";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Create", Controller = "Profiles", Icon = "fa-plus", Text = "New" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Create", "fa-plus");
             return View();
         }
 
-        [HttpPost("create")]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProfileViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                var model = vm.ToProfile();
+                var model = vm.ToModel();
                 var createOperation = await _bo.CreateAsync(model);
                 if (!createOperation.Success) return OperationErrorBackToIndex(createOperation.Exception);
+                if (!createOperation.Result)
+                {
+                    TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, createOperation.Message);
+                    Draw("Create", "fa-plus");
+                    return View();
+                }
                 else return OperationSuccess("The record was successfuly created");
             }
             return View(vm);
@@ -121,10 +130,7 @@ namespace WebAPI.Controllers.Web.Person
             if (getOperation.Result == null) return RecordNotFound();
 
             var vm = ProfileViewModel.Parse(getOperation.Result);
-            ViewData["Title"] = "Edit Profile";
-            var crumbs = GetCrumbs();
-            crumbs.Add(new BreadCrumb() { Action = "Edit", Controller = "Profiles", Icon = "fa-edit", Text = "Edit" });
-            ViewData["BreadCrumbs"] = crumbs;
+            Draw("Edit", "fa-edit");
             return View(vm);
         }
 
@@ -145,6 +151,22 @@ namespace WebAPI.Controllers.Web.Person
                     if (!updateOperation.Success)
                     {
                         TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Exception);
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+                        vm = ProfileViewModel.Parse(getOperation.Result);
+                        Draw("Edit", "fa-plus");
+                        return View(vm);
+                    }
+                    if (!updateOperation.Result)
+                    {
+                        TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, updateOperation.Message);
+                        getOperation = await _bo.ReadAsync((Guid)id);
+                        if (!getOperation.Success) return OperationErrorBackToIndex(getOperation.Exception);
+                        if (getOperation.Result == null) return RecordNotFound();
+
+                        vm = ProfileViewModel.Parse(getOperation.Result);
+                        Draw("Edit", "fa-plus");
                         return View(vm);
                     }
                     else return OperationSuccess("The record was successfuly updated");
