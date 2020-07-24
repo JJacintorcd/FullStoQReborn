@@ -16,7 +16,7 @@ namespace WebAPI.Models.QueueViewModel
         public Guid EstablishmentId { get; set; }
 
         [Display(Name = "Expiration Date")]
-        public DateTime ExpirationDate { get; set; }
+        public string ExpirationDate { get; set; }
 
         public ReservedQueue ToReservedQueue()
         {
@@ -29,7 +29,7 @@ namespace WebAPI.Models.QueueViewModel
                 Id = reservedQueue.Id,
                 ProfileId = reservedQueue.ProfileId,
                 EstablishmentId = reservedQueue.EstablishmentId,
-                ExpirationDate = reservedQueue.CreatedAt.AddHours(2),
+                ExpirationDate = reservedQueue.CreatedAt.AddHours(2).ToString("dd-MM-yyyy HH:mm:ss"),
             };
         }
 
