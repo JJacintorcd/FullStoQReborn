@@ -181,6 +181,9 @@ body {
     font-family: Muli, Helvética, H, Trebuchet MS;
 }
 
+.no-underline:hover {
+    text-decoration: none;
+}
 
 .text-lg-center {
     color: #FFE100;
