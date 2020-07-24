@@ -52,10 +52,10 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods
         {
             try
             {
-                //if (_dao.ListAsync().Result.Any(x => x.BarCode.ToLower().Trim() == item.BarCode.ToLower().Trim() && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Bar Code already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.BarCode.ToLower().Trim() == item.BarCode.ToLower().Trim() && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Bar Code already exists" };
 
-                //if (item.Amount <= 0) return new OperationResult<bool>() { Success = true, Result = false, Message = "Amount must be more than zero" };
-                //if (item.Price <= 0) return new OperationResult<bool>() { Success = true, Result = false, Message = "Price must be more than zero" };
+                if (item.Amount <= 0) return new OperationResult<bool>() { Success = true, Result = false, Message = "Amount must be more than zero" };
+                if (item.Price <= 0) return new OperationResult<bool>() { Success = true, Result = false, Message = "Price must be more than zero" };
                 await _dao.CreateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
 
