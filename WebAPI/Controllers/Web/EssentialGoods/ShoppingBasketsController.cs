@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.EssentialGoods;
+using Recodme.RD.FullStoQReborn.BusinessLayer.Person;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Models.EssentialGoodsViewModel;
 using WebAPI.Models.HtmlComponents;
+using WebAPI.Models.PersonViewModel;
 using WebAPI.Support;
 
 namespace WebAPI.Controllers.Web.EssentialGoods
@@ -13,6 +16,8 @@ namespace WebAPI.Controllers.Web.EssentialGoods
     public class ShoppingBasketsController : Controller
     {
         private readonly ShoppingBasketBusinessObject _bo = new ShoppingBasketBusinessObject();
+        private readonly ProfileBusinessObject _pbo = new ProfileBusinessObject();
+
 
         private string GetDeleteRef()
         {
@@ -47,6 +52,17 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             return RedirectToAction(nameof(Index));
         }
 
+        private async Task<List<ProfileViewModel>> GetProfileViewModels(List<Guid> ids)
+        {
+            var filterOperation = await _pbo.FilterAsync(x => ids.Contains(x.Id));
+            var cList = new List<ProfileViewModel>();
+            foreach (var item in filterOperation.Result)
+            {
+                cList.Add(ProfileViewModel.Parse(item));
+            }
+            return cList;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -58,6 +74,9 @@ namespace WebAPI.Controllers.Web.EssentialGoods
             {
                 lst.Add(ShoppingBasketViewModel.Parse(item));
             }
+
+            var pList = await GetProfileViewModels(listOperation.Result.Select(x => x.ProfileId).Distinct().ToList());
+            ViewData["Profiles"] = pList;
 
             ViewData["Title"] = "ShoppingBaskets";
             ViewData["BreadCrumbs"] = GetCrumbs();
