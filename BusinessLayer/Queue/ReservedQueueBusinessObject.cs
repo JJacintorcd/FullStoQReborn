@@ -316,11 +316,11 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Queue
                 var item = _dao.ReadAsync(id).Result;
                 var reserveHour = item.CreatedAt;
                 var hourLimit = reserveHour.AddHours(2);
-                if (DateTime.UtcNow > hourLimit)
-                {
-                    await _dao.DeleteAsync(item);
-                    return new OperationResult<bool>() { Success = true, Result = false };
-                }
+                //if (DateTime.UtcNow > hourLimit)
+                //{
+                //    await _dao.DeleteAsync(item);
+                //    return new OperationResult<bool>() { Success = true, Result = false };
+                //}
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
             catch (Exception e)
