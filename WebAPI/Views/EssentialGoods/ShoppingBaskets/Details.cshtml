@@ -1,18 +1,31 @@
 ﻿@using WebAPI.Models.EssentialGoodsViewModel;
+@using WebAPI.Models.PersonViewModel;
 @model ShoppingBasketViewModel
 
 <h2>ShoppingBasket - Details</h2>
 <hr />
 
-<div>
-    <dl class="row">
-        <dt class="col-2">
-            @Html.DisplayNameFor(model => model.ProfileId)
-        </dt>
 
-        <dd class="col-10">
-            @Html.DisplayFor(model => model.ProfileId)
-        </dd>
-    </dl>
+<div class="card">
+    <div class="card-header bg-greenish-green">
+        <h2 class="float-left">
+            @ViewData["Title"]
+        </h2>
+    </div>
+    <div class="card-body">
+        <div class="ml-5 mr-5">
+            <dl class="row">
+                <dt class="col-3">
+                    Profile
+                </dt>
+                <dd class="col-9">
+                    @{
+                        var pro = ViewData["Profile"] as ProfileViewModel;
+                    }
+                    <a asp-controller="Profiles" asp-action="Details" asp-route-id="@pro.Id" class="text-primary no-underline">@pro.VatNumber</a>
+                </dd>
+            </dl>
+        </div>
+    </div>
 </div>
 

@@ -61,7 +61,7 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server=RECODME-AMARTIM\SQLEXPRESS;Database=FullStoQ;Trusted_Connection=true;.
+        ///   Looks up a localized string similar to Server=RECODME-VASCOV\SQLEXPRESS;Database=FullStoQ;Trusted_Connection=true;.
         /// </summary>
         public static string ConnectionString {
             get {
