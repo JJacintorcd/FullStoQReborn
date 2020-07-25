@@ -106,7 +106,7 @@ namespace WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<FullStoqUser> userManager, RoleManager<FullStoqRole> roleManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -135,8 +135,6 @@ namespace WebAPI
             app.UseAuthorization();
 
             app.UseAuthentication();
-
-            SetupRolesAndUsers(userManager, roleManager);
 
             app.UseEndpoints(endpoints =>
             {
@@ -175,7 +173,7 @@ namespace WebAPI
             if (roleManager.FindByNameAsync("Admin").Result == null) roleManager.CreateAsync(new FullStoqRole() { Name = "Admin" }).Wait();
             if (userManager.FindByNameAsync("admin").Result == null)
             {
-                var person = new Profile(000000000, "Utilizador", "Exemplo", 912345678, DateTime.Now);
+                var person = new Profile(912345678, "Utilizador", "Exemplo", 0000000, DateTime.Now);
                 var abo = new AccountBusinessController(userManager, roleManager);
                 var res = abo.Register("admin", "admin@restLen.com", "Admin123!#", person, "Admin").Result;
                 var roleRes = userManager.AddToRoleAsync(userManager.FindByNameAsync("admin").Result, "Admin");
