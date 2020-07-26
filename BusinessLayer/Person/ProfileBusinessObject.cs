@@ -24,14 +24,11 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Person
         {
             try
             {
-                if (_dao.List().Any(x => (x.VatNumber == item.VatNumber || x.PhoneNumber == item.PhoneNumber) && item.Id != x.Id))
-                {
-                    if (_dao.List().Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
-                    if (_dao.List().Any(x => x.PhoneNumber == item.PhoneNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number already exists" };
-                    if (item.VatNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
-                    if (item.PhoneNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number must be 9 digits long" };
-                    if (item.PhoneNumber.ToString().StartsWith("91") || item.PhoneNumber.ToString().StartsWith("93") || item.PhoneNumber.ToString().StartsWith("96") || item.PhoneNumber.ToString().StartsWith("92")) return new OperationResult<bool>() { Success = true, Result = false, Message = "Enter a valid phone number" };
-                }
+                if (_dao.List().Any(x => x.VatNumber == item.VatNumber && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
+                if (_dao.List().Any(x => x.PhoneNumber == item.PhoneNumber && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number already exists" };
+                if (item.VatNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
+                if (item.PhoneNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number must be 9 digits long" };
+                if (!(item.PhoneNumber.ToString().StartsWith("91") || item.PhoneNumber.ToString().StartsWith("93") || item.PhoneNumber.ToString().StartsWith("96") || item.PhoneNumber.ToString().StartsWith("92"))) return new OperationResult<bool>() { Success = true, Result = false, Message = "Enter a valid phone number" };
                 _dao.Create(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -44,14 +41,11 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Person
         {
             try
             {
-                if (_dao.List().Any(x => (x.VatNumber == item.VatNumber || x.PhoneNumber == item.PhoneNumber) && item.Id != x.Id))
-                {
-                    if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
-                    if (_dao.ListAsync().Result.Any(x => x.PhoneNumber == item.PhoneNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number already exists" };
-                    if (item.VatNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
-                    if (item.PhoneNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number must be 9 digits long" };
-                    if (item.PhoneNumber.ToString().StartsWith("91") || item.PhoneNumber.ToString().StartsWith("93") || item.PhoneNumber.ToString().StartsWith("96") || item.PhoneNumber.ToString().StartsWith("92")) return new OperationResult<bool>() { Success = true, Result = false, Message = "Enter a valid phone number" };
-                }
+                if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.PhoneNumber == item.PhoneNumber && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number already exists" };
+                if (item.VatNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
+                if (item.PhoneNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number must be 9 digits long" };
+                if (!(item.PhoneNumber.ToString().StartsWith("91") || item.PhoneNumber.ToString().StartsWith("93") || item.PhoneNumber.ToString().StartsWith("96") || item.PhoneNumber.ToString().StartsWith("92"))) return new OperationResult<bool>() { Success = true, Result = false, Message = "Enter a valid phone number" };
                 await _dao.CreateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -110,14 +104,11 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Person
         {
             try
             {
-                if (_dao.List().Any(x => (x.VatNumber == item.VatNumber || x.PhoneNumber == item.PhoneNumber) && item.Id != x.Id))
-                {
-                    if (_dao.List().Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
-                    if (_dao.List().Any(x => x.PhoneNumber == item.PhoneNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number already exists" };
-                    if (item.VatNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
-                    if (item.PhoneNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number must be 9 digits long" };
-                    if (item.PhoneNumber.ToString().StartsWith("91") || item.PhoneNumber.ToString().StartsWith("93") || item.PhoneNumber.ToString().StartsWith("96") || item.PhoneNumber.ToString().StartsWith("92")) return new OperationResult<bool>() { Success = true, Result = false, Message = "Enter a valid phone number" };
-                }
+                if (_dao.List().Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
+                if (_dao.List().Any(x => x.PhoneNumber == item.PhoneNumber && item.Id != x.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number already exists" };
+                if (item.VatNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
+                if (item.PhoneNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number must be 9 digits long" };
+                if (!(item.PhoneNumber.ToString().StartsWith("91") || item.PhoneNumber.ToString().StartsWith("93") || item.PhoneNumber.ToString().StartsWith("96") || item.PhoneNumber.ToString().StartsWith("92"))) return new OperationResult<bool>() { Success = true, Result = false, Message = "Enter a valid phone number" };
                 _dao.Update(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }
@@ -130,14 +121,11 @@ namespace Recodme.RD.FullStoQReborn.BusinessLayer.Person
         {
             try
             {
-                if (_dao.List().Any(x => (x.VatNumber == item.VatNumber || x.PhoneNumber == item.PhoneNumber) && item.Id != x.Id))
-                {
-                    if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
-                    if (_dao.ListAsync().Result.Any(x => x.PhoneNumber == item.PhoneNumber && item.Id != x.Id)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number already exists" };
-                    if (item.VatNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
-                    if (item.PhoneNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number must be 9 digits long" };
-                    if (item.PhoneNumber.ToString().StartsWith("91") || item.PhoneNumber.ToString().StartsWith("93") || item.PhoneNumber.ToString().StartsWith("96") || item.PhoneNumber.ToString().StartsWith("92")) return new OperationResult<bool>() { Success = true, Result = false, Message = "Enter a valid phone number" };
-                }
+                if (_dao.ListAsync().Result.Any(x => x.VatNumber == item.VatNumber && item.Id != x.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Vat number already exists" };
+                if (_dao.ListAsync().Result.Any(x => x.PhoneNumber == item.PhoneNumber && item.Id != x.Id && !x.IsDeleted)) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number already exists" };
+                if (item.VatNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "VAT number must be 9 digits long" };
+                if (item.PhoneNumber.ToString().Length != 9) return new OperationResult<bool>() { Success = true, Result = false, Message = "Phone number must be 9 digits long" };
+                if (!(item.PhoneNumber.ToString().StartsWith("91") || item.PhoneNumber.ToString().StartsWith("93") || item.PhoneNumber.ToString().StartsWith("96") || item.PhoneNumber.ToString().StartsWith("92"))) return new OperationResult<bool>() { Success = true, Result = false, Message = "Enter a valid phone number" };
                 await _dao.UpdateAsync(item);
                 return new OperationResult<bool>() { Success = true, Result = true };
             }

@@ -1,4 +1,5 @@
-﻿using Recodme.RD.FullStoQReborn.DataLayer.Person;
+﻿using Recodme.RD.FullStoQReborn.DataLayer.Commercial;
+using Recodme.RD.FullStoQReborn.DataLayer.Person;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,11 @@ namespace WebAPI.Models.PersonViewModel
         }
 
         public Profile ToProfile()
+        {
+            return new Profile(VatNumber, FirstName, LastName, PhoneNumber, BirthDate);
+        }
+
+        public Profile ToModel()
         {
             return new Profile(VatNumber, FirstName, LastName, PhoneNumber, BirthDate);
         }

@@ -39,14 +39,13 @@
                         {
                             <li class="nav-item font">
                                 <a class="nav-link text-light" title="Manage">
-                                    <i class="fas fa-user "></i>
+                                    <i class="fas fa-user"></i>
                                     Hello @User.Identity.Name!
-                                   
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Accounts" asp-action="Logout">
-                                    <i class=" fas fa-sign-out-alt "></i>
+                                <a class="nav-link text-light" asp-controller="Account" asp-action="Logout">
+                                    <i class="fas fa-sign-out-alt"></i>
                                     Logout
                                 </a>
                             </li>
@@ -54,13 +53,13 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Accounts" asp-action="Register">
+                                <a class="nav-link text-light" asp-controller="Account" asp-action="Register">
                                     <i class="fas fa-user-plus"></i>
                                     Register
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Accounts" asp-action="Login">
+                                <a class="nav-link text-light" asp-controller="Account" asp-action="Login">
                                     <i class="fas fa-sign-in-alt"></i>
                                     Login
                                 </a>
@@ -68,6 +67,51 @@
                         }
                     </ul>
                     <ul class="navbar-nav flex-grow-1">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Administration">
+                                    <i class="fas fa-user-cog"></i>
+                                    Administration
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Client"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Client">
+                                    <i class="fas fa-user-cog"></i>
+                                    Client
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Staff"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Staff">
+                                    <i class="fas fa-user-cog"></i>
+                                    Staff
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Security"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Security">
+                                    <i class="fas fa-user-cog"></i>
+                                    Security
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Manager">
+                                    <i class="fas fa-user-cog"></i>
+                                    Manager
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="AboutUs">
                                 <i class="fas fa-address-card"></i>
