@@ -97,6 +97,15 @@ namespace Recodme.RD.FullStoQReborn.DataAccessLayer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Server=(localdb)\MSSQLLocalDB;Database=FullStoQ;.
+        /// </summary>
+        public static string ConnectionStringLocal {
+            get {
+                return ResourceManager.GetString("ConnectionStringLocal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server=RECODME-VASCOV\SQLEXPRESS;Database=FullStoQ;Trusted_Connection=true;.
         /// </summary>
         public static string ConnectionStringVasco {

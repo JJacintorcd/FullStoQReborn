@@ -34,7 +34,7 @@ namespace WebAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            ContextSeeder.Seed();
+            //ContextSeeder.Seed();
 
         }
 
@@ -44,7 +44,8 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
-
+            services.AddSession();
+            services.AddMemoryCache();
             //Políticas de Cookies
             services.Configure<CookiePolicyOptions>(
                 options =>
@@ -75,23 +76,23 @@ namespace WebAPI
             //CORS irresponsável
             services.AddCors(x => x.AddPolicy("Default", (builder) => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer((options) =>
-                {
-                    options.RequireHttpsMetadata = false;
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                    };
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddJwtBearer((options) =>
+            //    {
+            //        options.RequireHttpsMetadata = false;
+            //        options.SaveToken = true;
+            //        options.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateIssuer = true,
+            //            ValidateAudience = true,
+            //            ValidateLifetime = true,
+            //            ValidateIssuerSigningKey = true,
+            //            ValidIssuer = Configuration["Jwt:Issuer"],
+            //            ValidAudience = Configuration["Jwt:Audience"],
+            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+            //        };
 
-                });
+            //    });
             
             services.Configure<RazorViewEngineOptions>(o =>
             {
@@ -106,7 +107,7 @@ namespace WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<FullStoqUser> userManager, RoleManager<FullStoqRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -127,14 +128,15 @@ namespace WebAPI
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
-
-            app.UseCors("GeneralPolicy");
-
-            app.UseAuthorization();
-
             app.UseAuthentication();
+            app.UseAuthorization();
+            SetupRolesAndUsers(userManager, roleManager);
+            //app.UseCors("GeneralPolicy");
+
+
+            
 
             app.UseEndpoints(endpoints =>
             {
