@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.Person;
 using Recodme.RD.FullStoQReborn.DataLayer.Person;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Models.HtmlComponents;
 using WebAPI.Models.PersonViewModel;
@@ -17,7 +15,7 @@ namespace WebAPI.Controllers
         private UserManager<FullStoqUser> UserManager { get; set; }
         private SignInManager<FullStoqUser> SignInManager { get; set; }
         private RoleManager<FullStoqRole> RoleManager { get; set; }
-
+        
         private IActionResult OperationErrorBackToIndex(Exception exception)
         {
             TempData["Alert"] = AlertFactory.GenerateAlert(NotificationType.Danger, exception);
