@@ -34,7 +34,7 @@ namespace WebAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            //ContextSeeder.Seed();
+            ContextSeeder.Seed();
 
         }
 
@@ -76,24 +76,24 @@ namespace WebAPI
             //CORS irresponsável
             services.AddCors(x => x.AddPolicy("Default", (builder) => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddJwtBearer((options) =>
-            //    {
-            //        options.RequireHttpsMetadata = false;
-            //        options.SaveToken = true;
-            //        options.TokenValidationParameters = new TokenValidationParameters
-            //        {
-            //            ValidateIssuer = true,
-            //            ValidateAudience = true,
-            //            ValidateLifetime = true,
-            //            ValidateIssuerSigningKey = true,
-            //            ValidIssuer = Configuration["Jwt:Issuer"],
-            //            ValidAudience = Configuration["Jwt:Audience"],
-            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-            //        };
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer((options) =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    };
 
-            //    });
-            
+                });
+
             services.Configure<RazorViewEngineOptions>(o =>
             {
                 o.ViewLocationFormats.Clear();
@@ -133,7 +133,7 @@ namespace WebAPI
             app.UseAuthentication();
             app.UseAuthorization();
             SetupRolesAndUsers(userManager, roleManager);
-            //app.UseCors("GeneralPolicy");
+            app.UseCors("GeneralPolicy");
 
 
             
