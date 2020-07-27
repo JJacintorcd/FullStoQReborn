@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Recodme.RD.FullStoQReborn.BusinessLayer.Person;
 using Recodme.RD.FullStoQReborn.DataLayer.Person;
@@ -10,6 +11,7 @@ using WebAPI.Support;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     public class AccountsController : Controller
     {
         private UserManager<FullStoqUser> UserManager { get; set; }
@@ -46,6 +48,7 @@ namespace WebAPI.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel vm)

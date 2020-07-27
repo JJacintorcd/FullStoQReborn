@@ -13,6 +13,7 @@ using WebAPI.Models.CommercialViewModel;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -56,7 +57,7 @@ namespace WebAPI.Controllers
             return View();
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Administration()
         {
             return View();
@@ -68,12 +69,26 @@ namespace WebAPI.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Manager")]
         public IActionResult Manager()
         {
             return View();
         }
 
+        [Authorize(Roles = "Security")]
         public IActionResult Security()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Staff")]
+        public IActionResult Staff()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Client")]
+        public IActionResult Client()
         {
             return View();
         }

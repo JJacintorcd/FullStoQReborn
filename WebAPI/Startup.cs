@@ -42,7 +42,8 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
-
+            services.AddSession();
+            services.AddMemoryCache();
             //Políticas de Cookies
             services.Configure<CookiePolicyOptions>(
                 options =>
@@ -90,7 +91,7 @@ namespace WebAPI
                     };
 
                 });
-            
+
             services.Configure<RazorViewEngineOptions>(o =>
             {
                 o.ViewLocationFormats.Clear();
@@ -104,7 +105,7 @@ namespace WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<FullStoqUser> userManager, RoleManager<FullStoqRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -125,14 +126,15 @@ namespace WebAPI
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
+            SetupRolesAndUsers(userManager, roleManager);
             app.UseCors("GeneralPolicy");
 
-            app.UseAuthorization();
 
-            app.UseAuthentication();
+            
 
             app.UseEndpoints(endpoints =>
             {
