@@ -28,9 +28,7 @@ using Microsoft.AspNetCore.Localization;
 namespace WebAPI
 {
     public class Startup
-    {
-        
-
+    {      
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
